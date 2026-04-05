@@ -1,10 +1,13 @@
 package com.healthsys.pacientes.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Table(name="sexo")
-public class Sexo {
+@Getter
+@Setter
+public class Genero {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
