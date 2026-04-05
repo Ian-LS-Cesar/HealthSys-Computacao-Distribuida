@@ -1,6 +1,6 @@
 package com.healthsys.pacientes.service;
 
-import com.healthsys.pacientes.dto.SexoDTO;
+import com.healthsys.pacientes.dto.SexoResponseDTO;
 import com.healthsys.pacientes.mapper.SexoMapper;
 import com.healthsys.pacientes.model.Sexo;
 import com.healthsys.pacientes.repository.SexoRepository;
@@ -18,7 +18,7 @@ public class SexoService {
         this.sexoRepository = sexoRepository;
     }
 
-    public List<SexoDTO> getGeneros(){
+    public List<SexoResponseDTO> getGeneros(){
         List<Sexo> sexos = sexoRepository.findAll();
         return sexos.stream()
                 .map(SexoMapper::toDTO)

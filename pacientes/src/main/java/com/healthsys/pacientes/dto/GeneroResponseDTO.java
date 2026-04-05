@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeneroDTO {
+public class GeneroResponseDTO {
     private int id;
     private String descricao;
 }

@@ -1,6 +1,6 @@
 package com.healthsys.pacientes.controller;
 
-import com.healthsys.pacientes.dto.SexoDTO;
+import com.healthsys.pacientes.dto.SexoResponseDTO;
 import com.healthsys.pacientes.service.SexoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +19,8 @@ public class SexoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SexoDTO>> getSexos(){
-        List<SexoDTO> sexos = sexoService.getGeneros();
+    public ResponseEntity<List<SexoResponseDTO>> getSexos(){
+        List<SexoResponseDTO> sexos = sexoService.getGeneros();
         return ResponseEntity.ok().body(sexos);
     }
 }

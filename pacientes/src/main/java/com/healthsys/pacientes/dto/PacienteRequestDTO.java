@@ -3,6 +3,7 @@ package com.healthsys.pacientes.dto;
 import com.healthsys.pacientes.model.Telefone;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,12 +21,12 @@ public class PacienteRequestDTO {
     private String dataNascimento;
 
     @NotNull(message="Gênero é obrigatório")
-    private Integer generoId;
+    private Integer genero;
 
     @NotNull(message="Sexo é obrigatório")
-    private Integer sexoId;
+    private Integer sexo;
 
     @NotNull(message = "Telefone é obrigatório")
-    private Telefone telefone;
+    private String telefone;
 
 }

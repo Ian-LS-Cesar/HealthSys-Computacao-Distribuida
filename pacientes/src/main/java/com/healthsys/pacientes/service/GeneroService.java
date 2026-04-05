@@ -1,6 +1,6 @@
 package com.healthsys.pacientes.service;
 
-import com.healthsys.pacientes.dto.GeneroDTO;
+import com.healthsys.pacientes.dto.GeneroResponseDTO;
 import com.healthsys.pacientes.mapper.GeneroMapper;
 import com.healthsys.pacientes.model.Genero;
 import com.healthsys.pacientes.repository.GeneroRepository;
@@ -18,7 +18,7 @@ public class GeneroService {
         this.generoRepository = generoRepository;
     }
 
-    public List<GeneroDTO> getGeneros(){
+    public List<GeneroResponseDTO> getGeneros(){
         List<Genero> generos = generoRepository.findAll();
         return generos.stream()
                 .map(GeneroMapper::toDTO)

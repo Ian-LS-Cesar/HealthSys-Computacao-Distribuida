@@ -1,6 +1,6 @@
 package com.healthsys.pacientes.controller;
 
-import com.healthsys.pacientes.dto.GeneroDTO;
+import com.healthsys.pacientes.dto.GeneroResponseDTO;
 import com.healthsys.pacientes.service.GeneroService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +20,8 @@ public class GeneroController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GeneroDTO>> getGeneros(){
-        List<GeneroDTO> generos = generoService.getGeneros();
+    public ResponseEntity<List<GeneroResponseDTO>> getGeneros(){
+        List<GeneroResponseDTO> generos = generoService.getGeneros();
         return ResponseEntity.ok().body(generos);
     }
 }

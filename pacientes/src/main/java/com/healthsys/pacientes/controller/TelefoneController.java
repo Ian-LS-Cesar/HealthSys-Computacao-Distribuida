@@ -1,6 +1,6 @@
 package com.healthsys.pacientes.controller;
 
-import com.healthsys.pacientes.dto.TelefoneDTO;
+import com.healthsys.pacientes.dto.TelefoneResponseDTO;
 import com.healthsys.pacientes.service.TelefoneService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +19,8 @@ public class TelefoneController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TelefoneDTO>> getTelefones(){
-        List<TelefoneDTO> telefones = telefoneService.getTelefones();
+    public ResponseEntity<List<TelefoneResponseDTO>> getTelefones(){
+        List<TelefoneResponseDTO> telefones = telefoneService.getTelefones();
         return ResponseEntity.ok().body(telefones);
     }
 }

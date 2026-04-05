@@ -1,6 +1,6 @@
 package com.healthsys.pacientes.service;
 
-import com.healthsys.pacientes.dto.TelefoneDTO;
+import com.healthsys.pacientes.dto.TelefoneResponseDTO;
 import com.healthsys.pacientes.mapper.TelefoneMapper;
 import com.healthsys.pacientes.model.Telefone;
 import com.healthsys.pacientes.repository.TelefoneRepository;
@@ -18,7 +18,7 @@ public class TelefoneService {
         this.telefoneRepository = telefoneRepository;
     }
 
-    public List<TelefoneDTO> getTelefones() {
+    public List<TelefoneResponseDTO> getTelefones() {
         List<Telefone> telefones = telefoneRepository.findAll();
         return telefones.stream()
                 .map(TelefoneMapper::toDTO)

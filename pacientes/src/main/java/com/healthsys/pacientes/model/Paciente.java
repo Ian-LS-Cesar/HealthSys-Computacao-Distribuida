@@ -28,11 +28,11 @@ public class Paciente {
     private LocalDate dataNascimento;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="genero_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name= "genero", referencedColumnName = "id", nullable = false)
     private Genero genero;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="sexo_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name= "sexo", referencedColumnName = "id", nullable = false)
     private Sexo sexo;
 
     @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL)
