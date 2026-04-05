@@ -10,5 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeneroDTO {
+    private int id;
     private String descricao;
 }
