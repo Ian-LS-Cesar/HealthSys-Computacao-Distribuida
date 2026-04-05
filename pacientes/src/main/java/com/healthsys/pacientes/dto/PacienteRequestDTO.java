@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PacienteRequestDTO {
-    @NotBlank
+    @NotBlank(message="Nome não pode estar em branco")
     @Size(max=100, message= "Nome não pode exceder 100 caracteres")
     private String nome;
 
@@ -24,7 +24,7 @@ public class PacienteRequestDTO {
     @NotNull(message="Sexo é obrigatório")
     private Integer sexo;
 
-    @NotNull(message = "Telefone é obrigatório")
+    @NotBlank(message = "Telefone é obrigatório")
     private String telefone;
 
 }
