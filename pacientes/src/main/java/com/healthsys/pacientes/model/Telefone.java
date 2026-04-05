@@ -19,6 +19,6 @@ public class Telefone {
     private String numero;
 
     @ManyToOne
-    @JoinColumn(name="paciente_id")
+    @JoinColumn(name="paciente_id", referencedColumnName = "id")
     private Paciente paciente;
 }
