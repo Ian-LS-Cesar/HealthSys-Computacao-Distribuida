@@ -14,11 +14,9 @@ import java.util.List;
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
-    private final PerfilRepository perfilRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository, PerfilRepository perfilRepository) {
         this.usuarioRepository = usuarioRepository;
-        this.perfilRepository = perfilRepository;
     }
 
     public List<UsuarioResponseDTO> getUsuarios(){

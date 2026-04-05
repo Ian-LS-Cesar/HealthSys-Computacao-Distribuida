@@ -1,7 +1,6 @@
 package com.healthsys.usuarios.controller;
 
 import com.healthsys.usuarios.dto.UsuarioResponseDTO;
-import com.healthsys.usuarios.model.Usuario;
 import com.healthsys.usuarios.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
