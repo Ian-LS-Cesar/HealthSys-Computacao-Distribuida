@@ -1,7 +1,6 @@
 package com.healthsys.pacientes.controller;
 
 import com.healthsys.pacientes.dto.TelefoneDTO;
-import com.healthsys.pacientes.service.GeneroService;
 import com.healthsys.pacientes.service.TelefoneService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
