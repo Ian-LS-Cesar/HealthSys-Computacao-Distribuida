@@ -1,5 +1,4 @@
-package com.healthsys.pacientes.dto;
-
+package com.healthsys.usuarios.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,14 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PacienteResponseDTO {
+public class UsuarioResponseDTO {
     private String id;
     private String nome;
-    private String nomeSocial;
     private String dataNascimento;
-    private String genero;
-    private String sexo;
-    private String telefone;
-
-
+    private String email;
+    private String senha;
+    private String perfil;
 }
