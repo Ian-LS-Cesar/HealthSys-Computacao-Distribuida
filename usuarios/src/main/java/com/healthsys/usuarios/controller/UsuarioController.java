@@ -1,11 +1,11 @@
 package com.healthsys.usuarios.controller;
 
+import com.healthsys.usuarios.dto.UsuarioRequestDTO;
 import com.healthsys.usuarios.dto.UsuarioResponseDTO;
 import com.healthsys.usuarios.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +22,11 @@ public class UsuarioController {
     public ResponseEntity<List<UsuarioResponseDTO>> getUsuarios(){
         List<UsuarioResponseDTO> usuarios = usuarioService.getUsuarios();
         return ResponseEntity.ok().body(usuarios);
+    }
+
+    @PostMapping
+    public ResponseEntity<UsuarioResponseDTO> createUsuario(@Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO){
+        UsuarioResponseDTO usuarioResponseDTO = usuarioService.criarUsuario(usuarioRequestDTO);
+        return ResponseEntity.ok().body(usuarioResponseDTO);
     }
 }
