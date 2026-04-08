@@ -26,7 +26,6 @@ public class Usuario {
     private LocalDate dataNascimento;
 
     @NotNull
-    @Column(unique = true)
     @Email
     private String email;
 
