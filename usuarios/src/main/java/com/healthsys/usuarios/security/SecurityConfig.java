@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
                 // API stateless: desabilita CSRF para facilitar POST/PUT/DELETE via JSON
                 .csrf(AbstractHttpConfigurer::disable)

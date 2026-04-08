@@ -1,11 +1,10 @@
 package com.healthsys.usuarios.controller;
 
+import com.healthsys.usuarios.dto.PerfilRequestDTO;
 import com.healthsys.usuarios.dto.PerfilResponseDTO;
 import com.healthsys.usuarios.service.PerfilService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +21,11 @@ public class PerfilController {
     public ResponseEntity<List<PerfilResponseDTO>> getPerfis(){
         List<PerfilResponseDTO> perfis = perfilService.getPerfis();
         return ResponseEntity.ok().body(perfis);
+    }
+
+    @PostMapping
+    public ResponseEntity<PerfilResponseDTO> createPerfis(@RequestBody PerfilRequestDTO perfilRequestDTO){
+        PerfilResponseDTO perfilResponseDTO = perfilService.criarPerfis(perfilRequestDTO);
+        return ResponseEntity.ok().body(perfilResponseDTO);
     }
 }
