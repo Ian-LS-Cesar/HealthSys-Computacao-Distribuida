@@ -1,5 +1,6 @@
 package com.healthsys.usuarios.dto;
 
+import com.healthsys.usuarios.dto.validators.CreateUsuarioValidationGroup;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,13 +17,13 @@ public class UsuarioRequestDTO {
     @Email(message = "O email deve ser válido.")
     private String email;
 
-    @NotBlank(message = "Data de nascimento é obrigatória.")
+    @NotBlank(groups= CreateUsuarioValidationGroup.class, message = "Data de nascimento é obrigatória.")
     private String dataNascimento;
 
-    @NotBlank(message = "Senha é obrigatória.")
+    @NotBlank(groups= CreateUsuarioValidationGroup.class, message = "Senha é obrigatória.")
     private String senha;
 
-    @NotNull(message = "O ID do perfil é obrigatório.")
+    @NotNull(groups= CreateUsuarioValidationGroup.class, message = "O ID do perfil é obrigatório.")
     private Integer perfil;
 
 }

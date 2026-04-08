@@ -81,4 +81,8 @@ public class UsuarioService {
         Usuario usuarioAtualizado = usuarioRepository.save(usuario);
         return UsuarioMapper.toDTO(usuarioAtualizado);
     }
+
+    public void deletarUsuario(UUID id) {
+        usuarioRepository.deleteById(id);
+    }
 }

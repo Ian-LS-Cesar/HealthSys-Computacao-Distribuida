@@ -2,6 +2,7 @@ package com.healthsys.pacientes.controller;
 
 import com.healthsys.pacientes.dto.PacienteRequestDTO;
 import com.healthsys.pacientes.dto.PacienteResponseDTO;
+import com.healthsys.pacientes.dto.validators.CreatePacienteValidationGroup;
 import com.healthsys.pacientes.service.PacienteService;
 import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
@@ -28,7 +29,7 @@ public class PacienteController {
     }
 
     @PostMapping
-    public ResponseEntity<PacienteResponseDTO> criarPaciente(@Valid @RequestBody PacienteRequestDTO pacienteRequestDTO) {
+    public ResponseEntity<PacienteResponseDTO> criarPaciente(@Validated({Default.class, CreatePacienteValidationGroup.class}) @RequestBody PacienteRequestDTO pacienteRequestDTO) {
         PacienteResponseDTO pacienteResponseDTO = pacienteService.criarPaciente(pacienteRequestDTO);
         return ResponseEntity.ok().body(pacienteResponseDTO);
     }
@@ -37,5 +38,11 @@ public class PacienteController {
     public ResponseEntity<PacienteResponseDTO> updateUsuario(@PathVariable UUID id,@Validated({Default.class}) @RequestBody PacienteRequestDTO usuarioRequestDTO){
         PacienteResponseDTO pacienteResponseDTO = pacienteService.atualizarPaciente(id, usuarioRequestDTO);
         return ResponseEntity.ok().body(pacienteResponseDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PacienteResponseDTO> deletarPaciente(@PathVariable UUID id) {
+        pacienteService.deletarPaciente(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -22,7 +22,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/usuarios/**").permitAll() // <-- adicionar
+                        .requestMatchers(HttpMethod.PUT, "/usuarios/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/usuarios/**").permitAll()// <-- adicionar
                         .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().authenticated()
                 )

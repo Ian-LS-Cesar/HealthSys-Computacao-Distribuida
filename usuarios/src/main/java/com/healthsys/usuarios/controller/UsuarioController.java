@@ -2,6 +2,7 @@ package com.healthsys.usuarios.controller;
 
 import com.healthsys.usuarios.dto.UsuarioRequestDTO;
 import com.healthsys.usuarios.dto.UsuarioResponseDTO;
+import com.healthsys.usuarios.dto.validators.CreateUsuarioValidationGroup;
 import com.healthsys.usuarios.service.UsuarioService;
 import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
@@ -28,7 +29,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioResponseDTO> createUsuario(@Valid @RequestBody UsuarioRequestDTO usuarioRequestDTO){
+    public ResponseEntity<UsuarioResponseDTO> createUsuario(@Validated({Default.class, CreateUsuarioValidationGroup.class}) @RequestBody UsuarioRequestDTO usuarioRequestDTO){
         UsuarioResponseDTO usuarioResponseDTO = usuarioService.criarUsuario(usuarioRequestDTO);
         return ResponseEntity.ok().body(usuarioResponseDTO);
     }
@@ -37,5 +38,11 @@ public class UsuarioController {
     public ResponseEntity<UsuarioResponseDTO> updateUsuario(@PathVariable UUID id,@Validated({Default.class}) @RequestBody UsuarioRequestDTO usuarioRequestDTO){
         UsuarioResponseDTO usuarioResponseDTO = usuarioService.atualizarUsuario(id, usuarioRequestDTO);
         return ResponseEntity.ok().body(usuarioResponseDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUsuario(@PathVariable UUID id){
+        usuarioService.deletarUsuario(id);
+        return ResponseEntity.noContent().build();
     }
 }

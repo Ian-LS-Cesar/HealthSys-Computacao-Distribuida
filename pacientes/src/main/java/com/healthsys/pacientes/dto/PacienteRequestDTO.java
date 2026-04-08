@@ -1,5 +1,6 @@
 package com.healthsys.pacientes.dto;
 
+import com.healthsys.pacientes.dto.validators.CreatePacienteValidationGroup;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,16 +16,16 @@ public class PacienteRequestDTO {
 
     private String nomeSocial;
 
-    @NotBlank(message="Data de Nascimento é obrigatória")
+    @NotBlank(groups = CreatePacienteValidationGroup.class,  message ="Data de Nascimento é obrigatória")
     private String dataNascimento;
 
-    @NotNull(message="Gênero é obrigatório")
+    @NotNull(groups = CreatePacienteValidationGroup.class, message ="Gênero é obrigatório")
     private Integer genero;
 
-    @NotNull(message="Sexo é obrigatório")
+    @NotNull(groups = CreatePacienteValidationGroup.class, message="Sexo é obrigatório")
     private Integer sexo;
 
-    @NotBlank(message = "Telefone é obrigatório")
+    @NotBlank(groups = CreatePacienteValidationGroup.class, message = "Telefone é obrigatório")
     private Integer telefone;
 
 }
