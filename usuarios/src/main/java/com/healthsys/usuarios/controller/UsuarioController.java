@@ -4,7 +4,6 @@ import com.healthsys.usuarios.dto.UsuarioRequestDTO;
 import com.healthsys.usuarios.dto.UsuarioResponseDTO;
 import com.healthsys.usuarios.dto.validators.CreateUsuarioValidationGroup;
 import com.healthsys.usuarios.service.UsuarioService;
-import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

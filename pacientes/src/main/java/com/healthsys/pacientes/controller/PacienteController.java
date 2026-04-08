@@ -4,7 +4,6 @@ import com.healthsys.pacientes.dto.PacienteRequestDTO;
 import com.healthsys.pacientes.dto.PacienteResponseDTO;
 import com.healthsys.pacientes.dto.validators.CreatePacienteValidationGroup;
 import com.healthsys.pacientes.service.PacienteService;
-import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
