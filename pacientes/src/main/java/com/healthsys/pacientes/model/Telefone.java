@@ -21,6 +21,6 @@ public class Telefone {
     private String numero;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="paciente_id", referencedColumnName = "id")
+    @JoinColumn(name="paciente", referencedColumnName = "id")
     private Paciente paciente;
 }

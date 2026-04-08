@@ -25,6 +25,6 @@ public class PacienteRequestDTO {
     private Integer sexo;
 
     @NotBlank(message = "Telefone é obrigatório")
-    private String telefone;
+    private Integer telefone;
 
 }

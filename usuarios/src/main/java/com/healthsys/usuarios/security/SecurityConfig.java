@@ -26,8 +26,6 @@ public class SecurityConfig {
 
                         // monitoramento (opcional)
                         .requestMatchers("/actuator/health").permitAll()
-
-                        // todo o resto exige autenticação
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
