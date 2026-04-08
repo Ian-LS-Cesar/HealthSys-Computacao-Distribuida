@@ -21,10 +21,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // públicos
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-
-                        // monitoramento (opcional)
+                        .requestMatchers(HttpMethod.PUT, "/usuarios/**").permitAll() // <-- adicionar
                         .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().authenticated()
                 )

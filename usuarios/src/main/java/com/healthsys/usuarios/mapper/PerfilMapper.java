@@ -1,5 +1,6 @@
 package com.healthsys.usuarios.mapper;
 
+import com.healthsys.usuarios.dto.PerfilRequestDTO;
 import com.healthsys.usuarios.dto.PerfilResponseDTO;
 import com.healthsys.usuarios.model.Perfil;
 
@@ -9,5 +10,11 @@ public class PerfilMapper {
         perfilDTO.setId(perfil.getId());
         perfilDTO.setDescricao(perfil.getDescricao());
         return perfilDTO;
+    }
+
+    public static Perfil toModel(PerfilRequestDTO perfilRequestDTO){
+        Perfil perfil = new Perfil();
+        perfil.setDescricao(perfilRequestDTO.getDescricao());
+        return perfil;
     }
 }

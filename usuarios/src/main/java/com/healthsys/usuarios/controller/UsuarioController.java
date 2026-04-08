@@ -4,7 +4,9 @@ import com.healthsys.usuarios.dto.UsuarioRequestDTO;
 import com.healthsys.usuarios.dto.UsuarioResponseDTO;
 import com.healthsys.usuarios.service.UsuarioService;
 import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> updateUsuario(@PathVariable UUID id, @RequestBody UsuarioRequestDTO usuarioRequestDTO){
+    public ResponseEntity<UsuarioResponseDTO> updateUsuario(@PathVariable UUID id,@Validated({Default.class}) @RequestBody UsuarioRequestDTO usuarioRequestDTO){
         UsuarioResponseDTO usuarioResponseDTO = usuarioService.atualizarUsuario(id, usuarioRequestDTO);
         return ResponseEntity.ok().body(usuarioResponseDTO);
     }

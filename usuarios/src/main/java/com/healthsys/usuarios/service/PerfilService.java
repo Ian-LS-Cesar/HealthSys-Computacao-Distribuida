@@ -1,5 +1,6 @@
 package com.healthsys.usuarios.service;
 
+import com.healthsys.usuarios.dto.PerfilRequestDTO;
 import com.healthsys.usuarios.dto.PerfilResponseDTO;
 import com.healthsys.usuarios.mapper.PerfilMapper;
 import com.healthsys.usuarios.model.Perfil;
@@ -23,5 +24,11 @@ public class PerfilService {
         return perfis.stream()
                 .map(PerfilMapper::toDTO)
                 .toList();
+    }
+
+    public PerfilResponseDTO criarPerfis(PerfilRequestDTO perfilRequestDTO){
+        Perfil novoPerfil = PerfilMapper.toModel(perfilRequestDTO);
+        Perfil perfil = perfilRepository.save(novoPerfil);
+        return PerfilMapper.toDTO(perfil);
     }
 }
