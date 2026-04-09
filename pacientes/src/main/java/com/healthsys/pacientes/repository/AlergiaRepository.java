@@ -1,7 +1,6 @@
 package com.healthsys.pacientes.repository;
 
 import com.healthsys.pacientes.model.Alergia;
-import com.healthsys.pacientes.model.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +9,4 @@ import java.util.UUID;
 
 @Repository
 public interface AlergiaRepository extends JpaRepository<Alergia, Integer> {
-    List<Alergia> findByPacienteId(UUID pacienteId);
 }
