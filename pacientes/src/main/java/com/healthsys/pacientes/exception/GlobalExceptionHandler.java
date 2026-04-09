@@ -22,6 +22,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String,String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        log.warn("Requisição inválida: {}", ex.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("Erro no valido", ex.getMessage());
+        return ResponseEntity.badRequest().body(errors);
+    }
     @ExceptionHandler(PacienteNotFoundException.class)
     public ResponseEntity<Map<String, String>> handlePacienteNotFoundException(PacienteNotFoundException ex) {
 
@@ -29,6 +36,14 @@ public class GlobalExceptionHandler {
 
         Map<String, String> errors = new HashMap<>();
         errors.put("message", "Paciente não encontrado");
+        return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(CpfAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleCpfAlreadyExistsException(CpfAlreadyExistsException ex) {
+        log.warn("CPF já existente: {}", ex.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "CPF já existente");
         return ResponseEntity.badRequest().body(errors);
     }
 }

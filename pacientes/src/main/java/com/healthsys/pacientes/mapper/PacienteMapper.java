@@ -1,11 +1,9 @@
 package com.healthsys.pacientes.mapper;
 
+import com.healthsys.pacientes.dto.EnderecoResponseDTO;
 import com.healthsys.pacientes.dto.PacienteRequestDTO;
 import com.healthsys.pacientes.dto.PacienteResponseDTO;
-import com.healthsys.pacientes.model.Genero;
-import com.healthsys.pacientes.model.Paciente;
-import com.healthsys.pacientes.model.Sexo;
-import com.healthsys.pacientes.model.Telefone;
+import com.healthsys.pacientes.model.*;
 
 import java.time.LocalDate;
 
@@ -25,8 +23,36 @@ public class PacienteMapper {
             pacienteDTO.setSexo(paciente.getSexo().getDescricao());
         }
 
-        if (paciente.getTelefone() != null){
-            pacienteDTO.setTelefone(paciente.getTelefone().getNumero());
+        if (paciente.getTelefones() != null){
+            pacienteDTO.setTelefones(
+                    paciente.getTelefones().stream()
+                            .map(Telefone::getNumero)
+                            .toList()
+            );
+        }
+
+        if (paciente.getEnderecos() != null) {
+            pacienteDTO.setEnderecos(
+                    paciente.getEnderecos().stream()
+                            .map(e -> new EnderecoResponseDTO(
+                                    e.getId(),
+                                    e.getLogradouro(),
+                                    e.getNumero(),
+                                    e.getComplemento(),
+                                    e.getBairro(),
+                                    e.getCidade(),
+                                    e.getUf(),
+                                    e.getCep()
+                                    ))
+                            .toList()
+            );
+        }
+        if (paciente.getAlergias() != null) {
+            pacienteDTO.setAlergias(
+                    paciente.getAlergias().stream()
+                            .map(Alergia::getDescricao)
+                            .toList()
+            );
         }
 
         return pacienteDTO;
@@ -35,8 +61,7 @@ public class PacienteMapper {
     public static Paciente toModel(
             PacienteRequestDTO pacienteRequestDTO,
             Genero genero,
-            Sexo sexo,
-            Telefone telefone
+            Sexo sexo
     ) {
         Paciente paciente = new Paciente();
         paciente.setNome(pacienteRequestDTO.getNome());
@@ -45,7 +70,6 @@ public class PacienteMapper {
         paciente.setCpf(pacienteRequestDTO.getCpf());
         paciente.setGenero(genero);
         paciente.setSexo(sexo);
-        paciente.setTelefone(telefone);
 
 
         return paciente;

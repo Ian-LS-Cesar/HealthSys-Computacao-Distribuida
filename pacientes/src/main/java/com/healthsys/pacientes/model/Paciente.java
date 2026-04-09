@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,15 +33,20 @@ public class Paciente {
     private String cpf;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "genero", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name= "genero", referencedColumnName = "id", nullable = true)
     private Genero genero;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "sexo", referencedColumnName = "id", nullable = false)
     private Sexo sexo;
 
-    @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL)
-    private Telefone telefone;
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Telefone> telefones = new ArrayList<>();
 
+    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Endereco> enderecos = new ArrayList<>();
+
+    @OneToMany(mappedBy="paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Alergia> alergias = new ArrayList<>();
 
 }

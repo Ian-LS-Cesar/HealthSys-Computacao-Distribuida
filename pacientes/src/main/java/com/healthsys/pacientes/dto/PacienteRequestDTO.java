@@ -2,10 +2,13 @@ package com.healthsys.pacientes.dto;
 
 import com.healthsys.pacientes.dto.validators.CreatePacienteValidationGroup;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,9 +28,14 @@ public class PacienteRequestDTO {
     @NotNull(groups = CreatePacienteValidationGroup.class, message="Sexo é obrigatório")
     private Integer sexo;
 
-    @NotBlank(groups = CreatePacienteValidationGroup.class, message = "Telefone é obrigatório")
-    private Integer telefone;
+    @NotEmpty(groups = CreatePacienteValidationGroup.class, message = "Ao menos um telefone é obrigatório")
+    private List<String> telefones;
 
     @NotBlank(groups = CreatePacienteValidationGroup.class, message = "CPF é obrigatório")
     private String cpf;
+
+    private List<String> alergias;
+
+    private List<EnderecoRequestDTO> enderecos;
+
 }

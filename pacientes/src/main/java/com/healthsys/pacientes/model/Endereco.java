@@ -1,7 +1,6 @@
 package com.healthsys.pacientes.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,17 +9,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Table(name="telefone")
-public class Telefone {
+@Table(name="endereco")
+public class Endereco {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(nullable = false)
+    private String logradouro;
     private String numero;
+    private String complemento;
+    private String bairro;
+    private String cidade;
+    private String uf;
+    private String cep;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="paciente", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "paciente_id", referencedColumnName = "id", nullable = false)
     private Paciente paciente;
 }

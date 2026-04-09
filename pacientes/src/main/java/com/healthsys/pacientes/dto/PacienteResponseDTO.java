@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,7 +19,8 @@ public class PacienteResponseDTO {
     private String dataNascimento;
     private String genero;
     private String sexo;
-    private String telefone;
+    private List<String> telefones;
     private String cpf;
-
+    private List<String> alergias;
+    private List<EnderecoResponseDTO> enderecos;
 }

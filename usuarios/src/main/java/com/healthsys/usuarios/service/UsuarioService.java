@@ -82,7 +82,7 @@ public class UsuarioService {
         return UsuarioMapper.toDTO(usuarioAtualizado);
     }
 
-    public void deletarUsuario(UUID id) {
+    public void deletarCUsuario(UUID id) {
         usuarioRepository.deleteById(id);
     }
 }
