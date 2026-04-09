@@ -60,7 +60,7 @@ public class PacienteService {
             Endereco endereco = new Endereco();
             endereco.setLogradouro(dto.getLogradouro().trim());
             endereco.setNumero(dto.getNumero().trim());
-            endereco.setComplemento(dto.getComplemento().trim());
+            endereco.setComplemento(dto.getComplemento() == null ? null : dto.getComplemento().trim());
             endereco.setBairro(dto.getBairro().trim());
             endereco.setCep(dto.getCep().trim());
             endereco.setCidade(dto.getCidade().trim());

@@ -21,6 +21,6 @@ public class Telefone {
     private String numero;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="paciente", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="paciente_id", referencedColumnName = "id", nullable = false)
     private Paciente paciente;
 }
