@@ -67,6 +67,11 @@ public class PacienteService {
         Paciente paciente = pacienteRepository.findById(id)
                 .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + id));
 
+        if (pacienteRepository.existsByCpfAndIdNot(pacienteRequestDTO.getCpf(), id)) {
+            throw new IllegalArgumentException("Já existe um paciente com esse CPF");
+        }
+
+
         Genero genero = generoRepository.findById(pacienteRequestDTO.getGenero())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Gênero não encontrado com o ID: " + pacienteRequestDTO.getGenero()));
@@ -85,6 +90,7 @@ public class PacienteService {
         paciente.setGenero(genero);
         paciente.setSexo(sexo);
         paciente.setTelefone(telefone);
+        paciente.setCpf(pacienteRequestDTO.getCpf());
 
         Paciente pacienteAtualizado = pacienteRepository.save(paciente);
         return PacienteMapper.toDTO(pacienteAtualizado);

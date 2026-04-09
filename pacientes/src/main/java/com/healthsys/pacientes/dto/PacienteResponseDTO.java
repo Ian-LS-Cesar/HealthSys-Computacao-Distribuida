@@ -18,6 +18,6 @@ public class PacienteResponseDTO {
     private String genero;
     private String sexo;
     private String telefone;
-
+    private String cpf;
 
 }

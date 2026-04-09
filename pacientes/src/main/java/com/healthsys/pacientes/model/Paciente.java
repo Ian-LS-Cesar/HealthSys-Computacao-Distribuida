@@ -27,6 +27,9 @@ public class Paciente {
     @Column(nullable = false)
     private LocalDate dataNascimento;
 
+    @Column(nullable = false, unique = true)
+    private String cpf;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "genero", referencedColumnName = "id", nullable = false)
     private Genero genero;

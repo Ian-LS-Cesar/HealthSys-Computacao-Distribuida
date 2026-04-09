@@ -28,4 +28,6 @@ public class PacienteRequestDTO {
     @NotBlank(groups = CreatePacienteValidationGroup.class, message = "Telefone é obrigatório")
     private Integer telefone;
 
+    @NotBlank(groups = CreatePacienteValidationGroup.class, message = "CPF é obrigatório")
+    private String cpf;
 }
