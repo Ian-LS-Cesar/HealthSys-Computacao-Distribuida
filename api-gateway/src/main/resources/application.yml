@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        ## REST CLIENT -> http://localhost:8080/api/pacientes/
+        ## API GATEWAY -> http://paciente-service:8080/pacientes
+        ## PACIENTE SERVICE (SPRING BOOT APP) -> /pacientes -> Pacientes Array
+        - id: paciente-service-route
+          uri: http://paciente-service:8082
+          predicates:
+              - path=/api/pacientes/**
+          filters:
+              - strip-prefix=1
+
