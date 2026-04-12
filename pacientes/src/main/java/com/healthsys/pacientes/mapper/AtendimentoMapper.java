@@ -7,7 +7,6 @@ import com.healthsys.pacientes.model.Paciente;
 import com.healthsys.pacientes.model.TipoAtendimento;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class AtendimentoMapper {
 

@@ -1,6 +1,5 @@
 package com.healthsys.pacientes.mapper;
 
-import com.healthsys.pacientes.dto.EnderecoResponseDTO;
 import com.healthsys.pacientes.dto.PacienteRequestDTO;
 import com.healthsys.pacientes.dto.PacienteResponseDTO;
 import com.healthsys.pacientes.model.*;
@@ -35,19 +34,7 @@ public class PacienteMapper {
         if (paciente.getEnderecos() != null) {
             pacienteDTO.setEnderecos(
                     paciente.getEnderecos().stream()
-                            .map(e -> {
-                                EnderecoResponseDTO enderecoDTO = new EnderecoResponseDTO();
-                                enderecoDTO.setId(e.getId());
-                                enderecoDTO.setPaciente(e.getPaciente().getId());
-                                enderecoDTO.setLogradouro(e.getLogradouro());
-                                enderecoDTO.setNumero(e.getNumero());
-                                enderecoDTO.setComplemento(e.getComplemento());
-                                enderecoDTO.setBairro(e.getBairro());
-                                enderecoDTO.setCidade(e.getCidade());
-                                enderecoDTO.setUf(e.getUf());
-                                enderecoDTO.setCep(e.getCep());
-                                return enderecoDTO;
-                            })
+                            .map(EnderecoMapper::toDTO)
                             .toList()
             );
         }
