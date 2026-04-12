@@ -4,14 +4,14 @@ server:
 spring:
   cloud:
     gateway:
-      routes:
-        ## REST CLIENT -> http://localhost:8080/api/pacientes/
-        ## API GATEWAY -> http://paciente-service:8080/pacientes
-        ## PACIENTE SERVICE (SPRING BOOT APP) -> /pacientes -> Pacientes Array
-        - id: paciente-service-route
-          uri: http://paciente-service:8082
-          predicates:
-              - path=/api/pacientes/**
-          filters:
-              - strip-prefix=1
-
+      server:
+        webflux:
+          routes:
+            - id: paciente-service-route
+              uri: http://paciente-service:8082
+              predicates:
+                - Path=/api/pacientes,/api/pacientes/**,/api/generos/**,/api/telefones/**,/api/enderecos/**,/api/sexos/**,/api/alergias/**,/api/vacinas/**
+            - id: usuario-service-route
+              uri: http://usuario-service:8081
+              predicates:
+                - Path=/api/usuarios,/api/usuarios/**,/api/perfis/**
