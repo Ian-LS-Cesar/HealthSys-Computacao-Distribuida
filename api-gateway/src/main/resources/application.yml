@@ -7,11 +7,13 @@ spring:
       server:
         webflux:
           routes:
-            - id: paciente-service-route
-              uri: http://paciente-service:8082
-              predicates:
-                - Path=/api/pacientes,/api/pacientes/**,/api/generos/**,/api/telefones/**,/api/enderecos/**,/api/sexos/**,/api/alergias/**,/api/vacinas/**
+            # Serviços de Usuário
             - id: usuario-service-route
               uri: http://usuario-service:8081
               predicates:
                 - Path=/api/usuarios,/api/usuarios/**,/api/perfis/**
+            # Serviços de Paciente
+            - id: paciente-service-route
+              uri: http://paciente-service:8082
+              predicates:
+                - Path=/api/pacientes/**,/api/generos/**,/api/telefones/**,/api/enderecos/**,/api/sexos/**,/api/alergias/**,/api/vacinas/**
