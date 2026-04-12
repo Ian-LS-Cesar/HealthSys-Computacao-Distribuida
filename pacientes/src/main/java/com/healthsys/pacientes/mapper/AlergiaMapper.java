@@ -9,6 +9,7 @@ public class AlergiaMapper {
     public static AlergiaResponseDTO toDTO(Alergia alergia) {
         AlergiaResponseDTO alergiaResponseDTO = new AlergiaResponseDTO();
         alergiaResponseDTO.setId(alergia.getId());
+        alergiaResponseDTO.setPaciente(alergia.getPaciente().getId());
         alergiaResponseDTO.setDescricao(alergia.getDescricao());
         return alergiaResponseDTO;
     }

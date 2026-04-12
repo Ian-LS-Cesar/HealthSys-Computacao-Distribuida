@@ -9,6 +9,7 @@ public class EnderecoMapper {
     public static EnderecoResponseDTO toDTO(Endereco endereco) {
         EnderecoResponseDTO enderecoResponseDTO = new EnderecoResponseDTO();
         enderecoResponseDTO.setId(endereco.getId());
+        enderecoResponseDTO.setPaciente(endereco.getPaciente().getId());
         enderecoResponseDTO.setLogradouro(endereco.getLogradouro());
         enderecoResponseDTO.setNumero(endereco.getNumero());
         enderecoResponseDTO.setComplemento(endereco.getComplemento());

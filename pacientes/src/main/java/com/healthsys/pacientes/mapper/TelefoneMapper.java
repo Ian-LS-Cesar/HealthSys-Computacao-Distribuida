@@ -9,6 +9,7 @@ public class TelefoneMapper {
     public static TelefoneResponseDTO toDTO(Telefone telefone) {
         TelefoneResponseDTO telefoneResponseDTO = new TelefoneResponseDTO();
         telefoneResponseDTO.setId(telefone.getId());
+        telefoneResponseDTO.setPaciente(telefone.getPaciente().getId());
         telefoneResponseDTO.setNumero(telefone.getNumero());
         return telefoneResponseDTO;
     }

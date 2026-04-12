@@ -42,9 +42,9 @@ public class EnderecoService {
                 .toList();
     }
 
-    public EnderecoResponseDTO criarEndereco(UUID pacienteId, EnderecoRequestDTO dto) {
-        Paciente paciente = pacienteRepository.findById(pacienteId)
-                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + pacienteId));
+    public EnderecoResponseDTO criarEndereco(EnderecoRequestDTO dto) {
+        Paciente paciente = pacienteRepository.findById(dto.getPaciente())
+                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + dto.getPaciente()));
 
         Endereco novoEndereco = EnderecoMapper.toModel(dto, paciente);
         return EnderecoMapper.toDTO(enderecoRepository.save(novoEndereco));
@@ -54,6 +54,9 @@ public class EnderecoService {
         Endereco endereco = enderecoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Endereço não encontrado com ID: " + id));
 
+        Paciente paciente = pacienteRepository.findById(dto.getPaciente())
+                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + dto.getPaciente()));
+
         endereco.setLogradouro(dto.getLogradouro());
         endereco.setNumero(dto.getNumero());
         endereco.setComplemento(dto.getComplemento());
@@ -61,6 +64,7 @@ public class EnderecoService {
         endereco.setCidade(dto.getCidade());
         endereco.setUf(dto.getUf());
         endereco.setCep(dto.getCep());
+        endereco.setPaciente(paciente);
 
         return EnderecoMapper.toDTO(enderecoRepository.save(endereco));
     }

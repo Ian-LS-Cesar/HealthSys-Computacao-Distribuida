@@ -32,11 +32,10 @@ public class AlergiaController {
         return ResponseEntity.ok().body(alergias);
     }
 
-    @PostMapping("/paciente/{pacienteId}")
+    @PostMapping
     public ResponseEntity<AlergiaResponseDTO> criarAlergia(
-            @PathVariable UUID pacienteId,
             @Valid @RequestBody AlergiaRequestDTO alergiaRequestDTO) {
-        AlergiaResponseDTO alergiaResponseDTO = alergiaService.criarAlergia(pacienteId, alergiaRequestDTO);
+        AlergiaResponseDTO alergiaResponseDTO = alergiaService.criarAlergia(alergiaRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(alergiaResponseDTO);
     }
 

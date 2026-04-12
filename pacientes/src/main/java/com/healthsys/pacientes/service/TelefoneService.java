@@ -42,9 +42,9 @@ public class TelefoneService {
                 .toList();
     }
 
-    public TelefoneResponseDTO criarTelefone(UUID pacienteId, TelefoneRequestDTO dto) {
-        Paciente paciente = pacienteRepository.findById(pacienteId)
-                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + pacienteId));
+    public TelefoneResponseDTO criarTelefone(TelefoneRequestDTO dto) {
+        Paciente paciente = pacienteRepository.findById(dto.getPaciente())
+                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + dto.getPaciente()));
 
         Telefone novoTelefone = TelefoneMapper.toModel(dto, paciente);
         return TelefoneMapper.toDTO(telefoneRepository.save(novoTelefone));
@@ -54,7 +54,11 @@ public class TelefoneService {
         Telefone telefone = telefoneRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Telefone não encontrado com ID: " + id));
 
+        Paciente paciente = pacienteRepository.findById(dto.getPaciente())
+                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + dto.getPaciente()));
+
         telefone.setNumero(dto.getNumero());
+        telefone.setPaciente(paciente);
         return TelefoneMapper.toDTO(telefoneRepository.save(telefone));
     }
 

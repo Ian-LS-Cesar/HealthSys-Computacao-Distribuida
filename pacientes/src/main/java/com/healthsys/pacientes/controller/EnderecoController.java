@@ -32,11 +32,10 @@ public class EnderecoController {
         return ResponseEntity.ok().body(enderecos);
     }
 
-    @PostMapping("/paciente/{pacienteId}")
+    @PostMapping
     public ResponseEntity<EnderecoResponseDTO> criarEndereco(
-            @PathVariable UUID pacienteId,
             @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) {
-        EnderecoResponseDTO enderecoResponseDTO = enderecoService.criarEndereco(pacienteId, enderecoRequestDTO);
+        EnderecoResponseDTO enderecoResponseDTO = enderecoService.criarEndereco(enderecoRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(enderecoResponseDTO);
     }
 

@@ -8,22 +8,23 @@ import com.healthsys.pacientes.model.*;
 import java.time.LocalDate;
 
 public class PacienteMapper {
-    public static PacienteResponseDTO toDTO(Paciente paciente){
+    public static PacienteResponseDTO toDTO(Paciente paciente) {
         PacienteResponseDTO pacienteDTO = new PacienteResponseDTO();
         pacienteDTO.setId(paciente.getId().toString());
         pacienteDTO.setNome(paciente.getNome());
         pacienteDTO.setNomeSocial(paciente.getNomeSocial());
         pacienteDTO.setDataNascimento(paciente.getDataNascimento().toString());
         pacienteDTO.setCpf(paciente.getCpf());
-        if (paciente.getGenero() != null){
+
+        if (paciente.getGenero() != null) {
             pacienteDTO.setGenero(paciente.getGenero().getDescricao());
         }
 
-        if (paciente.getSexo() != null){
+        if (paciente.getSexo() != null) {
             pacienteDTO.setSexo(paciente.getSexo().getDescricao());
         }
 
-        if (paciente.getTelefones() != null){
+        if (paciente.getTelefones() != null) {
             pacienteDTO.setTelefones(
                     paciente.getTelefones().stream()
                             .map(Telefone::getNumero)
@@ -34,19 +35,23 @@ public class PacienteMapper {
         if (paciente.getEnderecos() != null) {
             pacienteDTO.setEnderecos(
                     paciente.getEnderecos().stream()
-                            .map(e -> new EnderecoResponseDTO(
-                                    e.getId(),
-                                    e.getLogradouro(),
-                                    e.getNumero(),
-                                    e.getComplemento(),
-                                    e.getBairro(),
-                                    e.getCidade(),
-                                    e.getUf(),
-                                    e.getCep()
-                                    ))
+                            .map(e -> {
+                                EnderecoResponseDTO enderecoDTO = new EnderecoResponseDTO();
+                                enderecoDTO.setId(e.getId());
+                                enderecoDTO.setPaciente(e.getPaciente().getId());
+                                enderecoDTO.setLogradouro(e.getLogradouro());
+                                enderecoDTO.setNumero(e.getNumero());
+                                enderecoDTO.setComplemento(e.getComplemento());
+                                enderecoDTO.setBairro(e.getBairro());
+                                enderecoDTO.setCidade(e.getCidade());
+                                enderecoDTO.setUf(e.getUf());
+                                enderecoDTO.setCep(e.getCep());
+                                return enderecoDTO;
+                            })
                             .toList()
             );
         }
+
         if (paciente.getAlergias() != null) {
             pacienteDTO.setAlergias(
                     paciente.getAlergias().stream()
@@ -70,7 +75,6 @@ public class PacienteMapper {
         paciente.setCpf(pacienteRequestDTO.getCpf());
         paciente.setGenero(genero);
         paciente.setSexo(sexo);
-
 
         return paciente;
     }

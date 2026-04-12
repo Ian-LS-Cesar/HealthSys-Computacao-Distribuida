@@ -32,11 +32,10 @@ public class TelefoneController {
         return ResponseEntity.ok().body(telefones);
     }
 
-    @PostMapping("/paciente/{pacienteId}")
+    @PostMapping
     public ResponseEntity<TelefoneResponseDTO> criarTelefone(
-            @PathVariable UUID pacienteId,
             @Valid @RequestBody TelefoneRequestDTO telefoneRequestDTO) {
-        TelefoneResponseDTO telefoneResponseDTO = telefoneService.criarTelefone(pacienteId, telefoneRequestDTO);
+        TelefoneResponseDTO telefoneResponseDTO = telefoneService.criarTelefone(telefoneRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(telefoneResponseDTO);
     }
 

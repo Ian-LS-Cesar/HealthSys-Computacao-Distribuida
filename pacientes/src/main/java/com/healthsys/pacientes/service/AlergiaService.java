@@ -42,19 +42,25 @@ public class AlergiaService {
                 .toList();
     }
 
-    public AlergiaResponseDTO criarAlergia(UUID pacienteId, AlergiaRequestDTO dto) {
-        Paciente paciente = pacienteRepository.findById(pacienteId)
-                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + pacienteId));
+    public AlergiaResponseDTO criarAlergia(AlergiaRequestDTO alergiaRequestDTO) {
+        Paciente paciente = pacienteRepository.findById(alergiaRequestDTO.getPaciente())
+                .orElseThrow(() -> new PacienteNotFoundException(
+                        "Paciente não encontrado com ID: " + alergiaRequestDTO.getPaciente()));
 
-        Alergia novaAlergia = AlergiaMapper.toModel(dto, paciente);
+        Alergia novaAlergia = AlergiaMapper.toModel(alergiaRequestDTO, paciente);
         return AlergiaMapper.toDTO(alergiaRepository.save(novaAlergia));
     }
 
-    public AlergiaResponseDTO atualizarAlergia(Integer id, AlergiaRequestDTO dto) {
+    public AlergiaResponseDTO atualizarAlergia(Integer id, AlergiaRequestDTO alergiaRequestDTO) {
         Alergia alergia = alergiaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Alergia não encontrada com ID: " + id));
 
-        alergia.setDescricao(dto.getDescricao());
+        Paciente paciente = pacienteRepository.findById(alergiaRequestDTO.getPaciente())
+                .orElseThrow(() -> new PacienteNotFoundException(
+                        "Paciente não encontrado com ID: " + alergiaRequestDTO.getPaciente()));
+
+        alergia.setDescricao(alergiaRequestDTO.getDescricao());
+        alergia.setPaciente(paciente);
         return AlergiaMapper.toDTO(alergiaRepository.save(alergia));
     }
 

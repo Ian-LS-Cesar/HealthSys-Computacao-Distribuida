@@ -11,8 +11,10 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TelefoneResponseDTO {
-    private int id;
+public class AtendimentoResponseDTO {
+    private UUID id;
     private UUID paciente;
-    private String numero;
+    private int tipoAtendimento;
+    private String observacao;
+    private String dataAtendimento;
 }

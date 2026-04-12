@@ -5,17 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class EnderecoResponseDTO {
     private int id;
+    private UUID paciente;
     private String logradouro;
     private String numero;
     private String complemento;
-    private String cep;
     private String bairro;
     private String cidade;
     private String uf;
+    private String cep;
 }
