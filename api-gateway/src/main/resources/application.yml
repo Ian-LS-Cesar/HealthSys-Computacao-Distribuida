@@ -7,12 +7,12 @@ spring:
       server:
         webflux:
           routes:
-            # Serviços de Usuário
+            # Servicos de Usuario
             - id: usuario-service-route
               uri: http://usuario-service:8081
               predicates:
                 - Path=/api/usuarios,/api/usuarios/**,/api/perfis/**
-            # Serviços de Paciente
+            # Servicos de Paciente
             - id: paciente-service-route
               uri: http://paciente-service:8082
               predicates:
