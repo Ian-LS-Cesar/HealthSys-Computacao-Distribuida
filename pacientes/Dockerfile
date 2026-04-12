@@ -1,19 +1,19 @@
-FROM gradle:9.4.1-jdk17 AS builder
-
+FROM eclipse-temurin:17-jdk AS builder
 WORKDIR /app
 
+COPY gradlew .
+COPY gradle ./gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src ./src
 
-RUN gradle clean build -x test --no-daemon
+RUN chmod +x gradlew \
+    && ./gradlew clean bootJar -x test --no-daemon
 
-FROM eclipse-temurin:17-jdk AS runner
-
+FROM eclipse-temurin:17-jre AS runner
 WORKDIR /app
 
-COPY --from=builder /app/build/libs/pacientes-0.0.1-SNAPSHOT.jar ./app.jar
+COPY --from=builder /app/build/libs/pacientes-0.0.1-SNAPSHOT.jar /app/app.jar
 
-EXPOSE 4000
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+EXPOSE 8082
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
