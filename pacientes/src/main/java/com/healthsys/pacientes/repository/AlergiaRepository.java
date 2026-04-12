@@ -9,4 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface AlergiaRepository extends JpaRepository<Alergia, Integer> {
+    List<Alergia> findByPacienteId(UUID pacienteId);
 }
