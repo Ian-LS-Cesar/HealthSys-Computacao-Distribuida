@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/vacinas")
+@RequestMapping("/api/vacinas")
 public class VacinaController {
     private final VacinaService vacinaService;
 
