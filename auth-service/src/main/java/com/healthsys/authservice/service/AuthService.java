@@ -1,7 +1,6 @@
 package com.healthsys.authservice.service;
 
 import com.healthsys.authservice.dto.LoginRequestDTO;
-import com.healthsys.authservice.model.Usuario;
 import com.healthsys.authservice.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
