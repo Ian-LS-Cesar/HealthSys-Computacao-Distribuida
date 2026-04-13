@@ -1,19 +1,20 @@
-server:
-  port: 8080
-
 spring:
   cloud:
     gateway:
       server:
         webflux:
           routes:
-            # Servicos de Usuario
-            - id: auth-service-route
+            - id: auth-service
               uri: http://auth-service:8081
               predicates:
-                - Path=/api/usuarios,/api/usuarios/**,/api/perfis/**
-            # Servicos de Paciente
-            - id: paciente-service-route
+                - Path=/auth/**
+              filters:
+                - StripPrefix=1
+
+
+            - id: paciente-api
               uri: http://paciente-service:8082
               predicates:
-                - Path=/api/pacientes/**,/api/generos/**,/api/telefones/**,/api/enderecos/**,/api/sexos/**,/api/alergias/**,/api/vacinas/**
+                - Path=/api/**
+              filters:
+                - StripPrefix=1
