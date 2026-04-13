@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Setter
@@ -32,6 +33,10 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
         this.perfilRepository = perfilRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public Optional<Usuario> findByEmail(String email) {
+        return  usuarioRepository.findByEmail(email);
     }
 
     public List<UsuarioResponseDTO> getUsuarios() {

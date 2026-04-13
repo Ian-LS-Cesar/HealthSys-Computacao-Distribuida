@@ -28,4 +28,10 @@ public class PerfilController {
         PerfilResponseDTO perfilResponseDTO = perfilService.criarPerfis(perfilRequestDTO);
         return ResponseEntity.ok().body(perfilResponseDTO);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<PerfilResponseDTO> deletePerfil(@PathVariable int id){
+        perfilService.deletarPerfil(id);
+        return ResponseEntity.notFound().build();
+    }
 }

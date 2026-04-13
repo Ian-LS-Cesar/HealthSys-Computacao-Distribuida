@@ -2,6 +2,7 @@ package com.healthsys.authservice.service;
 
 import com.healthsys.authservice.dto.PerfilRequestDTO;
 import com.healthsys.authservice.dto.PerfilResponseDTO;
+import com.healthsys.authservice.exception.PerfilAlreadyExistsException;
 import com.healthsys.authservice.mapper.PerfilMapper;
 import com.healthsys.authservice.model.Perfil;
 import com.healthsys.authservice.repository.PerfilRepository;
@@ -27,8 +28,18 @@ public class PerfilService {
     }
 
     public PerfilResponseDTO criarPerfis(PerfilRequestDTO perfilRequestDTO){
+        if (perfilRepository.existsByDescricaoIgnoreCase(perfilRequestDTO.getDescricao())){
+            throw new PerfilAlreadyExistsException(
+                    "Já existe um perfil com essa descrição: "+ perfilRequestDTO.getDescricao()
+            );
+        }
+
         Perfil novoPerfil = PerfilMapper.toModel(perfilRequestDTO);
         Perfil perfil = perfilRepository.save(novoPerfil);
         return PerfilMapper.toDTO(perfil);
+    }
+
+    public void deletarPerfil(int id){
+        perfilRepository.deleteById(id);
     }
 }
