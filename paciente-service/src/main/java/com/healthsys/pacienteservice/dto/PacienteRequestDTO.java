@@ -1,11 +1,7 @@
 package com.healthsys.pacienteservice.dto;
 
-import com.healthsys.pacienteservice.dto.EnderecoRequestDTO;
 import com.healthsys.pacienteservice.dto.validators.CreatePacienteValidationGroup;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +16,7 @@ public class PacienteRequestDTO {
 
     private String nomeSocial;
 
-    @NotBlank(groups = CreatePacienteValidationGroup.class,  message ="Data de Nascimento é obrigatória")
+    @NotBlank(groups = CreatePacienteValidationGroup.class, message ="Data de Nascimento é obrigatória")
     private String dataNascimento;
 
     @NotNull(groups = CreatePacienteValidationGroup.class, message ="Gênero é obrigatório")
@@ -32,6 +28,7 @@ public class PacienteRequestDTO {
     @NotEmpty(groups = CreatePacienteValidationGroup.class, message = "Ao menos um telefone é obrigatório")
     private List<String> telefones;
 
+    @Pattern(regexp = "\\d{11}", message = "CPF deve conter exatamente 11 dígitos numéricos")
     @NotBlank(groups = CreatePacienteValidationGroup.class, message = "CPF é obrigatório")
     private String cpf;
 

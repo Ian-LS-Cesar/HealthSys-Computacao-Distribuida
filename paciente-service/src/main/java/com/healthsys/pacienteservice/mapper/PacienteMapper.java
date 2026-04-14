@@ -59,7 +59,7 @@ public class PacienteMapper {
         paciente.setNome(pacienteRequestDTO.getNome());
         paciente.setNomeSocial(pacienteRequestDTO.getNomeSocial());
         paciente.setDataNascimento(LocalDate.parse(pacienteRequestDTO.getDataNascimento()));
-        paciente.setCpf(pacienteRequestDTO.getCpf());
+        paciente.setCpf(pacienteRequestDTO.getCpf().replaceAll("\\D", ""));
         paciente.setGenero(genero);
         paciente.setSexo(sexo);
 

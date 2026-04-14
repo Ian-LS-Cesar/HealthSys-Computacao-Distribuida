@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
 @Setter
 @Service
 public class PacienteService {
@@ -69,6 +68,7 @@ public class PacienteService {
             return endereco;
         }).toList();
     }
+
     private List<Alergia> mapAlergias(List<String> descricoes, Paciente paciente) {
         if (descricoes == null) return new ArrayList<>();
         return descricoes.stream()
@@ -82,8 +82,24 @@ public class PacienteService {
                 .toList();
     }
 
+    private String normalizarCpf(String cpf) {
+        if (cpf == null) {
+            throw new IllegalArgumentException("CPF é obrigatório");
+        }
+
+        String cpfNormalizado = cpf.replaceAll("\\D", "");
+
+        if (cpfNormalizado.length() != 11) {
+            throw new IllegalArgumentException("CPF deve conter exatamente 11 dígitos numéricos");
+        }
+
+        return cpfNormalizado;
+    }
+
     public PacienteResponseDTO criarPaciente(PacienteRequestDTO dto) {
-        if (pacienteRepository.existsByCpf(dto.getCpf())) {
+        String cpfNormalizado = normalizarCpf(dto.getCpf());
+
+        if (pacienteRepository.existsByCpf(cpfNormalizado)) {
             throw new CpfAlreadyExistsException("Já existe um paciente com esse CPF");
         }
 
@@ -93,6 +109,7 @@ public class PacienteService {
                 .orElseThrow(() -> new IllegalArgumentException("Sexo não encontrado com o ID: " + dto.getSexo()));
 
         Paciente novoPaciente = PacienteMapper.toModel(dto, genero, sexo);
+        novoPaciente.setCpf(cpfNormalizado);
         novoPaciente.setTelefones(mapTelefones(dto.getTelefones(), novoPaciente));
         novoPaciente.setAlergias(mapAlergias(dto.getAlergias(), novoPaciente));
         novoPaciente.setEnderecos(mapEnderecos(dto.getEnderecos(), novoPaciente));
@@ -104,7 +121,9 @@ public class PacienteService {
         Paciente paciente = pacienteRepository.findById(id)
                 .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + id));
 
-        if (pacienteRepository.existsByCpfAndIdNot(dto.getCpf(), id)) {
+        String cpfNormalizado = normalizarCpf(dto.getCpf());
+
+        if (pacienteRepository.existsByCpfAndIdNot(cpfNormalizado, id)) {
             throw new IllegalArgumentException("Já existe um paciente com esse CPF");
         }
 
@@ -118,7 +137,7 @@ public class PacienteService {
         paciente.setDataNascimento(LocalDate.parse(dto.getDataNascimento()));
         paciente.setGenero(genero);
         paciente.setSexo(sexo);
-        paciente.setCpf(dto.getCpf());
+        paciente.setCpf(cpfNormalizado);
 
         paciente.getTelefones().clear();
         paciente.getTelefones().addAll(mapTelefones(dto.getTelefones(), paciente));
