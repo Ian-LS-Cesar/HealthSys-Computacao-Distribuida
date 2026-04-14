@@ -14,7 +14,7 @@ spring:
               filters:
                 - StripPrefix=1
 
-            - id: paciente-api
+            - id: paciente-service
               uri: http://paciente-service:8082
               predicates:
                 - Path=/api/**

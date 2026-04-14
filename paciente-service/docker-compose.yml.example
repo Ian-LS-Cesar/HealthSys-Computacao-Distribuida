@@ -1,0 +1,44 @@
+services:
+  paciente-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: paciente-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://paciente-service-db:5432/db
+      SPRING_DATASOURCE_USERNAME: {SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: {SPRING_DATASOURCE_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+    depends_on:
+      - paciente-service-db
+    networks:
+      - internal
+    restart: unless-stopped
+
+  paciente-service-db:
+    image: postgres:latest
+    container_name: paciente-service-db
+    environment:
+      POSTGRES_USER: "{POSTGRES_USER}"
+      POSTGRES_PASSWORD: "{POSTGRES_PASSWORD}"
+      POSTGRES_DB: db
+    ports:
+      - "5002:5432"
+    volumes:
+      - paciente-service-db-data:/var/lib/postgresql
+    networks:
+      - internal
+    restart: unless-stopped
+
+networks:
+  internal:
+    external: true
+    name: healthsys-internal
+
+volumes:
+  paciente-service-db-data:
+
+
