@@ -12,6 +12,7 @@ import com.healthsys.authservice.repository.UsuarioRepository;
 import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Setter
 @Service
+@Transactional
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PerfilRepository perfilRepository;
@@ -35,10 +37,12 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional(readOnly = true)
     public Optional<Usuario> findByEmail(String email) {
-        return  usuarioRepository.findByEmail(email);
+        return usuarioRepository.findByEmail(email);
     }
 
+    @Transactional(readOnly = true)
     public List<UsuarioResponseDTO> getUsuarios() {
         List<Usuario> usuarios = usuarioRepository.findAll();
         return usuarios.stream()
@@ -48,12 +52,12 @@ public class UsuarioService {
 
     public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO usuarioRequestDTO) {
         if (usuarioRepository.existsByEmail(usuarioRequestDTO.getEmail())) {
-            throw new EmailAlreadyExistsException("Um usuário com esse e-mail já existe");
+            throw new EmailAlreadyExistsException("Um usuario com esse e-mail ja existe");
         }
 
         Perfil perfil = perfilRepository.findById(usuarioRequestDTO.getPerfil())
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Perfil não encontrado com o ID: " + usuarioRequestDTO.getPerfil()));
+                        "Perfil nao encontrado com o ID: " + usuarioRequestDTO.getPerfil()));
 
         Usuario novoUsuario = UsuarioMapper.toModel(usuarioRequestDTO, perfil);
         novoUsuario.setSenha(passwordEncoder.encode(usuarioRequestDTO.getSenha()));
@@ -64,24 +68,35 @@ public class UsuarioService {
 
     public UsuarioResponseDTO atualizarUsuario(UUID id, UsuarioRequestDTO usuarioRequestDTO) {
         Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new UsuarioNotFoundException("Usuario não encontrado com ID: " + id));
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario nao encontrado com ID: " + id));
 
-        // Verifica e-mail duplicado ignorando o próprio registro que está sendo atualizado
-        if (usuarioRepository.existsByEmailAndIdNot(usuarioRequestDTO.getEmail(), id)) {
-            throw new EmailAlreadyExistsException(
-                    "Um usuário com esse endereço de e-mail já existe: " + usuarioRequestDTO.getEmail()
-            );
+        if (usuarioRequestDTO.getEmail() != null && !usuarioRequestDTO.getEmail().isBlank()) {
+            if (usuarioRepository.existsByEmailAndIdNot(usuarioRequestDTO.getEmail(), id)) {
+                throw new EmailAlreadyExistsException(
+                        "Um usuario com esse endereco de e-mail ja existe: " + usuarioRequestDTO.getEmail()
+                );
+            }
+            usuario.setEmail(usuarioRequestDTO.getEmail());
         }
 
-        Perfil perfil = perfilRepository.findById(usuarioRequestDTO.getPerfil())
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Perfil não encontrado com o ID: " + usuarioRequestDTO.getPerfil()));
+        if (usuarioRequestDTO.getNome() != null && !usuarioRequestDTO.getNome().isBlank()) {
+            usuario.setNome(usuarioRequestDTO.getNome());
+        }
 
-        usuario.setNome(usuarioRequestDTO.getNome());
-        usuario.setEmail(usuarioRequestDTO.getEmail());
-        usuario.setDataNascimento(LocalDate.parse(usuarioRequestDTO.getDataNascimento()));
-        usuario.setSenha(passwordEncoder.encode(usuarioRequestDTO.getSenha()));
-        usuario.setPerfil(perfil);
+        if (usuarioRequestDTO.getDataNascimento() != null && !usuarioRequestDTO.getDataNascimento().isBlank()) {
+            usuario.setDataNascimento(LocalDate.parse(usuarioRequestDTO.getDataNascimento()));
+        }
+
+        if (usuarioRequestDTO.getSenha() != null && !usuarioRequestDTO.getSenha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(usuarioRequestDTO.getSenha()));
+        }
+
+        if (usuarioRequestDTO.getPerfil() != null) {
+            Perfil perfil = perfilRepository.findById(usuarioRequestDTO.getPerfil())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Perfil nao encontrado com o ID: " + usuarioRequestDTO.getPerfil()));
+            usuario.setPerfil(perfil);
+        }
 
         Usuario usuarioAtualizado = usuarioRepository.save(usuario);
         return UsuarioMapper.toDTO(usuarioAtualizado);
