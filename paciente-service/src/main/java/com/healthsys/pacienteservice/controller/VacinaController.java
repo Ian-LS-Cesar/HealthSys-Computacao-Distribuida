@@ -4,6 +4,7 @@ import com.healthsys.pacienteservice.dto.VacinaRequestDTO;
 import com.healthsys.pacienteservice.dto.VacinaResponseDTO;
 import com.healthsys.pacienteservice.service.VacinaService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/vacinas")
 public class VacinaController {
+
     private final VacinaService vacinaService;
 
     public VacinaController(VacinaService vacinaService) {
@@ -20,35 +22,32 @@ public class VacinaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VacinaResponseDTO>> getVacinas(){
-        List<VacinaResponseDTO> vacinas = vacinaService.getVacinas();
-        return ResponseEntity.ok().body(vacinas);
+    public ResponseEntity<List<VacinaResponseDTO>> getVacinas() {
+        return ResponseEntity.ok(vacinaService.getVacinas());
     }
 
-    @GetMapping("/paciente/{paciente}")
-    public ResponseEntity<List<VacinaResponseDTO>> getVacinasPorPaciente(@PathVariable UUID paciente){
-        List<VacinaResponseDTO> vacinas = vacinaService.getVacinasPorPaciente(paciente);
-        return ResponseEntity.ok().body(vacinas);
+    @GetMapping("/{id}")
+    public ResponseEntity<VacinaResponseDTO> getVacinaById(@PathVariable UUID id) {
+        return ResponseEntity.ok(vacinaService.getVacinaById(id));
     }
 
-    @PostMapping()
-    public ResponseEntity<VacinaResponseDTO> criarVacina(@Valid @RequestBody VacinaRequestDTO vacinaRequestDTO){
+    @PostMapping
+    public ResponseEntity<VacinaResponseDTO> criarVacina(
+            @Valid @RequestBody VacinaRequestDTO vacinaRequestDTO) {
         VacinaResponseDTO vacina = vacinaService.criarVacina(vacinaRequestDTO);
-        return ResponseEntity.ok().body(vacina);
+        return ResponseEntity.status(HttpStatus.CREATED).body(vacina);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VacinaResponseDTO> atualizarVacina(@PathVariable UUID id, @Valid @RequestBody VacinaRequestDTO vacinaRequestDTO){
-        VacinaResponseDTO vacinaResponseDTO = vacinaService.atualizarVacina(id, vacinaRequestDTO);
-        return ResponseEntity.ok().body(vacinaResponseDTO);
+    public ResponseEntity<VacinaResponseDTO> atualizarVacina(
+            @PathVariable UUID id,
+            @Valid @RequestBody VacinaRequestDTO vacinaRequestDTO) {
+        return ResponseEntity.ok(vacinaService.atualizarVacina(id, vacinaRequestDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<VacinaResponseDTO> deletarVacina(@PathVariable UUID id){
+    public ResponseEntity<Void> deletarVacina(@PathVariable UUID id) {
         vacinaService.deletarVacina(id);
         return ResponseEntity.noContent().build();
     }
-
-
-
 }

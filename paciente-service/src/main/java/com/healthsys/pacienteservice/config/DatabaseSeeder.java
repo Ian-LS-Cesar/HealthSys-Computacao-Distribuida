@@ -1,26 +1,33 @@
 package com.healthsys.pacienteservice.config;
 
 import com.healthsys.pacienteservice.model.Sexo;
+import com.healthsys.pacienteservice.model.Vacina;
 import com.healthsys.pacienteservice.repository.GeneroRepository;
 import com.healthsys.pacienteservice.repository.SexoRepository;
+import com.healthsys.pacienteservice.repository.VacinaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final SexoRepository sexoRepository;
     private final GeneroRepository generoRepository;
+    private final VacinaRepository vacinaRepository;
 
-    public DatabaseSeeder(SexoRepository sexoRepository, GeneroRepository generoRepository) {
+    public DatabaseSeeder(SexoRepository sexoRepository, GeneroRepository generoRepository, VacinaRepository vacinaRepository) {
         this.sexoRepository = sexoRepository;
         this.generoRepository = generoRepository;
+        this.vacinaRepository = vacinaRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
         seedSexos();
         seedGeneros();
+        seedVacinas();
     }
 
     private void seedSexos() {
@@ -76,6 +83,37 @@ public class DatabaseSeeder implements CommandLineRunner {
             generoRepository.save(outro);
 
             System.out.println("Gêneros alimentados com sucesso!");
+        }
+    }
+
+    private void seedVacinas() {
+        if (vacinaRepository.count() == 0) {
+            List<String> vacinas = List.of(
+                    "BCG",
+                    "Hepatite B",
+                    "Pentavalente",
+                    "Poliomielite (VIP/VOP)",
+                    "Rotavírus",
+                    "Pneumocócica 10",
+                    "Meningocócica C",
+                    "Febre Amarela",
+                    "Tríplice Viral (SCR)",
+                    "Tetraviral",
+                    "DTP",
+                    "Hepatite A",
+                    "HPV",
+                    "dT (Dupla Adulto)",
+                    "Influenza",
+                    "COVID-19"
+            );
+
+            for (String nomeVacina : vacinas) {
+                Vacina vacina = new Vacina();
+                vacina.setNome(nomeVacina);
+                vacinaRepository.save(vacina);
+            }
+
+            System.out.println("Vacinas alimentadas com sucesso!");
         }
     }
 }

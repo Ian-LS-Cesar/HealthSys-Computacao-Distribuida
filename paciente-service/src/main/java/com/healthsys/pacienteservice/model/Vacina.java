@@ -21,11 +21,4 @@ public class Vacina {
 
     @Column(nullable = false, unique = true)
     private String nome;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "paciente_id", referencedColumnName = "id", nullable = false)
-    private Paciente paciente;
-
-    @Column(nullable = false)
-    private LocalDate dataAplicacao;
 }

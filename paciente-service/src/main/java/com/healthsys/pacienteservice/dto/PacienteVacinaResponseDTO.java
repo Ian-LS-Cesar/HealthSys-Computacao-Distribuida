@@ -11,7 +11,10 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VacinaResponseDTO {
+public class PacienteVacinaResponseDTO {
     private UUID id;
-    private String nome;
+    private UUID pacienteId;
+    private UUID vacinaId;
+    private String nomeVacina;
+    private String dataAplicacao;
 }

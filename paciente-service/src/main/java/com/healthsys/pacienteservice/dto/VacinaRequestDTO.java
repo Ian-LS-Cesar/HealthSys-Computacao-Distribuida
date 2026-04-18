@@ -10,12 +10,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class VacinaRequestDTO {
-    @NotNull(message= "ID do Paciente é obrigatório")
-    private UUID paciente;
-
     @NotBlank(message= "Nome da vacina é obrigatório")
     private String nome;
-
-    @NotBlank(message = "Data da aplicação é obrigatória")
-    private String dataAplicacao;
 }
