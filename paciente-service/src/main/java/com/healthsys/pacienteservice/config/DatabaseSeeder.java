@@ -5,6 +5,7 @@ import com.healthsys.pacienteservice.model.Vacina;
 import com.healthsys.pacienteservice.repository.GeneroRepository;
 import com.healthsys.pacienteservice.repository.SexoRepository;
 import com.healthsys.pacienteservice.repository.VacinaRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String @NonNull ... args){
         seedSexos();
         seedGeneros();
         seedVacinas();

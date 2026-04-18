@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -18,5 +19,5 @@ public class PacienteVacinaRequestDTO {
     private UUID vacinaId;
 
     @NotBlank(message = "Data da aplicação é obrigatória")
-    private String dataAplicacao; // formato esperado: yyyy-MM-dd
+    private LocalDate dataAplicacao; // formato esperado: yyyy-MM-dd
 }
