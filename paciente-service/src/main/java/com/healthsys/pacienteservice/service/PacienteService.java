@@ -40,6 +40,19 @@ public class PacienteService {
         return pacientes.stream().map(PacienteMapper::toDTO).toList();
     }
 
+    public PacienteResponseDTO getPacienteById(UUID id) {
+        Paciente paciente = pacienteRepository.findById(id)
+                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + id));
+        return PacienteMapper.toDTO(paciente);
+    }
+
+    public PacienteResponseDTO getPacienteByCpf(String cpf) {
+        String cpfNormalizado = normalizarCpf(cpf);
+        Paciente paciente = pacienteRepository.findByCpf(cpfNormalizado)
+                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com CPF: " + cpfNormalizado));
+        return PacienteMapper.toDTO(paciente);
+    }
+
     private List<Telefone> mapTelefones(List<String> numeros, Paciente paciente) {
         if (numeros == null) return new ArrayList<>();
         return numeros.stream()

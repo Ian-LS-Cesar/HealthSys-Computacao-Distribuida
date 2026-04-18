@@ -27,6 +27,16 @@ public class PacienteController {
         return ResponseEntity.ok().body(pacientes);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PacienteResponseDTO> getPacienteById(@PathVariable UUID id) {
+        return ResponseEntity.ok(pacienteService.getPacienteById(id));
+    }
+
+    @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<PacienteResponseDTO> getPacienteByCpf(@PathVariable String cpf) {
+        return ResponseEntity.ok(pacienteService.getPacienteByCpf(cpf));
+    }
+
     @PostMapping
     public ResponseEntity<PacienteResponseDTO> criarPaciente(@Validated({Default.class, CreatePacienteValidationGroup.class}) @RequestBody PacienteRequestDTO pacienteRequestDTO) {
         PacienteResponseDTO pacienteResponseDTO = pacienteService.criarPaciente(pacienteRequestDTO);
