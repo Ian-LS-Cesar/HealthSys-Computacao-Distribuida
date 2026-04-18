@@ -19,5 +19,5 @@ public class PacienteVacinaRequestDTO {
     private UUID vacinaId;
 
     @NotBlank(message = "Data da aplicação é obrigatória")
-    private LocalDate dataAplicacao; // formato esperado: yyyy-MM-dd
+    private String dataAplicacao; // formato esperado: yyyy-MM-dd
 }
