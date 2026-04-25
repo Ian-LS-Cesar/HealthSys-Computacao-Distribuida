@@ -24,6 +24,11 @@ public class SintomaController {
         return ResponseEntity.ok().body(sintomas);
     }
 
+    @PostMapping
+    public ResponseEntity<SintomaResponseDTO> criarSintoma(@Valid @RequestBody SintomaRequestDTO sintomaRequestDTO) {
+        SintomaResponseDTO sintomaResponseDTO = sintomaService.criarSintoma(sintomaRequestDTO);
+        return ResponseEntity.ok().body(sintomaResponseDTO);
+    }
     @PutMapping("/{id}")
     public ResponseEntity<SintomaResponseDTO> atualizarSintoma(@PathVariable Integer id, @Valid @RequestBody SintomaRequestDTO sintomaRequestDTO) {
         SintomaResponseDTO sintomaResponseDTO = sintomaService.atualizarSintoma(id, sintomaRequestDTO);
