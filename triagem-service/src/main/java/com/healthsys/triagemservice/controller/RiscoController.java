@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/riscos")
 public class RiscoController {
-    private RiscoService riscoService;
+    private final RiscoService riscoService;
 
     public RiscoController(RiscoService riscoService){
         this.riscoService = riscoService;
