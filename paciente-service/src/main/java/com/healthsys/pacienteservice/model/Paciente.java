@@ -1,6 +1,5 @@
 package com.healthsys.pacienteservice.model;
 
-import com.healthsys.pacienteservice.model.Genero;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

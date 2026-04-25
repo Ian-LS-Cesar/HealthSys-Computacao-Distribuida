@@ -39,7 +39,7 @@ public class RiscoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<RiscoResponseDTO> deletarRisco(@PathVariable Integer id){
+    public ResponseEntity<Void> deletarRisco(@PathVariable Integer id){
         riscoService.deletarRisco(id);
         return ResponseEntity.noContent().build();
     }
