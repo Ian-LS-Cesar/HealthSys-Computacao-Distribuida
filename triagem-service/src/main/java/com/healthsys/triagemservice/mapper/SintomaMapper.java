@@ -15,7 +15,7 @@ public class SintomaMapper {
         return sintomaResponseDTO;
     }
 
-    public static Sintoma toModel (@org.checkerframework.checker.nullness.qual.MonotonicNonNull SintomaRequestDTO sintomaResponseDTO, Risco risco) {
+    public static Sintoma toModel (SintomaRequestDTO sintomaResponseDTO, Risco risco) {
         Sintoma sintoma = new Sintoma();
         sintoma.setDescricao(sintomaResponseDTO.getDescricao());
         sintoma.setRisco(risco);
