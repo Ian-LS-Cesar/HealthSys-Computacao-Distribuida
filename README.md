@@ -20,6 +20,7 @@ Execute os comandos abaixo na raiz do projeto:
 docker compose -f auth-service/docker-compose.yml up -d --build
 docker compose -f paciente-service/docker-compose.yml up -d --build
 docker compose -f api-gateway/docker-compose.yml up -d --build
+docker compose -f triagem-service/docker-compose.yml up -d --build
 ```
 
 ### 3) Ver logs
@@ -28,6 +29,7 @@ docker compose -f api-gateway/docker-compose.yml up -d --build
 docker compose -f auth-service/docker-compose.yml logs -f
 docker compose -f paciente-service/docker-compose.yml logs -f
 docker compose -f api-gateway/docker-compose.yml logs -f
+docker compose -f triagem-service/docker-compose.yml logs -f
 ```
 
 ### 4) Parar os servicos
@@ -36,6 +38,7 @@ docker compose -f api-gateway/docker-compose.yml logs -f
 docker compose -f api-gateway/docker-compose.yml down
 docker compose -f paciente-service/docker-compose.yml down
 docker compose -f auth-service/docker-compose.yml down
+docker compose -f triagem-service/docker-compose.yml down
 ```
 
 ## Portas padrao
@@ -43,5 +46,7 @@ docker compose -f auth-service/docker-compose.yml down
 - API Gateway: `8080`
 - Auth Service: `8081`
 - Paciente Service: `8082`
+- Triagem Service: `8083`
 - Auth DB (Postgres): `5001`
 - Paciente DB (Postgres): `5002`
+- Triagem DB (Postgres): `5003`
