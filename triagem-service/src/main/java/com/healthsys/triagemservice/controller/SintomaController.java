@@ -32,7 +32,7 @@ public class SintomaController {
     @PutMapping("/{id}")
     public ResponseEntity<SintomaResponseDTO> atualizarSintoma(@PathVariable Integer id, @Valid @RequestBody SintomaRequestDTO sintomaRequestDTO) {
         SintomaResponseDTO sintomaResponseDTO = sintomaService.atualizarSintoma(id, sintomaRequestDTO);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(sintomaResponseDTO);
     }
 
     @DeleteMapping("/{id}")
