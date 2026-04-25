@@ -39,3 +39,11 @@ spring:
               filters:
                 - StripPrefix=1
                 - JwtValidation
+
+            - id: triagem-service
+              uri: http://triagem-service:8083
+              predicates:
+                - Path=/api/**
+              filters:
+                - StripPrefix=1
+                - JwtValidation
