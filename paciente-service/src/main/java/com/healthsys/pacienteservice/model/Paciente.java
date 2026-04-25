@@ -33,7 +33,7 @@ public class Paciente {
     private String cpf;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "genero", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name= "genero", referencedColumnName = "id")
     private Genero genero;
 
     @ManyToOne(fetch = FetchType.LAZY)
