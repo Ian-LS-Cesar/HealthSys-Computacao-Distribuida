@@ -43,7 +43,7 @@ spring:
             - id: triagem-service
               uri: http://triagem-service:8083
               predicates:
-                - Path=/api/**
+                - Path=/tri/**
               filters:
                 - StripPrefix=1
                 - JwtValidation
