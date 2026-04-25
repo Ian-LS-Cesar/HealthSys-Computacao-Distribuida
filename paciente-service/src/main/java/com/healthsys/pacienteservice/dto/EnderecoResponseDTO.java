@@ -10,7 +10,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 public class EnderecoResponseDTO {
-    private int id;
+    private Integer id;
     private UUID paciente;
     private String logradouro;
     private String numero;

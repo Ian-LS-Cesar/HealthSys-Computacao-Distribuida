@@ -12,6 +12,6 @@ public class SintomaRequestDTO {
     private String descricao;
 
     @NotNull(message = "ID do risco associado é obrigatório")
-    private int risco;
+    private Integer risco;
 
 }

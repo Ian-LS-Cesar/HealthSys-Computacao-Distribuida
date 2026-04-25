@@ -1,4 +1,4 @@
-package com.healthsys.pacienteservice.dto;
+package com.healthsys.triagemservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +11,9 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlergiaResponseDTO {
-    private Integer id;
+public class TriagemResponseDTO {
+    private UUID id;
     private UUID paciente;
-    private String descricao;
+    private Integer risco;
+    private Integer status;
 }

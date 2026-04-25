@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SintomaResponseDTO {
-    private int id;
+    private Integer id;
     private String descricao;
-    private int risco;
+    private Integer risco;
 }

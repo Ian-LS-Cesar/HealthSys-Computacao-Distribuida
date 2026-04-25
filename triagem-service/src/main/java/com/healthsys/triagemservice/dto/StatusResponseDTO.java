@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StatusResponseDTO {
-    private int id;
+    private Integer id;
     private String descricao;
 }

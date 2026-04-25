@@ -2,51 +2,61 @@ package com.healthsys.triagemservice.config;
 
 import com.healthsys.triagemservice.model.Risco;
 import com.healthsys.triagemservice.model.Sintoma;
+import com.healthsys.triagemservice.model.Status;
 import com.healthsys.triagemservice.repository.RiscoRepository;
 import com.healthsys.triagemservice.repository.SintomaRepository;
+import com.healthsys.triagemservice.repository.StatusRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final RiscoRepository riscoRepository;
     private final SintomaRepository sintomaRepository;
+    private final StatusRepository statusRepository;
 
-    public DatabaseSeeder(RiscoRepository riscoRepository, SintomaRepository sintomaRepository) {
+    public DatabaseSeeder(
+            RiscoRepository riscoRepository,
+            SintomaRepository sintomaRepository,
+            StatusRepository statusRepository
+    ) {
         this.riscoRepository = riscoRepository;
         this.sintomaRepository = sintomaRepository;
+        this.statusRepository = statusRepository;
     }
 
     @Override
     public void run(String @NonNull ... args) {
         seedRiscos();
+        seedStatus();
         seedSintomas();
     }
 
     private void seedRiscos() {
-        if (riscoRepository.count() == 0) {
-            Risco azul = new Risco();
-            azul.setDescricao("Azul - Não Urgente");
-            riscoRepository.save(azul);
-
-            Risco verde = new Risco();
-            verde.setDescricao("Verde - Pouco Urgente");
-            riscoRepository.save(verde);
-
-            Risco amarelo = new Risco();
-            amarelo.setDescricao("Amarelo - Urgente");
-            riscoRepository.save(amarelo);
-
-            Risco laranja = new Risco();
-            laranja.setDescricao("Laranja - Muito Urgente");
-            riscoRepository.save(laranja);
-
-            Risco vermelho = new Risco();
-            vermelho.setDescricao("Vermelho - Emergência");
-            riscoRepository.save(vermelho);
+        if (riscoRepository.count() > 0) {
+            return;
         }
+
+        salvarRisco("Azul - Não Urgente");
+        salvarRisco("Verde - Pouco Urgente");
+        salvarRisco("Amarelo - Urgente");
+        salvarRisco("Laranja - Muito Urgente");
+        salvarRisco("Vermelho - Emergência");
+    }
+
+    private void seedStatus() {
+        if (statusRepository.count() > 0) {
+            return;
+        }
+
+        salvarStatus("ABERTA");
+        salvarStatus("EM_ATENDIMENTO");
+        salvarStatus("FINALIZADA");
+        salvarStatus("CANCELADA");
     }
 
     private void seedSintomas() {
@@ -54,11 +64,16 @@ public class DatabaseSeeder implements CommandLineRunner {
             return;
         }
 
-        Risco risco1 = riscoRepository.findById(1).orElseThrow();
-        Risco risco2 = riscoRepository.findById(2).orElseThrow();
-        Risco risco3 = riscoRepository.findById(3).orElseThrow();
-        Risco risco4 = riscoRepository.findById(4).orElseThrow();
-        Risco risco5 = riscoRepository.findById(5).orElseThrow();
+        List<Risco> riscos = riscoRepository.findAll();
+        if (riscos.size() < 5) {
+            throw new IllegalStateException("É necessário cadastrar 5 riscos antes de cadastrar os sintomas.");
+        }
+
+        Risco risco1 = riscos.get(0);
+        Risco risco2 = riscos.get(1);
+        Risco risco3 = riscos.get(2);
+        Risco risco4 = riscos.get(3);
+        Risco risco5 = riscos.get(4);
 
         // Nível 5
         criarSintoma("Parada cardiorrespiratória", risco5);
@@ -143,6 +158,18 @@ public class DatabaseSeeder implements CommandLineRunner {
         criarSintoma("Solicitação de atestados ou laudos", risco1);
         criarSintoma("Avaliação de lesões de pele antigas", risco1);
         criarSintoma("Orientações médicas gerais", risco1);
+    }
+
+    private void salvarRisco(String descricao) {
+        Risco risco = new Risco();
+        risco.setDescricao(descricao);
+        riscoRepository.save(risco);
+    }
+
+    private void salvarStatus(String descricao) {
+        Status status = new Status();
+        status.setDescricao(descricao);
+        statusRepository.save(status);
     }
 
     private void criarSintoma(String descricao, Risco risco) {
