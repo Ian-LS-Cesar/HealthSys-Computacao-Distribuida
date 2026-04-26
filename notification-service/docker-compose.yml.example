@@ -1,0 +1,41 @@
+services:
+  notification-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: notification-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_RABBITMQ_HOST: notification-service-db
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: {RABBITMQ_USER}
+      SPRING_RABBITMQ_PASSWORD: {RABBITMQ_PASSWORD}
+    depends_on:
+      - notification-service-db
+    networks:
+      - internal
+    restart: unless-stopped
+
+  notification-service-db:
+    image: rabbitmq:3-management
+    container_name: notification-service-db
+    environment:
+      RABBITMQ_DEFAULT_USER: {RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: {RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - notification-service-db-data:/var/lib/rabbitmq
+    networks:
+      - internal
+    restart: unless-stopped
+
+networks:
+  internal:
+    external: true
+    name: healthsys-internal
+
+volumes:
+  notification-service-db-data:
