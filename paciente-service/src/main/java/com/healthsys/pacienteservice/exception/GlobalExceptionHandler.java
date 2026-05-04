@@ -3,6 +3,7 @@ package com.healthsys.pacienteservice.exception;
 import com.healthsys.pacienteservice.exception.CpfAlreadyExistsException;
 import com.healthsys.pacienteservice.exception.PacienteNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -48,4 +49,13 @@ public class GlobalExceptionHandler {
         errors.put("message", "CPF já existente");
         return ResponseEntity.badRequest().body(errors);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
+        log.error("Erro inesperado no paciente-service", ex);
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.healthsys.pacienteservice.config;
 
+import com.healthsys.pacienteservice.model.Genero;
 import com.healthsys.pacienteservice.model.Sexo;
 import com.healthsys.pacienteservice.model.Vacina;
 import com.healthsys.pacienteservice.repository.GeneroRepository;
@@ -18,14 +19,18 @@ public class DatabaseSeeder implements CommandLineRunner {
     private final GeneroRepository generoRepository;
     private final VacinaRepository vacinaRepository;
 
-    public DatabaseSeeder(SexoRepository sexoRepository, GeneroRepository generoRepository, VacinaRepository vacinaRepository) {
+    public DatabaseSeeder(
+            SexoRepository sexoRepository,
+            GeneroRepository generoRepository,
+            VacinaRepository vacinaRepository
+    ) {
         this.sexoRepository = sexoRepository;
         this.generoRepository = generoRepository;
         this.vacinaRepository = vacinaRepository;
     }
 
     @Override
-    public void run(String @NonNull ... args){
+    public void run(String @NonNull ... args) {
         seedSexos();
         seedGeneros();
         seedVacinas();
@@ -33,58 +38,35 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private void seedSexos() {
         if (sexoRepository.count() == 0) {
-            Sexo feminino = new Sexo();
-            feminino.setDescricao("Feminino");
-            sexoRepository.save(feminino);
-
-            Sexo masculino = new Sexo();
-            masculino.setDescricao("Masculino");
-            sexoRepository.save(masculino);
-
-            Sexo intersexo = new Sexo();
-            intersexo.setDescricao("Intersexo");
-            sexoRepository.save(intersexo);
-
-            System.out.println("Sexos alimentados com sucesso!");
+            sexoRepository.save(criarSexo("Feminino"));
+            sexoRepository.save(criarSexo("Masculino"));
+            sexoRepository.save(criarSexo("Intersexo"));
         }
+    }
+
+    private Sexo criarSexo(String descricao) {
+        Sexo sexo = new Sexo();
+        sexo.setDescricao(descricao);
+        return sexo;
     }
 
     private void seedGeneros() {
         if (generoRepository.count() == 0) {
-            com.healthsys.pacienteservice.model.Genero mulherCis = new com.healthsys.pacienteservice.model.Genero();
-            mulherCis.setDescricao("Mulher Cis");
-            generoRepository.save(mulherCis);
-
-            com.healthsys.pacienteservice.model.Genero homemCis = new com.healthsys.pacienteservice.model.Genero();
-            homemCis.setDescricao("Homem Cis");
-            generoRepository.save(homemCis);
-
-            com.healthsys.pacienteservice.model.Genero mulherTrans = new com.healthsys.pacienteservice.model.Genero();
-            mulherTrans.setDescricao("Mulher Trans");
-            generoRepository.save(mulherTrans);
-
-            com.healthsys.pacienteservice.model.Genero homemTrans = new com.healthsys.pacienteservice.model.Genero();
-            homemTrans.setDescricao("Homem Trans");
-            generoRepository.save(homemTrans);
-
-            com.healthsys.pacienteservice.model.Genero travesti = new com.healthsys.pacienteservice.model.Genero();
-            travesti.setDescricao("Travesti");
-            generoRepository.save(travesti);
-
-            com.healthsys.pacienteservice.model.Genero naoBinario = new com.healthsys.pacienteservice.model.Genero();
-            naoBinario.setDescricao("Não-binário");
-            generoRepository.save(naoBinario);
-
-            com.healthsys.pacienteservice.model.Genero naoDeclarado = new com.healthsys.pacienteservice.model.Genero();
-            naoDeclarado.setDescricao("Não declarado");
-            generoRepository.save(naoDeclarado);
-
-            com.healthsys.pacienteservice.model.Genero outro = new com.healthsys.pacienteservice.model.Genero();
-            outro.setDescricao("Outro");
-            generoRepository.save(outro);
-
-            System.out.println("Gêneros alimentados com sucesso!");
+            generoRepository.save(criarGenero("Mulher Cis"));
+            generoRepository.save(criarGenero("Homem Cis"));
+            generoRepository.save(criarGenero("Mulher Trans"));
+            generoRepository.save(criarGenero("Homem Trans"));
+            generoRepository.save(criarGenero("Travesti"));
+            generoRepository.save(criarGenero("Não-binário"));
+            generoRepository.save(criarGenero("Não declarado"));
+            generoRepository.save(criarGenero("Outro"));
         }
+    }
+
+    private Genero criarGenero(String descricao) {
+        Genero genero = new Genero();
+        genero.setDescricao(descricao);
+        return genero;
     }
 
     private void seedVacinas() {
@@ -113,8 +95,6 @@ public class DatabaseSeeder implements CommandLineRunner {
                 vacina.setNome(nomeVacina);
                 vacinaRepository.save(vacina);
             }
-
-            System.out.println("Vacinas alimentadas com sucesso!");
         }
     }
 }
