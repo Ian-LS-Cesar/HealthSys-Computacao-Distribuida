@@ -8,13 +8,12 @@ import com.healthsys.authservice.repository.EspecialidadeRepository;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Service
 public class EspecialidadeService {
-    private EspecialidadeRepository especialidadeRepository;
+    private final EspecialidadeRepository especialidadeRepository;
 
     public EspecialidadeService(EspecialidadeRepository especialidadeRepository) {
         this.especialidadeRepository = especialidadeRepository;
