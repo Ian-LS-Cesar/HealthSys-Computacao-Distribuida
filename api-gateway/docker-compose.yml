@@ -6,9 +6,10 @@ services:
     container_name: api-gateway
     ports:
       - "${API_GATEWAY_PORT}:8080"
+    env_file:
+      - ../.env
     environment:
       AUTH_SERVICE_URL: http://auth-service:8081
     networks:
       - internal
     restart: unless-stopped
-    env_file: ../.env

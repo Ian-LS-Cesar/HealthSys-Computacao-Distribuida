@@ -6,7 +6,8 @@ services:
     container_name: paciente-service
     ports:
       - "${PACIENTE_SERVICE_PORT}:8082"
-    env_file: ../.env
+    env_file:
+      - ../.env
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://paciente-service-db:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
@@ -22,7 +23,8 @@ services:
   paciente-service-db:
     image: postgres:latest
     container_name: paciente-service-db
-    env_file: ../.env
+    env_file:
+      - ../.env
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -35,10 +37,9 @@ services:
       - internal
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
+      test: [ "CMD-SHELL", "PGPASSWORD=\"${DB_PASSWORD}\" pg_isready -U ${DB_USERNAME} -d ${DB_NAME} -h localhost -p 5432" ]
       interval: 10s
       timeout: 5s
       retries: 5
-
 volumes:
   paciente-service-db-data:
