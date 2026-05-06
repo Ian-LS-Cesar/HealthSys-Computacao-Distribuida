@@ -1,44 +1,130 @@
 # HealthSys-Computacao-Distribuida
 
-## Rodando os servicos pelo diretorio raiz
+### 1) Pré-requisitos (executar uma vez)
 
-Os tres `docker-compose.yml` usam a rede externa `healthsys-internal`.
-
-### 1) Pre-requisito (executar uma vez)
-
+## 1.1) Criar a rede Docker para os serviços se conectar
 ```bash
 docker network create healthsys-internal
 ```
 
-Se a rede ja existir, o Docker vai retornar erro de rede duplicada e voce pode ignorar.
-
-### 2) Subir os servicos (sem entrar nas pastas)
-
-Execute os comandos abaixo na raiz do projeto:
+## 1.2) Criar um arquivo .env na raiz do projeto com as seguintes variáveis de ambiente:
 
 ```bash
-docker compose -f auth-service/docker-compose.yml up -d --build
-docker compose -f paciente-service/docker-compose.yml up -d --build
-docker compose -f api-gateway/docker-compose.yml up -d --build
-docker compose -f triagem-service/docker-compose.yml up -d --build
+DB_USERNAME=Nome_Usuario_DB
+DB_PASSWORD=Senha_Usuario_DB
+DB_NAME=db
+API_GATEWAY_PORT=8080
+AUTH_SERVICE_PORT=8081
+AUTH_SERVICE_DB_PORT=5001
+PACIENTE_SERVICE_PORT=8082
+PACIENTE_SERVICE_DB_PORT=5002
+TRIAGEM_SERVICE_PORT=8083
+TRIAGEM_SERVICE_DB_PORT=5003
+SERVICE_DISCOVERY_PORT=8761
+JWT_SECRET=(Token JWT)
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
+SPRING_JPA_SHOW_SQL=true
+DOCKER_NETWORK=healthsys-internal
+EUREKA_HOST=service-discovery
+EUREKA_PORT=8167
 ```
 
-### 3) Ver logs
+**OBS: Substitua os valores pelos valores reais do seu ambiente. E lembre-se de verificar se a .env está no gitignore**
 
+Se a rede já existir, o Docker vai retornar erro de rede duplicada e você pode ignorar.
+
+# 2) Comandos
+
+## Construção das imagens dos serviços:
+### Construir as imagens dos serviços:
 ```bash
-docker compose -f auth-service/docker-compose.yml logs -f
-docker compose -f paciente-service/docker-compose.yml logs -f
-docker compose -f api-gateway/docker-compose.yml logs -f
-docker compose -f triagem-service/docker-compose.yml logs -f
+docker compose build auth-service
+docker compose build paciente-service
+docker compose build triagem-service
+docker compose build api-gateway
+docker compose build service-discovery
 ```
 
-### 4) Parar os servicos
+### Construir as imagens de todos os serviços:
+```bash
+docker compose build
+```
+
+## Subir os serviços:
+
+### Subir os serviços específicos:
+```bash
+docker compose up -d auth-service
+docker compose up -d paciente-service
+docker compose up -d triagem-service
+docker compose up -d api-gateway
+docker compose up -d service-discovery
+```
+
+### Subir todos os serviços:
+```bash
+docker compose up -d
+```
+
+## Subir os serviços aplicando novas mudanças:
+
+### Subir serviços específicos enquanto aplica novas mudanças:
+```bash
+docker compose up -d --build auth-service
+docker compose up -d --build paciente-service
+docker compose up -d --build triagem-service
+docker compose up -d --build api-gateway
+docker compose up -d --build service-discovery
+```
+
+### Subir todos os serviços enquanto aplica novas mudanças:
+```bash
+docker compose up -d --build
+```
+
+##  Ver logs
 
 ```bash
-docker compose -f api-gateway/docker-compose.yml down
-docker compose -f paciente-service/docker-compose.yml down
-docker compose -f auth-service/docker-compose.yml down
-docker compose -f triagem-service/docker-compose.yml down
+docker compose logs auth-service
+docker compose logs paciente-service
+docker compose logs triagem-service
+docker compose logs api-gateway
+docker compose logs service-discovery
+```
+
+```bash
+docker compose logs
+```
+
+## Parar os serviços:
+
+### Parar serviços específicos:
+```bash
+docker compose down auth-service
+docker compose down paciente-service
+docker compose down triagem-service
+docker compose down api-gateway
+docker compose down service-discovery
+```
+
+### Para parar todos os serviços, utilize:
+```bash
+docker compose down
+```
+
+## Parar e limpar dados de serviços:
+
+### Parar e limpar dados de serviços específicos:
+```bash
+docker compose down -v auth-service
+docker compose down -v paciente-service
+docker compose down -v triagem-service
+docker compose down -v api-gateway
+docker compose down -v service-discovery
+```
+### Para parar e limpar dados de todos os serviços, utilize:
+```bash
+docker compose down -v
 ```
 
 ## Portas padrao
