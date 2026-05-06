@@ -26,6 +26,6 @@ public class PacienteVacina {
     @JoinColumn(name="vacina_id", referencedColumnName = "id", nullable = false)
     private Vacina vacina;
 
-    @Column(name="data_aplicacao", nullable = false)
+    @Column(name="data_aplicacao")
     private LocalDate dataAplicacao;
 }
