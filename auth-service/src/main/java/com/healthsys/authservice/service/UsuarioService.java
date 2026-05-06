@@ -49,10 +49,43 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public List<UsuarioResponseDTO> getUsuarios() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        return usuarios.stream()
+        return usuarioRepository.findAll().stream()
                 .map(UsuarioMapper::toDTO)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsuarioResponseDTO> getUsuariosByPerfilId(Integer perfilId) {
+        Perfil perfil = perfilRepository.findById(perfilId)
+                .orElseThrow(() -> new IllegalArgumentException("Perfil nao encontrado com o ID: " + perfilId));
+
+        return usuarioRepository.findAll().stream()
+                .filter(u -> u.getPerfil() != null && u.getPerfil().getId() == perfil.getId())
+                .map(UsuarioMapper::toDTO)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsuarioResponseDTO> getUsuariosByEspecialidadeId(Integer especialidadeId) {
+        Especialidade especialidade = especialidadeRepository.findById(especialidadeId)
+                .orElseThrow(() -> new IllegalArgumentException("Especialidade nao encontrada com o ID: " + especialidadeId));
+
+        return usuarioRepository.findAll().stream()
+                .filter(u -> u.getEspecialidade() != null && u.getEspecialidade().getId() == especialidade.getId())
+                .map(UsuarioMapper::toDTO)
+                .toList();
+    }
+
+    public UsuarioResponseDTO getUsuarioByEmail(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario nao encontrado com email: " + email));
+        return UsuarioMapper.toDTO(usuario);
+    }
+
+    public UsuarioResponseDTO getUsuarioById(UUID id) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuário não encontrado com o ID: " + id));
+        return UsuarioMapper.toDTO(usuario);
     }
 
     public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO usuarioRequestDTO) {
@@ -110,7 +143,7 @@ public class UsuarioService {
         if (usuarioRequestDTO.getEspecialidade() != null) {
             Especialidade especialidade = especialidadeRepository.findById(usuarioRequestDTO.getEspecialidade())
                     .orElseThrow(() -> new IllegalArgumentException(
-                            "Especialidade nao encontrada com o  ID: " + usuarioRequestDTO.getEspecialidade()));
+                            "Especialidade nao encontrada com o ID: " + usuarioRequestDTO.getEspecialidade()));
             usuario.setEspecialidade(especialidade);
         }
 
