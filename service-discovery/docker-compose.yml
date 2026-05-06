@@ -1,0 +1,11 @@
+services:
+  service-discovery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: service-discovery
+    ports:
+      - "${SERVICE_DISCOVERY_PORT}:8761"
+    networks:
+      - internal
+    restart: unless-stopped
