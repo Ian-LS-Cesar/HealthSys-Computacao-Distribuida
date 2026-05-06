@@ -9,3 +9,4 @@ services:
     networks:
       - internal
     restart: unless-stopped
+    env_file: ../.env
