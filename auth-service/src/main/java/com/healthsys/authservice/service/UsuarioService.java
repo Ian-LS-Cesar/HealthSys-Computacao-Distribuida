@@ -5,8 +5,10 @@ import com.healthsys.authservice.dto.UsuarioResponseDTO;
 import com.healthsys.authservice.exception.EmailAlreadyExistsException;
 import com.healthsys.authservice.exception.UsuarioNotFoundException;
 import com.healthsys.authservice.mapper.UsuarioMapper;
+import com.healthsys.authservice.model.Especialidade;
 import com.healthsys.authservice.model.Perfil;
 import com.healthsys.authservice.model.Usuario;
+import com.healthsys.authservice.repository.EspecialidadeRepository;
 import com.healthsys.authservice.repository.PerfilRepository;
 import com.healthsys.authservice.repository.UsuarioRepository;
 import lombok.Setter;
@@ -25,15 +27,18 @@ import java.util.UUID;
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PerfilRepository perfilRepository;
+    private final EspecialidadeRepository especialidadeRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(
             UsuarioRepository usuarioRepository,
             PerfilRepository perfilRepository,
+            EspecialidadeRepository especialidadeRepository,
             PasswordEncoder passwordEncoder
     ) {
         this.usuarioRepository = usuarioRepository;
         this.perfilRepository = perfilRepository;
+        this.especialidadeRepository = especialidadeRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -59,7 +64,11 @@ public class UsuarioService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Perfil nao encontrado com o ID: " + usuarioRequestDTO.getPerfil()));
 
-        Usuario novoUsuario = UsuarioMapper.toModel(usuarioRequestDTO, perfil);
+        Especialidade especialidade = especialidadeRepository.findById(usuarioRequestDTO.getEspecialidade())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Especialidade nao encontrada com o ID: " + usuarioRequestDTO.getEspecialidade()));
+
+        Usuario novoUsuario = UsuarioMapper.toModel(usuarioRequestDTO, perfil, especialidade);
         novoUsuario.setSenha(passwordEncoder.encode(usuarioRequestDTO.getSenha()));
 
         Usuario usuarioSalvo = usuarioRepository.save(novoUsuario);
@@ -96,6 +105,13 @@ public class UsuarioService {
                     .orElseThrow(() -> new IllegalArgumentException(
                             "Perfil nao encontrado com o ID: " + usuarioRequestDTO.getPerfil()));
             usuario.setPerfil(perfil);
+        }
+
+        if (usuarioRequestDTO.getEspecialidade() != null) {
+            Especialidade especialidade = especialidadeRepository.findById(usuarioRequestDTO.getEspecialidade())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Especialidade nao encontrada com o  ID: " + usuarioRequestDTO.getEspecialidade()));
+            usuario.setEspecialidade(especialidade);
         }
 
         Usuario usuarioAtualizado = usuarioRepository.save(usuario);

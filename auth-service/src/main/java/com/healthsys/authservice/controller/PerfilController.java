@@ -32,6 +32,6 @@ public class PerfilController {
     @DeleteMapping("/{id}")
     public ResponseEntity<PerfilResponseDTO> deletePerfil(@PathVariable int id){
         perfilService.deletarPerfil(id);
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
     }
 }

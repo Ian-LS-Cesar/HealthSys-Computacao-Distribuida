@@ -36,4 +36,8 @@ public class Usuario {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "perfil_id", referencedColumnName = "id", columnDefinition = "int default 0")
     private Perfil perfil;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "especialidade_id", referencedColumnName = "id")
+    private Especialidade especialidade;
 }

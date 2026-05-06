@@ -28,4 +28,5 @@ public class UsuarioRequestDTO {
     @NotNull(groups= CreateUsuarioValidationGroup.class, message = "O ID do perfil é obrigatório.")
     private Integer perfil;
 
+    private Integer especialidade;
 }
