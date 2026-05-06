@@ -1,6 +1,6 @@
 package com.healthsys.notification_service.config;
 
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String QUEUE_NAME = "medical.alerts";
+    // Nome da Exchange que conectará Triagem e Notificação
+    public static final String EXCHANGE_NAME = "medical.notification.exchange";
 
     @Bean
-    public Queue queue() {
-        return new Queue(QUEUE_NAME, true);
+    public TopicExchange medicalExchange() {
+        return new TopicExchange(EXCHANGE_NAME);
     }
 
     @Bean
