@@ -15,8 +15,10 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
       SPRING_JPA_SHOW_SQL: ${SPRING_JPA_SHOW_SQL}
       JWT_SECRET: ${JWT_SECRET}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
     depends_on:
       - auth-service-db
+      - service-discovery
     networks:
       - internal
     restart: unless-stopped
