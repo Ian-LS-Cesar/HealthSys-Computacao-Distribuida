@@ -18,3 +18,20 @@ logging:
 # spring.datasource.username=${DB_USERNAME}
 # spring.datasource.password=${DB_PASSWORD}
 # spring.config.import=optional:file:.env[.properties]
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
