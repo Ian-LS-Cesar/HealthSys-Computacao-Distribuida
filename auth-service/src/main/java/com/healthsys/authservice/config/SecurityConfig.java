@@ -12,10 +12,18 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http){
-        http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().permitAll())
-                .csrf(AbstractHttpConfigurer::disable);
-        return http.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+
+                // 1. DESATIVA O LOGOUT AUTOMÁTICO DO SPRING SECURITY
+                .logout(AbstractHttpConfigurer::disable)
+
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/validate", "/logout").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .build();
     }
 
     @Bean

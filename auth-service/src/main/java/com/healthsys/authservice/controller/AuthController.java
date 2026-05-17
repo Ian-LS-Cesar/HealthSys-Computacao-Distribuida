@@ -33,6 +33,20 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
+    @Operation(summary = "Realizar logout do usuário, revogando o token")
+    @PostMapping("/logout")
+    public ResponseEntity<LoginResponseDTO> logout(@RequestHeader("Authorization") String authHeader){
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        String token = authHeader.substring(7);
+
+        authService.logout(token);
+
+        return ResponseEntity.ok().build();
+    }
     @Operation(summary = "Validar Token")
     @GetMapping("/validate")
     public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authHeader){
