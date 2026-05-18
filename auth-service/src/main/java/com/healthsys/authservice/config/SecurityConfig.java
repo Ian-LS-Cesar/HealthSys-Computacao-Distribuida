@@ -16,23 +16,22 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(cors -> cors.configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-                    return config;
-                }))
-                .csrf(csrf -> csrf.disable()) // Desabilite CSRF para APIs com JWT
-                // ... restante da sua config de rotas
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login").permitAll()
-                        .anyRequest().authenticated()
-                );
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
 
-        return http.build();
+                // 1. DESATIVA O LOGOUT AUTOMÁTICO DO SPRING SECURITY
+                .logout(AbstractHttpConfigurer::disable)
+
+                .authorizeHttpRequests(auth -> auth
+                        // Allow unauthenticated access to create user (registration).
+                        // Allow unauthenticated access to login/logout, validate and actuator endpoints
+                        .requestMatchers("/login", "/validate", "/logout", "/actuator/**", "/perfis", "/usuarios", "/auth/usuarios", "/especialidades").permitAll()
+
+                        // everything else must be authenticated
+                        .anyRequest().authenticated()
+                )
+                .build();
     }
 
     @Bean

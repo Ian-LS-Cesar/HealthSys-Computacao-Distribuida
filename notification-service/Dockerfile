@@ -1,8 +1,12 @@
 # Mude de 17 para 21
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
+COPY .mvn ./.mvn
+COPY mvnw ./
+COPY pom.xml ./
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
 
 # Mude de 17 para 21
 FROM eclipse-temurin:21-jre

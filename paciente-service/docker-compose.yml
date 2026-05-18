@@ -14,8 +14,12 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
       SPRING_JPA_SHOW_SQL: ${SPRING_JPA_SHOW_SQL}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
     depends_on:
-      - paciente-service-db
+      paciente-service-db:
+        condition: service_healthy
+      service-discovery:
+        condition: service_healthy
     networks:
       - internal
     restart: unless-stopped

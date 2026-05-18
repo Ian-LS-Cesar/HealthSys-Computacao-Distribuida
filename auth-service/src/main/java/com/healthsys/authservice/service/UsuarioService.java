@@ -97,10 +97,12 @@ public class UsuarioService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Perfil nao encontrado com o ID: " + usuarioRequestDTO.getPerfil()));
 
-        Especialidade especialidade = especialidadeRepository.findById(usuarioRequestDTO.getEspecialidade())
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Especialidade nao encontrada com o ID: " + usuarioRequestDTO.getEspecialidade()));
-
+        Especialidade especialidade = null;
+        if (usuarioRequestDTO.getEspecialidade() != null) {
+            especialidade = especialidadeRepository.findById(usuarioRequestDTO.getEspecialidade())
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Especialidade nao encontrada com o ID: " + usuarioRequestDTO.getEspecialidade()));
+        }
         Usuario novoUsuario = UsuarioMapper.toModel(usuarioRequestDTO, perfil, especialidade);
         novoUsuario.setSenha(passwordEncoder.encode(usuarioRequestDTO.getSenha()));
 

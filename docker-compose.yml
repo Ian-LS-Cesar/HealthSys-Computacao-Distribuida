@@ -5,8 +5,9 @@ include:
   - path: ./notification-service/docker-compose.yml
   - path: ./service-discovery/docker-compose.yml
   - path: ./api-gateway/docker-compose.yml
+  - path: ./observability/docker-compose.yml
 
 networks:
-    internal:
-        external: true
-        name: ${DOCKER_NETWORK}
+  internal:
+    external: true
+    name: ${DOCKER_NETWORK}

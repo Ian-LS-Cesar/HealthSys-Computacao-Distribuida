@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: auth-service
+
+server:
+  port: 8081
+
+# spring.datasource.url=jdbc:postgresql://localhost:5432/usuario
+# spring.datasource.driver-class-name=org.postgresql.Driver
+# spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+# spring.sql.init.mode=always
+# spring.jpa.hibernate.ddl-auto=update
+
+# spring.datasource.username=${DB_USERNAME}
+# spring.datasource.password=${DB_PASSWORD}
+
+# spring.config.import=optional:file:.env[.properties
+logging:
+  level:
+    root: info
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+

@@ -10,24 +10,34 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/enderecos")
 public class EnderecoController {
     private final EnderecoService enderecoService;
+    private final Counter counter;
 
-    public EnderecoController(EnderecoService enderecoService) {
+    public EnderecoController(EnderecoService enderecoService, MeterRegistry meterRegistry) {
         this.enderecoService = enderecoService;
+        this.counter = Counter.builder("paciente_service_requests_total")
+                .description("Total de chamadas ao controller EnderecoController")
+                .tag("controller", "EnderecoController")
+                .tag("endpoint", "/enderecos")
+                .register(meterRegistry);
     }
 
     @GetMapping
     public ResponseEntity<List<EnderecoResponseDTO>> getEnderecos() {
+        counter.increment();
         List<EnderecoResponseDTO> enderecos = enderecoService.getEnderecos();
         return ResponseEntity.ok().body(enderecos);
     }
 
     @GetMapping("/paciente/{pacienteId}")
     public ResponseEntity<List<EnderecoResponseDTO>> getEnderecosPorPaciente(@PathVariable UUID pacienteId) {
+        counter.increment();
         List<EnderecoResponseDTO> enderecos = enderecoService.getEnderecosPorPaciente(pacienteId);
         return ResponseEntity.ok().body(enderecos);
     }
@@ -35,6 +45,7 @@ public class EnderecoController {
     @PostMapping
     public ResponseEntity<EnderecoResponseDTO> criarEndereco(
             @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) {
+        counter.increment();
         EnderecoResponseDTO enderecoResponseDTO = enderecoService.criarEndereco(enderecoRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(enderecoResponseDTO);
     }
@@ -43,12 +54,14 @@ public class EnderecoController {
     public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(
             @PathVariable Integer id,
             @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) {
+        counter.increment();
         EnderecoResponseDTO enderecoResponseDTO = enderecoService.atualizarEndereco(id, enderecoRequestDTO);
         return ResponseEntity.ok().body(enderecoResponseDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarEndereco(@PathVariable Integer id) {
+        counter.increment();
         enderecoService.deletarEndereco(id);
         return ResponseEntity.noContent().build();
     }

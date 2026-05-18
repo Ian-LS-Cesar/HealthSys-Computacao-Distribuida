@@ -1,15 +1,17 @@
-FROM maven:3.9.9-eclipse-temurin-21 AS builder
+FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
 
-COPY pom.xml .
+COPY .mvn ./.mvn
+COPY mvnw ./
+COPY pom.xml ./
 
-RUN mvn dependency:go-offline -B
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
 
 COPY src ./src
 
-RUN mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
-FROM eclipse-temurin:21 AS runner
+FROM eclipse-temurin:21-jdk AS runner
 
 WORKDIR /app
 COPY --from=builder ./app/target/auth-service-0.0.1-SNAPSHOT.jar ./app.jar

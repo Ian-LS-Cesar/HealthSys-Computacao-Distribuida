@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: api-gateway
   cloud:
     gateway:
       server:
@@ -26,14 +28,14 @@ spring:
 
           routes:
             - id: auth-service
-              uri: http://auth-service:8081
+              uri: lb://auth-service
               predicates:
                 - Path=/auth/**
               filters:
                 - StripPrefix=1
 
             - id: paciente-service
-              uri: http://paciente-service:8082
+              uri: lb://paciente-service
               predicates:
                 - Path=/api/**
               filters:
@@ -41,9 +43,35 @@ spring:
                 - JwtValidation
 
             - id: triagem-service
-              uri: http://triagem-service:8083
+              uri: lb://triagem-service
               predicates:
                 - Path=/tri/**
               filters:
                 - StripPrefix=1
                 - JwtValidation
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+          - prometheus
+  endpoint:
+    health:
+      show-details: always
+
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+

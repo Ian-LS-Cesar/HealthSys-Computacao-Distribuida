@@ -1,31 +1,28 @@
 package com.healthsys.triagemservice.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.healthsys.triagemservice.client.PacienteFeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.UUID;
 
 @Service
 public class PacienteClient {
-    private final WebClient webClient;
+    private final PacienteFeignClient feign;
 
-    public PacienteClient(WebClient.Builder builder,
-                          @Value("${services.paciente.base-url}") String pacienteBaseUrl) {
-        this.webClient = builder.baseUrl(pacienteBaseUrl).build();
+    public PacienteClient(PacienteFeignClient feign) {
+        this.feign = feign;
     }
 
-    public boolean existePaciente(UUID pacienteId) {
+    public boolean existePaciente(UUID id) {
         try {
-            webClient.get()
-                    .uri("/pacientes/{id}", pacienteId)
-                    .retrieve()
-                    .toBodilessEntity()
-                    .block();
-            return true;
-        } catch (WebClientResponseException.NotFound ex) {
-            return false;
+            ResponseEntity<Void> rest = feign.existePaciente(id);
+            return rest.getStatusCode().is2xxSuccessful();
+        } catch (feign.FeignException e) {
+            if (e.status() == 404) {
+                return false;
+            }
+            throw new IllegalStateException("Erro ao chamar paciente-service", e);
         }
     }
 }
