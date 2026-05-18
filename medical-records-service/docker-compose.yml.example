@@ -1,0 +1,41 @@
+services:
+  medical-records-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medical-records-service
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://{MONGO_USER}:{MONGO_PASSWORD}@medical-records-service-db:27017/medical_db?authSource=admin
+      SPRING_RABBITMQ_HOST: notification-service-db
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: {RABBITMQ_USER}
+      SPRING_RABBITMQ_PASSWORD: {RABBITMQ_PASSWORD}
+    depends_on:
+      - medical-records-service-db
+    networks:
+      - internal
+    restart: unless-stopped
+
+  medical-records-service-db:
+    image: mongo:latest
+    container_name: medical-records-service-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: {MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: {MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - medical-records-service-db-data:/data/db
+    networks:
+      - internal
+    restart: unless-stopped
+
+networks:
+  internal:
+    external: true
+    name: healthsys-internal
+
+volumes:
+  medical-records-service-db-data:
