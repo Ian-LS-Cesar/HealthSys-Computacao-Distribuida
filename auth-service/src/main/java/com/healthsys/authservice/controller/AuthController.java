@@ -9,19 +9,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 public class AuthController {
     private final AuthService authService;
+    private final Counter counter;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, MeterRegistry meterRegistry) {
         this.authService = authService;
+        this.counter = Counter.builder("auth_service_requests_total")
+                .description("Total de chamadas ao controller AuthController")
+                .tag("controller", "AuthController")
+                .tag("endpoint", "auth")
+                .register(meterRegistry);
     }
 
     @Operation(summary="Gerar token no login do usuário")
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(
             @RequestBody LoginRequestDTO loginRequestDTO){
+        counter.increment();
 
         Optional<String> tokenOptional = authService.authenticate(loginRequestDTO);
 
@@ -36,6 +45,7 @@ public class AuthController {
     @Operation(summary = "Realizar logout do usuário, revogando o token")
     @PostMapping("/logout")
     public ResponseEntity<LoginResponseDTO> logout(@RequestHeader("Authorization") String authHeader){
+        counter.increment();
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -50,6 +60,7 @@ public class AuthController {
     @Operation(summary = "Validar Token")
     @GetMapping("/validate")
     public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authHeader){
+        counter.increment();
 
         // Authorization: Bear <token>
 

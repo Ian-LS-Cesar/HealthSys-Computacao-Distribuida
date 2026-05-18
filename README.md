@@ -7,7 +7,7 @@
 docker network create healthsys-internal
 ```
 
-## 1.2) Criar um arquivo .env na raiz do projeto com as seguintes variáveis de ambiente:
+## 1.2) Criar um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente:
 
 ```bash
 DB_NAME=db
@@ -26,13 +26,13 @@ RABBITMQ_MANAGEMENT_PORT=15672
 RABBITMQ_USER=Usuario_RABBITMQ
 RABBITMQ_PASSWORD=Senha_RABBITMQ
 SERVICE_DISCOVERY_PORT=8761
-NOTIFICATION_SERVICE_DB_PORT=5672
 JWT_SECRET=TokenJWT
 SPRING_JPA_HIBERNATE_DDL_AUTO=update
 SPRING_JPA_SHOW_SQL=true
 DOCKER_NETWORK=healthsys-internal
-EUREKA_HOST=service-discovery
-EUREKA_PORT=8167
+EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka/
+GRAFANA_ADMIN_USER=SEU_USUARIO_GRAFANA
+GRAFANA_ADMIN_PASSWORD=SUA_SENHA_GRAFANA
 ```
 
 **OBS: Substitua os valores pelos valores reais do seu ambiente. E lembre-se de verificar se a .env está no gitignore e não commitado**
@@ -41,8 +41,9 @@ Se a rede já existir, o Docker vai retornar erro de rede duplicada e você pode
 
 # 2) Comandos
 
-## Construção das imagens dos serviços:
-### Construir as imagens dos serviços:
+## Construção das imagens
+
+### Construir as imagens dos serviços individualmente:
 ```bash
 docker compose build auth-service
 docker compose build paciente-service
@@ -50,6 +51,8 @@ docker compose build triagem-service
 docker compose build notification-service
 docker compose build api-gateway
 docker compose build service-discovery
+docker compose build prometheus
+docker compose build grafana
 ```
 
 ### Construir as imagens de todos os serviços:
@@ -57,7 +60,7 @@ docker compose build service-discovery
 docker compose build
 ```
 
-## Subir os serviços:
+## Subir os serviços
 
 ### Subir os serviços específicos:
 ```bash
@@ -67,6 +70,8 @@ docker compose up -d triagem-service
 docker compose up -d notification-service
 docker compose up -d api-gateway
 docker compose up -d service-discovery
+docker compose up -d prometheus
+docker compose up -d grafana
 ```
 
 ### Subir todos os serviços:
@@ -74,7 +79,7 @@ docker compose up -d service-discovery
 docker compose up -d
 ```
 
-## Subir os serviços aplicando novas mudanças:
+## Subir os serviços aplicando novas mudanças
 
 ### Subir serviços específicos enquanto aplica novas mudanças:
 ```bash
@@ -84,6 +89,23 @@ docker compose up -d --build triagem-service
 docker compose up -d --build notification-service
 docker compose up -d --build api-gateway
 docker compose up -d --build service-discovery
+docker compose up -d --build prometheus
+docker compose up -d --build grafana
+```
+
+### Subir apenas o Observability (Prometheus + Grafana):
+```bash
+docker compose up -d --build prometheus grafana
+```
+
+### Alternativa de execução do Observability:
+```bash
+docker compose up -d --build grafana prometheus
+```
+
+### Subir o stack completo com observability:
+```bash
+docker compose up -d --build service-discovery api-gateway auth-service paciente-service triagem-service notification-service prometheus grafana
 ```
 
 ### Subir todos os serviços enquanto aplica novas mudanças:
@@ -91,7 +113,9 @@ docker compose up -d --build service-discovery
 docker compose up -d --build
 ```
 
-##  Ver logs
+> Observação: `observability` não é um serviço do compose raiz; no compose principal ele entra via `include`. Para subir Grafana e Prometheus, use `prometheus grafana`.
+
+## Ver logs
 
 ```bash
 docker compose logs auth-service
@@ -100,10 +124,8 @@ docker compose logs triagem-service
 docker compose logs notification-service
 docker compose logs api-gateway
 docker compose logs service-discovery
-```
-
-```bash
-docker compose logs
+docker compose logs prometheus
+docker compose logs grafana
 ```
 
 ## Parar os serviços:
@@ -116,6 +138,8 @@ docker compose down triagem-service
 docker compose down notification-service
 docker compose down api-gateway
 docker compose down service-discovery
+docker compose down prometheus
+docker compose down grafana
 ```
 
 ### Para parar todos os serviços, utilize:
@@ -133,13 +157,15 @@ docker compose down -v triagem-service
 docker compose down -v notification-service
 docker compose down -v api-gateway
 docker compose down -v service-discovery
+docker compose down -v prometheus
+docker compose down -v grafana
 ```
 ### Para parar e limpar dados de todos os serviços, utilize:
 ```bash
 docker compose down -v
 ```
 
-## Portas padrao
+## Portas padrão
 
 - API Gateway: `8080`
 - Auth Service: `8081`
@@ -147,6 +173,8 @@ docker compose down -v
 - Triagem Service: `8083`
 - Notification Service: `8084`
 - Service Discovery (Eureka): `8761`
+- Prometheus: `9090`
+- Grafana: `3000`
 - Auth DB (Postgres): `5001`
 - Paciente DB (Postgres): `5002`
 - Triagem DB (Postgres): `5003`

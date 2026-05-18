@@ -1,0 +1,46 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['api-gateway:8080']
+        labels:
+          application: "API Gateway"
+
+  - job_name: 'service-discovery'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+        - targets: ['service-discovery:8761']
+          labels:
+            application: "Service Discovery"
+
+  - job_name: 'auth-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+        - targets: ['auth-service:8081']
+          labels:
+            application: "Auth Service"
+
+  - job_name: 'paciente-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+        - targets: ['paciente-service:8082']
+          labels:
+            application: "Paciente Service"
+
+  - job_name: 'triagem-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+        - targets: ['triagem-service:8083']
+          labels:
+              application: "Triagem Service"
+
+  - job_name: 'notification-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+        - targets: ['notification-service:8084']
+          labels:
+              application: "Notification Service"

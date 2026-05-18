@@ -15,8 +15,10 @@ services:
       SPRING_JPA_SHOW_SQL: ${SPRING_JPA_SHOW_SQL}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
     depends_on:
-      - triagem-service-db
-      - service-discovery
+      triagem-service-db:
+        condition: service_healthy
+      service-discovery:
+        condition: service_healthy
     networks:
       - internal
     restart: unless-stopped

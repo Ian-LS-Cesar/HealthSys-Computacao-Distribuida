@@ -62,9 +62,13 @@ management:
   endpoint:
     health:
       show-details: always
+
+    prometheus:
+      enabled: true
   metrics:
     tags:
       application: ${spring.application.name}
+
 
 eureka:
   client:

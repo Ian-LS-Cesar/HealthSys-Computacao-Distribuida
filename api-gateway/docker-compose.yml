@@ -12,7 +12,8 @@ services:
       AUTH_SERVICE_URL: http://auth-service:8081
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
     depends_on:
-      - service-discovery
+      service-discovery:
+        condition: service_healthy
     networks:
       - internal
     restart: unless-stopped

@@ -15,8 +15,10 @@ services:
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
     depends_on:
-      - notification-service-db
-      - service-discovery
+      notification-service-db:
+        condition: service_healthy
+      service-discovery:
+        condition: service_healthy
     networks:
       - internal
     restart: unless-stopped
@@ -37,6 +39,11 @@ services:
     networks:
       - internal
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 volumes:
   notification-service-db-data:
