@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Allow unauthenticated access to create user (registration).
                         // Allow unauthenticated access to login/logout, validate and actuator endpoints
-                        .requestMatchers("/login", "/validate", "/logout", "/actuator/**", "/perfis", "/usuarios", "/auth/usuarios").permitAll()
+                        .requestMatchers("/login", "/validate", "/logout", "/actuator/**", "/perfis", "/usuarios", "/auth/usuarios", "/especialidades").permitAll()
 
                         // everything else must be authenticated
                         .anyRequest().authenticated()
