@@ -1,8 +1,12 @@
 package com.healthsys.pacienteservice.config;
 
+import com.healthsys.pacienteservice.model.Alergia;
+import com.healthsys.pacienteservice.model.Comorbidade;
 import com.healthsys.pacienteservice.model.Genero;
 import com.healthsys.pacienteservice.model.Sexo;
 import com.healthsys.pacienteservice.model.Vacina;
+import com.healthsys.pacienteservice.repository.AlergiaRepository;
+import com.healthsys.pacienteservice.repository.ComorbidadeRepository;
 import com.healthsys.pacienteservice.repository.GeneroRepository;
 import com.healthsys.pacienteservice.repository.SexoRepository;
 import com.healthsys.pacienteservice.repository.VacinaRepository;
@@ -18,15 +22,21 @@ public class DatabaseSeeder implements CommandLineRunner {
     private final SexoRepository sexoRepository;
     private final GeneroRepository generoRepository;
     private final VacinaRepository vacinaRepository;
+    private final ComorbidadeRepository comorbidadeRepository;
+    private final AlergiaRepository alergiaRepository;
 
     public DatabaseSeeder(
             SexoRepository sexoRepository,
             GeneroRepository generoRepository,
-            VacinaRepository vacinaRepository
+            VacinaRepository vacinaRepository,
+            ComorbidadeRepository comorbidadeRepository,
+            AlergiaRepository alergiaRepository
     ) {
         this.sexoRepository = sexoRepository;
         this.generoRepository = generoRepository;
         this.vacinaRepository = vacinaRepository;
+        this.comorbidadeRepository = comorbidadeRepository;
+        this.alergiaRepository = alergiaRepository;
     }
 
     @Override
@@ -34,6 +44,8 @@ public class DatabaseSeeder implements CommandLineRunner {
         seedSexos();
         seedGeneros();
         seedVacinas();
+        seedComorbidades();
+        seedAlergias();
     }
 
     private void seedSexos() {
@@ -94,6 +106,142 @@ public class DatabaseSeeder implements CommandLineRunner {
                 Vacina vacina = new Vacina();
                 vacina.setNome(nomeVacina);
                 vacinaRepository.save(vacina);
+            }
+        }
+    }
+
+    private void seedComorbidades() {
+        if (comorbidadeRepository.count() == 0) {
+            List<String> comorbidades = List.of(
+                    "Hipertensão arterial sistêmica",
+                    "Diabetes mellitus tipo 1",
+                    "Diabetes mellitus tipo 2",
+                    "Dislipidemia",
+                    "Obesidade",
+                    "Sobrepeso",
+                    "Asma",
+                    "DPOC",
+                    "Bronquite crônica",
+                    "Enfisema pulmonar",
+                    "Insuficiência cardíaca",
+                    "Arritmia cardíaca",
+                    "Doença arterial coronariana",
+                    "Infarto agudo do miocárdio prévio",
+                    "AVC prévio",
+                    "Doença renal crônica",
+                    "Insuficiência renal",
+                    "Doença hepática crônica",
+                    "Cirrose hepática",
+                    "Hepatite crônica",
+                    "HIV",
+                    "AIDS",
+                    "Tuberculose",
+                    "Hanseníase",
+                    "Epilepsia",
+                    "Alzheimer",
+                    "Parkinson",
+                    "Esclerose múltipla",
+                    "Depressão",
+                    "Ansiedade",
+                    "Transtorno bipolar",
+                    "Esquizofrenia",
+                    "Autismo",
+                    "TDAH",
+                    "Deficiência intelectual",
+                    "Câncer",
+                    "Neoplasia maligna",
+                    "Hipotireoidismo",
+                    "Hipertireoidismo",
+                    "Anemia",
+                    "Anemia falciforme",
+                    "Doença celíaca",
+                    "Lúpus",
+                    "Artrite reumatoide",
+                    "Artrose",
+                    "Psoríase",
+                    "Gota",
+                    "Osteoporose",
+                    "Refluxo gastroesofágico",
+                    "Gastrite crônica",
+                    "Úlcera péptica",
+                    "Fibromialgia",
+                    "Síndrome do intestino irritável",
+                    "Doença de Crohn",
+                    "Retocolite ulcerativa",
+                    "Miastenia gravis",
+                    "Imunossupressão"
+            );
+
+            for (String descricao : comorbidades) {
+                Comorbidade comorbidade = new Comorbidade();
+                comorbidade.setDescricao(descricao);
+                comorbidadeRepository.save(comorbidade);
+            }
+        }
+    }
+
+    private void seedAlergias() {
+        if (alergiaRepository.count() == 0) {
+            List<String> alergias = List.of(
+                    "Penicilina",
+                    "Amoxicilina",
+                    "Dipirona",
+                    "Paracetamol",
+                    "Ibuprofeno",
+                    "AAS (ácido acetilsalicílico)",
+                    "Diclofenaco",
+                    "Naproxeno",
+                    "Cetoprofeno",
+                    "Omeprazol",
+                    "Loratadina",
+                    "Benzilpenicilina",
+                    "Sulfas",
+                    "Cefalexina",
+                    "Ceftriaxona",
+                    "Anestésicos locais",
+                    "Látex",
+                    "Poeira",
+                    "Ácaros",
+                    "Pólen",
+                    "Mofo",
+                    "Camarão",
+                    "Caranguejo",
+                    "Lula",
+                    "Peixes",
+                    "Amendoim",
+                    "Castanhas",
+                    "Nozes",
+                    "Leite de vaca",
+                    "Ovo",
+                    "Soja",
+                    "Trigo",
+                    "Glúten",
+                    "Frutos do mar",
+                    "Chocolate",
+                    "Corantes alimentares",
+                    "Conservantes alimentares",
+                    "Perfumes",
+                    "Produtos de limpeza",
+                    "Pelos de animais",
+                    "Picada de abelha",
+                    "Picada de formiga",
+                    "Picada de mosquito",
+                    "Fumaça",
+                    "Fragrâncias",
+                    "Pimenta",
+                    "Frutas cítricas",
+                    "Tomate",
+                    "Maracujá",
+                    "Kiwi",
+                    "Manga",
+                    "Morango",
+                    "Níquel"
+            );
+
+            for (String descricao : alergias) {
+                Alergia alergia = new Alergia();
+                alergia.setDescricao(descricao);
+                alergiaRepository.save(alergia);
             }
         }
     }
