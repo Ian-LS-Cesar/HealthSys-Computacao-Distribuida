@@ -1,9 +1,12 @@
 package com.healthsys.triagemservice.service;
 
 import com.healthsys.triagemservice.client.PacienteFeignClient;
+import com.healthsys.triagemservice.dto.AlergiaDTO;
+import com.healthsys.triagemservice.dto.ComorbidadeDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,5 +27,15 @@ public class PacienteClient {
             }
             throw new IllegalStateException("Erro ao chamar paciente-service", e);
         }
+    }
+
+    public List<AlergiaDTO> getAlergiasPorPaciente(UUID pacienteId) {
+        ResponseEntity<List<AlergiaDTO>> response = feign.getAlergiasPorPaciente(pacienteId);
+        return response.getBody() != null ? response.getBody() : List.of();
+    }
+
+    public List<ComorbidadeDTO> getComorbidadesPorPaciente(UUID pacienteId) {
+        ResponseEntity<List<ComorbidadeDTO>> response = feign.getComorbidadesPorPaciente(pacienteId);
+        return response.getBody() != null ? response.getBody() : List.of();
     }
 }

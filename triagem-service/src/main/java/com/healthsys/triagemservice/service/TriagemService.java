@@ -1,7 +1,6 @@
 package com.healthsys.triagemservice.service;
 
-import com.healthsys.triagemservice.dto.TriagemRequestDTO;
-import com.healthsys.triagemservice.dto.TriagemResponseDTO;
+import com.healthsys.triagemservice.dto.*;
 import com.healthsys.triagemservice.mapper.TriagemMapper;
 import com.healthsys.triagemservice.model.Risco;
 import com.healthsys.triagemservice.model.Status;
@@ -49,6 +48,26 @@ public class TriagemService {
                 .stream()
                 .map(TriagemMapper::toDTO)
                 .toList();
+    }
+
+    public TriagemDetalhadaResponseDTO getTriagemDetalhada(UUID triagemId) {
+        Triagem triagem = triagemRepository.findById(triagemId)
+                .orElseThrow(() -> new IllegalArgumentException("Triagem não encontrada com ID: " + triagemId));
+
+        UUID pacienteId = triagem.getPaciente();
+
+        List<AlergiaDTO> alergias = pacienteClient.getAlergiasPorPaciente(pacienteId);
+        List<ComorbidadeDTO> comorbidades = pacienteClient.getComorbidadesPorPaciente(pacienteId);
+
+        return new TriagemDetalhadaResponseDTO(
+                triagem.getId(),
+                triagem.getPaciente(),
+                triagem.getRisco().getId(),
+                triagem.getStatus().getId(),
+                triagem.getDataCriacao(),
+                alergias,
+                comorbidades
+        );
     }
 
     public TriagemResponseDTO criarTriagem(TriagemRequestDTO triagemRequestDTO){

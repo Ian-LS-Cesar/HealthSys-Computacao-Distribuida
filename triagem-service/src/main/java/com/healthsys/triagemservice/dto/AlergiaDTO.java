@@ -1,4 +1,4 @@
-package com.healthsys.pacienteservice.dto;
+package com.healthsys.triagemservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlergiaResponseDTO {
+public class AlergiaDTO {
     private Integer id;
     private String descricao;
 }

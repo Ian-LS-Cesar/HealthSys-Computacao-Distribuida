@@ -2,24 +2,39 @@ package com.healthsys.pacienteservice.service;
 
 import com.healthsys.pacienteservice.dto.ComorbidadeRequestDTO;
 import com.healthsys.pacienteservice.dto.ComorbidadeResponseDTO;
+import com.healthsys.pacienteservice.exception.PacienteNotFoundException;
 import com.healthsys.pacienteservice.mapper.ComorbidadeMapper;
 import com.healthsys.pacienteservice.model.Comorbidade;
+import com.healthsys.pacienteservice.repository.PacienteRepository;
 import com.healthsys.pacienteservice.repository.ComorbidadeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ComorbidadeService {
     public final ComorbidadeRepository comorbidadeRepository;
+    private final PacienteRepository pacienteRepository;
 
-    public ComorbidadeService(ComorbidadeRepository comorbidadeRepository) {
+    public ComorbidadeService(ComorbidadeRepository comorbidadeRepository, PacienteRepository pacienteRepository) {
         this.comorbidadeRepository = comorbidadeRepository;
+        this.pacienteRepository = pacienteRepository;
     }
 
     public List<ComorbidadeResponseDTO> getComorbidades(){
         List<Comorbidade> comorbidades = comorbidadeRepository.findAll();
         return comorbidades.stream()
+                .map(ComorbidadeMapper::toDTO)
+                .toList();
+    }
+
+    public List<ComorbidadeResponseDTO> getComorbidadesPorPaciente(UUID pacienteId) {
+        pacienteRepository.findById(pacienteId)
+                .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + pacienteId));
+
+        return comorbidadeRepository.findByPacienteId(pacienteId)
+                .stream()
                 .map(ComorbidadeMapper::toDTO)
                 .toList();
     }
@@ -33,6 +48,21 @@ public class ComorbidadeService {
         Comorbidade novaComorbidade = ComorbidadeMapper.toModel(comorbidadeRequestDTO);
         Comorbidade comorbidade = comorbidadeRepository.save(novaComorbidade);
         return ComorbidadeMapper.toDTO(comorbidade);
+    }
+
+    public ComorbidadeResponseDTO atualizarComorbidade(Integer id, ComorbidadeRequestDTO comorbidadeRequestDTO) {
+        Comorbidade comorbidade = comorbidadeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Comorbidade não encontrada com ID: " + id));
+
+        String descricaoTrimmed = comorbidadeRequestDTO.getDescricao().trim();
+        Comorbidade comorbidadeExistente = comorbidadeRepository.findByDescricaoIgnoreCase(descricaoTrimmed).orElse(null);
+
+        if (comorbidadeExistente != null && comorbidadeExistente.getId() != id) {
+            throw new IllegalArgumentException("Já existe uma comorbidade com essa descrição: " + descricaoTrimmed);
+        }
+
+        comorbidade.setDescricao(descricaoTrimmed);
+        return ComorbidadeMapper.toDTO(comorbidadeRepository.save(comorbidade));
     }
 
     public void deletarComorbidade(int id){

@@ -5,7 +5,6 @@ import com.healthsys.pacienteservice.dto.AlergiaResponseDTO;
 import com.healthsys.pacienteservice.exception.PacienteNotFoundException;
 import com.healthsys.pacienteservice.mapper.AlergiaMapper;
 import com.healthsys.pacienteservice.model.Alergia;
-import com.healthsys.pacienteservice.model.Paciente;
 import com.healthsys.pacienteservice.repository.AlergiaRepository;
 import com.healthsys.pacienteservice.repository.PacienteRepository;
 import lombok.Setter;
@@ -43,11 +42,7 @@ public class AlergiaService {
     }
 
     public AlergiaResponseDTO criarAlergia(AlergiaRequestDTO alergiaRequestDTO) {
-        Paciente paciente = pacienteRepository.findById(alergiaRequestDTO.getPaciente())
-                .orElseThrow(() -> new PacienteNotFoundException(
-                        "Paciente não encontrado com ID: " + alergiaRequestDTO.getPaciente()));
-
-        Alergia novaAlergia = AlergiaMapper.toModel(alergiaRequestDTO, paciente);
+        Alergia novaAlergia = AlergiaMapper.toModel(alergiaRequestDTO);
         return AlergiaMapper.toDTO(alergiaRepository.save(novaAlergia));
     }
 
@@ -55,12 +50,7 @@ public class AlergiaService {
         Alergia alergia = alergiaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Alergia não encontrada com ID: " + id));
 
-        Paciente paciente = pacienteRepository.findById(alergiaRequestDTO.getPaciente())
-                .orElseThrow(() -> new PacienteNotFoundException(
-                        "Paciente não encontrado com ID: " + alergiaRequestDTO.getPaciente()));
-
         alergia.setDescricao(alergiaRequestDTO.getDescricao());
-        alergia.setPaciente(paciente);
         return AlergiaMapper.toDTO(alergiaRepository.save(alergia));
     }
 
