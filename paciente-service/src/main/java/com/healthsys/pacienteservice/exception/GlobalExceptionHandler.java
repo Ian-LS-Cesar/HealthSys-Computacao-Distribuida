@@ -1,7 +1,5 @@
 package com.healthsys.pacienteservice.exception;
 
-import com.healthsys.pacienteservice.exception.CpfAlreadyExistsException;
-import com.healthsys.pacienteservice.exception.PacienteNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

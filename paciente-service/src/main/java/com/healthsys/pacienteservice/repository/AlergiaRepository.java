@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface AlergiaRepository extends JpaRepository<Alergia, Integer> {
-    boolean existsByDescricaoIgnoreCase(String descricao);
     Optional<Alergia> findByDescricaoIgnoreCase(String descricao);
 }

@@ -1,19 +1,11 @@
 package com.healthsys.pacienteservice.service;
 
-import com.healthsys.pacienteservice.dto.AlergiaInputDTO;
-import com.healthsys.pacienteservice.dto.ComorbidadeInputDTO;
-import com.healthsys.pacienteservice.dto.EnderecoRequestDTO;
-import com.healthsys.pacienteservice.dto.PacienteRequestDTO;
-import com.healthsys.pacienteservice.dto.PacienteResponseDTO;
+import com.healthsys.pacienteservice.dto.*;
 import com.healthsys.pacienteservice.exception.CpfAlreadyExistsException;
 import com.healthsys.pacienteservice.exception.PacienteNotFoundException;
 import com.healthsys.pacienteservice.mapper.PacienteMapper;
 import com.healthsys.pacienteservice.model.*;
-import com.healthsys.pacienteservice.repository.ComorbidadeRepository;
-import com.healthsys.pacienteservice.repository.GeneroRepository;
-import com.healthsys.pacienteservice.repository.PacienteRepository;
-import com.healthsys.pacienteservice.repository.SexoRepository;
-import lombok.Setter;
+import com.healthsys.pacienteservice.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Setter
 @Service
 public class PacienteService {
     private final PacienteRepository pacienteRepository;

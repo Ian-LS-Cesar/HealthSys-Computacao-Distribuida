@@ -1,4 +1,4 @@
-package com.healthsys.pacienteservice.dto.validators;
+package com.healthsys.pacienteservice.dto;
 
 import lombok.Getter;
 import lombok.Setter;
