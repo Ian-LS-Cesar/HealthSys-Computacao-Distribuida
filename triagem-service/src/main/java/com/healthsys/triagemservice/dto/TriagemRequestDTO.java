@@ -20,4 +20,14 @@ public class TriagemRequestDTO {
 
     @NotNull(message = "O campo de data é obrigatório")
     private String dataCriacao;
+
+    private String temperatura;
+
+    private String glicemia;
+
+    private String frequenciaCardiaca;
+
+    private String saturacaoOxigenio;
+
+    private String frequenciaRespiratoria;
 }

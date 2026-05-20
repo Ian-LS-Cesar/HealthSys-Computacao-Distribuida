@@ -60,13 +60,18 @@ public class TriagemService {
         List<ComorbidadeDTO> comorbidades = pacienteClient.getComorbidadesPorPaciente(pacienteId);
 
         return new TriagemDetalhadaResponseDTO(
-                triagem.getId(),
-                triagem.getPaciente(),
-                triagem.getRisco().getId(),
-                triagem.getStatus().getId(),
-                triagem.getDataCriacao(),
-                alergias,
-                comorbidades
+            triagem.getId(),
+            triagem.getPaciente(),
+            triagem.getTemperatura(),
+            triagem.getGlicemia(),
+            triagem.getFrequenciaCardiaca(),
+            triagem.getSaturacaoOxigenio(),
+            triagem.getFrequenciaRespiratoria(),
+            triagem.getRisco().getId(),
+            triagem.getStatus().getId(),
+            triagem.getDataCriacao(),
+            alergias,
+            comorbidades
         );
     }
 

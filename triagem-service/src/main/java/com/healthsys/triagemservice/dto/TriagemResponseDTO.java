@@ -15,6 +15,15 @@ import java.util.UUID;
 public class TriagemResponseDTO {
     private UUID id;
     private UUID paciente;
+    private String temperatura;
+
+    private String glicemia;
+
+    private String frequenciaCardiaca;
+
+    private String saturacaoOxigenio;
+
+    private String frequenciaRespiratoria;
     private Integer risco;
     private Integer status;
     private LocalDateTime dataCriacao;
