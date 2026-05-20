@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -17,4 +18,7 @@ public class TriagemRequestDTO {
 
     @NotNull(message = "O campo de status é obrigatório")
     private Integer status;
+
+    @NotNull(message = "O campo de data é obrigatório")
+    private String dataCriacao;
 }

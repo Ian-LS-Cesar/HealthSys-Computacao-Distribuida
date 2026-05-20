@@ -1,5 +1,6 @@
 package com.healthsys.pacienteservice.dto;
 
+import com.healthsys.pacienteservice.dto.validators.ComorbidadeInputDTO;
 import com.healthsys.pacienteservice.dto.validators.CreatePacienteValidationGroup;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -32,8 +33,10 @@ public class PacienteRequestDTO {
     @NotBlank(groups = CreatePacienteValidationGroup.class, message = "CPF é obrigatório")
     private String cpf;
 
-    private List<String> alergias;
+    private List<AlergiaInputDTO> alergias;
 
     private List<EnderecoRequestDTO> enderecos;
+
+    private List<ComorbidadeInputDTO> comorbidades;
 
 }

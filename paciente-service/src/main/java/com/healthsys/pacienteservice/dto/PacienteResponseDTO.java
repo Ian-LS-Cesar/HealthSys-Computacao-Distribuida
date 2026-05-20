@@ -23,4 +23,5 @@ public class PacienteResponseDTO {
     private String cpf;
     private List<String> alergias;
     private List<EnderecoResponseDTO> enderecos;
+    private List<String> comorbidades;
 }

@@ -50,6 +50,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
+    @ExceptionHandler(ComorbidadeAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleComorbidadeAlreadyExistsException(ComorbidadeAlreadyExistsException ex) {
+        log.warn("Comorbidade já existente: {}", ex.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", "Comorbidade já adicionada ao sistema");
+        return ResponseEntity.badRequest().body(errors);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGeneric(Exception ex) {
         log.error("Erro inesperado no paciente-service", ex);

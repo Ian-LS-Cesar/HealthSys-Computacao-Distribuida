@@ -6,6 +6,8 @@ import com.healthsys.triagemservice.model.Risco;
 import com.healthsys.triagemservice.model.Status;
 import com.healthsys.triagemservice.model.Triagem;
 
+import java.time.LocalDateTime;
+
 public class TriagemMapper {
 
     public static TriagemResponseDTO toDTO(Triagem triagem){
@@ -14,12 +16,14 @@ public class TriagemMapper {
         triagemResponseDTO.setPaciente(triagem.getPaciente());
         triagemResponseDTO.setRisco(triagem.getRisco().getId());
         triagemResponseDTO.setStatus(triagem.getStatus().getId());
+        triagemResponseDTO.setDataCriacao(triagem.getDataCriacao());
         return triagemResponseDTO;
     }
 
     public static Triagem toModel(TriagemRequestDTO triagemRequestDTO, Risco risco, Status status){
         Triagem triagem = new Triagem();
         triagem.setPaciente(triagemRequestDTO.getPaciente());
+        triagem.setDataCriacao(LocalDateTime.now());
         triagem.setRisco(risco);
         triagem.setStatus(status);
         return triagem;

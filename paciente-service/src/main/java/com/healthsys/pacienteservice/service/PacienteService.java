@@ -1,5 +1,7 @@
 package com.healthsys.pacienteservice.service;
 
+import com.healthsys.pacienteservice.dto.AlergiaInputDTO;
+import com.healthsys.pacienteservice.dto.ComorbidadeInputDTO;
 import com.healthsys.pacienteservice.dto.EnderecoRequestDTO;
 import com.healthsys.pacienteservice.dto.PacienteRequestDTO;
 import com.healthsys.pacienteservice.dto.PacienteResponseDTO;
@@ -7,6 +9,7 @@ import com.healthsys.pacienteservice.exception.CpfAlreadyExistsException;
 import com.healthsys.pacienteservice.exception.PacienteNotFoundException;
 import com.healthsys.pacienteservice.mapper.PacienteMapper;
 import com.healthsys.pacienteservice.model.*;
+import com.healthsys.pacienteservice.repository.ComorbidadeRepository;
 import com.healthsys.pacienteservice.repository.GeneroRepository;
 import com.healthsys.pacienteservice.repository.PacienteRepository;
 import com.healthsys.pacienteservice.repository.SexoRepository;
@@ -24,15 +27,21 @@ public class PacienteService {
     private final PacienteRepository pacienteRepository;
     private final GeneroRepository generoRepository;
     private final SexoRepository sexoRepository;
+    private final ComorbidadeRepository comorbidadeRepository;
+    private final AlergiaRepository alergiaRepository;
 
     public PacienteService(
             PacienteRepository pacienteRepository,
             GeneroRepository generoRepository,
-            SexoRepository sexoRepository
+            SexoRepository sexoRepository,
+            ComorbidadeRepository comorbidadeRepository,
+            AlergiaRepository alergiaRepository
     ) {
         this.pacienteRepository = pacienteRepository;
         this.generoRepository = generoRepository;
         this.sexoRepository = sexoRepository;
+        this.comorbidadeRepository = comorbidadeRepository;
+        this.alergiaRepository = alergiaRepository;
     }
 
     public List<PacienteResponseDTO> getPacientes() {
@@ -82,15 +91,54 @@ public class PacienteService {
         }).toList();
     }
 
-    private List<Alergia> mapAlergias(List<String> descricoes, Paciente paciente) {
-        if (descricoes == null) return new ArrayList<>();
-        return descricoes.stream()
-                .filter(d -> d != null && !d.isBlank())
-                .map(d -> {
-                    Alergia alergia = new Alergia();
-                    alergia.setDescricao(d.trim());
-                    alergia.setPaciente(paciente);
-                    return alergia;
+    private List<Alergia> mapAlergias(List<AlergiaInputDTO> inputs) {
+        if (inputs == null || inputs.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return inputs.stream()
+                .map(input -> {
+                    if (input.getId() != null) {
+                        return alergiaRepository.findById(input.getId())
+                                .orElseThrow(() -> new IllegalArgumentException("Alergia não encontrada com ID: " + input.getId()));
+
+                    } else if (input.getDescricao() != null && !input.getDescricao().isBlank()) {
+                        String descricaoTrimmed = input.getDescricao().trim();
+                        return alergiaRepository.findByDescricaoIgnoreCase(descricaoTrimmed)
+                                .orElseGet(() -> {
+                                    Alergia novaAlergia = new Alergia();
+                                    novaAlergia.setDescricao(descricaoTrimmed);
+                                    return alergiaRepository.save(novaAlergia);
+                                });
+                    } else {
+                        throw new IllegalArgumentException("Alergia deve ter pelo menos um ID ou uma descrição válida");
+                    }
+                })
+                .toList();
+    }
+
+    private List<Comorbidade> mapComorbidades(List<ComorbidadeInputDTO> inputs) {
+        if (inputs == null || inputs.isEmpty()){
+            return new ArrayList<>();
+        }
+
+        return inputs.stream()
+                .map(input -> {
+                    if (input.getId() != null){
+                        return comorbidadeRepository.findById(input.getId())
+                                .orElseThrow(() -> new IllegalArgumentException("Comorbidade não encontrada com ID: " + input.getId()));
+
+                    } else if (input.getDescricao() != null && !input.getDescricao().isBlank()){
+                        String descricaoTrimmed = input.getDescricao().trim();
+                        return comorbidadeRepository.findByDescricaoIgnoreCase(descricaoTrimmed)
+                                .orElseGet(() -> {
+                                    Comorbidade novaComorbidade = new Comorbidade();
+                                    novaComorbidade.setDescricao(descricaoTrimmed);
+                                    return comorbidadeRepository.save(novaComorbidade);
+                                });
+                    } else {
+                        throw new IllegalArgumentException("Comorbidade deve ter pelo menos um ID ou uma descrição válida");
+                    }
                 })
                 .toList();
     }
@@ -124,8 +172,9 @@ public class PacienteService {
         Paciente novoPaciente = PacienteMapper.toModel(dto, genero, sexo);
         novoPaciente.setCpf(cpfNormalizado);
         novoPaciente.setTelefones(mapTelefones(dto.getTelefones(), novoPaciente));
-        novoPaciente.setAlergias(mapAlergias(dto.getAlergias(), novoPaciente));
+        novoPaciente.setAlergias(mapAlergias(dto.getAlergias()));
         novoPaciente.setEnderecos(mapEnderecos(dto.getEnderecos(), novoPaciente));
+        novoPaciente.setComorbidades(mapComorbidades(dto.getComorbidades()));
 
         return PacienteMapper.toDTO(pacienteRepository.save(novoPaciente));
     }
@@ -156,10 +205,13 @@ public class PacienteService {
         paciente.getTelefones().addAll(mapTelefones(dto.getTelefones(), paciente));
 
         paciente.getAlergias().clear();
-        paciente.getAlergias().addAll(mapAlergias(dto.getAlergias(), paciente));
+        paciente.getAlergias().addAll(mapAlergias(dto.getAlergias()));
 
         paciente.getEnderecos().clear();
         paciente.getEnderecos().addAll(mapEnderecos(dto.getEnderecos(), paciente));
+
+        paciente.getComorbidades().clear();
+        paciente.getComorbidades().addAll(mapComorbidades(dto.getComorbidades()));
 
         return PacienteMapper.toDTO(pacienteRepository.save(paciente));
     }

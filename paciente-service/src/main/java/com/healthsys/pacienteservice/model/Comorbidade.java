@@ -2,19 +2,16 @@ package com.healthsys.pacienteservice.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@Table(name= "alergia")
-public class Alergia {
+public class Comorbidade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false, unique = true, length = 120)
+    @Column(nullable = false, unique = true)
     private String descricao;
 }

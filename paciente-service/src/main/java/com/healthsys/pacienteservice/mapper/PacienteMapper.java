@@ -5,6 +5,7 @@ import com.healthsys.pacienteservice.dto.PacienteResponseDTO;
 import com.healthsys.pacienteservice.model.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class PacienteMapper {
     public static PacienteResponseDTO toDTO(Paciente paciente) {
@@ -27,6 +28,14 @@ public class PacienteMapper {
             pacienteDTO.setTelefones(
                     paciente.getTelefones().stream()
                             .map(Telefone::getNumero)
+                            .toList()
+            );
+        }
+
+        if (paciente.getComorbidades() != null) {
+            pacienteDTO.setComorbidades(
+                    paciente.getComorbidades().stream()
+                            .map(Comorbidade::getDescricao)
                             .toList()
             );
         }

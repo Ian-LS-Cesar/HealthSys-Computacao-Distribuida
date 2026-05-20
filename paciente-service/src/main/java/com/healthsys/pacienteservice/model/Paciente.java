@@ -46,7 +46,19 @@ public class Paciente {
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Endereco> enderecos = new ArrayList<>();
 
-    @OneToMany(mappedBy="paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany
+    @JoinTable(
+            name = "paciente_alergia",
+            joinColumns = @JoinColumn(name = "paciente_id"),
+            inverseJoinColumns = @JoinColumn(name = "alergia_id")
+    )
     private List<Alergia> alergias = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "paciente_comorbidade",
+            joinColumns = @JoinColumn(name = "paciente_id"),
+            inverseJoinColumns = @JoinColumn(name = "comorbidade_id")
+    )
+    private List<Comorbidade> comorbidades = new ArrayList<>();
 }
