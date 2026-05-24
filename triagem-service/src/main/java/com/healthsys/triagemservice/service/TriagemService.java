@@ -11,6 +11,7 @@ import com.healthsys.triagemservice.repository.TriagemRepository;
 import org.springframework.stereotype.Service;
 
 
+import com.healthsys.triagemservice.exception.ResourceConflictException;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class TriagemService {
     private final RiscoRepository riscoRepository;
     private final StatusRepository statusRepository;
     private final PacienteClient pacienteClient;
+    private static final List<String> CLOSED_STATUSES = List.of("FINALIZADA", "CANCELADA");
 
     public TriagemService(TriagemRepository triagemRepository, RiscoRepository riscoRepository, StatusRepository statusRepository, PacienteClient pacienteClient) {
         this.triagemRepository = triagemRepository;
@@ -78,6 +80,14 @@ public class TriagemService {
     public TriagemResponseDTO criarTriagem(TriagemRequestDTO triagemRequestDTO){
         validarPaciente(triagemRequestDTO.getPaciente());
 
+        // Verificar se já existe uma triagem não finalizada/não cancelada para o paciente
+        boolean existeAtiva = triagemRepository.existsByPacienteAndStatus_DescricaoNotIn(
+                triagemRequestDTO.getPaciente(), CLOSED_STATUSES
+        );
+        if (existeAtiva) {
+            throw new ResourceConflictException("Já existe uma triagem ativa para o paciente: " + triagemRequestDTO.getPaciente());
+        }
+
         Risco risco = riscoRepository.findById(triagemRequestDTO.getRisco())
                 .orElseThrow(() -> new IllegalArgumentException("Risco não encontrado com ID: " + triagemRequestDTO.getRisco()));
 
@@ -93,6 +103,14 @@ public class TriagemService {
                 .orElseThrow(() -> new IllegalArgumentException("Triagem não encontrada com ID: " + id));
 
         validarPaciente(triagemRequestDTO.getPaciente());
+
+        // Se o paciente estiver sendo alterado, ou mesmo ao atualizar, garantir que não haja outra triagem ativa
+        boolean existeOutraAtiva = triagemRepository.existsByPacienteAndStatus_DescricaoNotInAndIdNot(
+                triagemRequestDTO.getPaciente(), CLOSED_STATUSES, triagem.getId()
+        );
+        if (existeOutraAtiva) {
+            throw new ResourceConflictException("Já existe outra triagem ativa para o paciente: " + triagemRequestDTO.getPaciente());
+        }
 
         Risco risco = riscoRepository.findById(triagemRequestDTO.getRisco())
                 .orElseThrow(() -> new IllegalArgumentException("Risco não encontrado com ID: " + triagemRequestDTO.getRisco()));

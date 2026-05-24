@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface TriagemRepository extends JpaRepository<Triagem, UUID> {
     List<Triagem> findByPaciente(UUID idPaciente);
+    boolean existsByPacienteAndStatus_DescricaoNotIn(UUID paciente, java.util.Collection<String> statusDescricoes);
+    boolean existsByPacienteAndStatus_DescricaoNotInAndIdNot(UUID paciente, java.util.Collection<String> statusDescricoes, UUID idNot);
 }
