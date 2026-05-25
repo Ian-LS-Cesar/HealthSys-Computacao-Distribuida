@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "bed-service", url = "http://bed-service:8086/api/leitos")
+@FeignClient(name = "bed-service", path = "/bed/leitos")
 public interface BedClient {
 
     @PostMapping("/{id}/internar")

@@ -2,9 +2,7 @@ spring:
   application:
     name: triagem-service
 
-services:
-  paciente:
-    base-url: http://paciente-service:8082
+# O acesso ao paciente-service é feito via Eureka usando @FeignClient(name = "paciente-service")
 
 server:
   port: 8083
@@ -28,8 +26,6 @@ management:
   endpoint:
     health:
       show-details: always
-    prometheus:
-      enabled: true
   metrics:
     tags:
       application: ${spring.application.name}
