@@ -40,8 +40,7 @@ RABBITMQ_AMQP_PORT=5672
 RABBITMQ_MANAGEMENT_PORT=15672
 RABBITMQ_USER=Usuario_RABBITMQ
 RABBITMQ_PASSWORD=Senha_RABBITMQ
-
-# JWT
+SERVICE_DISCOVERY_PORT=8761
 JWT_SECRET=TokenJWT
 
 # JPA
@@ -220,7 +219,7 @@ docker compose down -v
 - Auth DB (Postgres): `5001`
 - Paciente DB (Postgres): `5002`
 - Triagem DB (Postgres): `5003`
-- - Bed Service: `8086`
+- Bed Service: `8086`
 - Medical Records Service: `8085`
 - Bed DB (Postgres): `5004`
 - Medical Records DB (MongoDB): `5005`

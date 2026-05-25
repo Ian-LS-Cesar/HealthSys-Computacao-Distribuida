@@ -6,6 +6,8 @@ import com.healthsys.medical_records_service.repository.ProntuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProntuarioService {
 
@@ -47,5 +49,21 @@ public class ProntuarioService {
         prontuario.setHistoricoClinico(prontuario.getHistoricoClinico() + " | Alta concedida pelo médico.");
         
         return prontuarioRepository.save(prontuario);
+    }
+
+    // Métodos novos adicionados abaixo:
+
+    public List<Prontuario> listarTodosProntuarios() {
+        return prontuarioRepository.findAll();
+    }
+
+    public Prontuario buscarProntuarioPorId(String id) {
+        return prontuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prontuário não encontrado com o ID: " + id));
+    }
+
+
+    public List<Prontuario> buscarProntuariosPorStatus(String status) {
+        return prontuarioRepository.findByStatus(status);
     }
 }
