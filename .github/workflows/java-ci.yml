@@ -1,0 +1,49 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        java: ['21']
+        service:
+          - api-gateway
+          - auth-service
+          - bed-service
+          - medical-records-service
+          - notification-service
+          - paciente-service
+          - service-discovery
+          - triagem-service
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
+        working-directory: ${{ matrix.service }}
+
+      - name: Run tests and build
+        run: ./mvnw clean verify
+        working-directory: ${{ matrix.service }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.service }}-jar
+          path: ${{ matrix.service }}/target/*.jar
