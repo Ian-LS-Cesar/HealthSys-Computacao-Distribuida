@@ -19,7 +19,6 @@ services:
 
   # O Microserviço de Leitos
   bed-service:
-    build: .
     build:
       context: .
       dockerfile: Dockerfile

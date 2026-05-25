@@ -62,7 +62,8 @@ public class ProntuarioService {
                 .orElseThrow(() -> new RuntimeException("Prontuário não encontrado com o ID: " + id));
     }
 
-    public List<Prontuario> buscarPronutariosPorStatus(String status) {
+    // Corrigido: nome do método alinhado com o usado pelo controller
+    public List<Prontuario> buscarProntuariosPorStatus(String status) {
         // Nota: Garanta que seu ProntuarioRepository tenha o método findByStatus(String status)
         return prontuarioRepository.findByStatus(status);
     }
