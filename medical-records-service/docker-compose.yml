@@ -15,8 +15,6 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
     depends_on:
       - medical-records-service-db
-      - notification-service-db
-      - service-discovery
     networks:
       - internal
     restart: unless-stopped
