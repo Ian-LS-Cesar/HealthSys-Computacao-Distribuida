@@ -5,16 +5,17 @@ services:
       dockerfile: Dockerfile
     container_name: medical-records-service
     ports:
-      - "8085:8085"
+      - "${MEDICAL_RECORDS_SERVICE_PORT}:8085"
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://{MONGO_USER}:{MONGO_PASSWORD}@medical-records-service-db:27017/medical_db?authSource=admin
+      SPRING_DATA_MONGODB_URI: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@medical-records-service-db:27017/${MEDICAL_RECORDS_DB_NAME}?authSource=admin
       SPRING_RABBITMQ_HOST: notification-service-db
-      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_PORT: ${RABBITMQ_AMQP_PORT}
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
     depends_on:
       - medical-records-service-db
+      - notification-service-db
       - service-discovery
     networks:
       - internal
@@ -29,7 +30,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     ports:
-      - "27017:27017"
+      - "${MEDICAL_RECORDS_SERVICE_DB_PORT}:27017"
     volumes:
       - medical-records-service-db-data:/data/db
     networks:
@@ -41,7 +42,7 @@ services:
 networks:
   internal:
     external: true
-    name: healthsys-internal
+    name: ${DOCKER_NETWORK}
 
 volumes:
   medical-records-service-db-data:

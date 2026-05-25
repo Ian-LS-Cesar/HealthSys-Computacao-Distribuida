@@ -1,34 +1,41 @@
-version: '3.8'
-
 services:
   # O Banco de dados exclusivo do Bed Service
   bed-db:
     image: postgres:18.4-alpine
     container_name: bed-db
+    env_file:
+      - ../.env
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: bed_db
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${BED_DB_NAME}
     ports:
-      - "5434:5432" # Porta externa 5434 para não chocar com o Postgres do Auth (5432)
+      - "${BED_SERVICE_DB_PORT}:5432"
     networks:
       - internal
     volumes:
-      - bed_db_data:/var/lib/postgresql/data
+      - bed_db_data:/var/lib/postgresql
 
   # O Microserviço de Leitos
   bed-service:
     build: .
     container_name: bed-service
+    env_file:
+      - ../.env
     ports:
-      - "8086:8086"
+      - "${BED_SERVICE_PORT}:8086"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://bed-db:5432/bed_db
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka/
+      SPRING_DATASOURCE_URL: jdbc:postgresql://bed-db:5432/${BED_DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_RABBITMQ_HOST: notification-service-db
+      SPRING_RABBITMQ_PORT: ${RABBITMQ_AMQP_PORT}
+      SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER}
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
     depends_on:
       - bed-db
-      - rabbitmq
+      - notification-service-db
       - service-discovery
     networks:
       - internal
@@ -37,6 +44,7 @@ services:
 networks:
   internal:
     external: true
+    name: ${DOCKER_NETWORK}
 
 volumes:
   bed_db_data:

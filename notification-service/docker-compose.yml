@@ -10,10 +10,10 @@ services:
       - ../.env
     environment:
       SPRING_RABBITMQ_HOST: notification-service-db
-      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_PORT: ${RABBITMQ_AMQP_PORT}
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
     depends_on:
       notification-service-db:
         condition: service_healthy
