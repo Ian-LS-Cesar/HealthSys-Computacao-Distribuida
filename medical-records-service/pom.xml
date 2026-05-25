@@ -12,6 +12,7 @@
     <artifactId>medical-records-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>medical-records-service</name>
+    <description>Serviço de Prontuários Médicos do HealthSys</description>
 
     <properties>
         <java.version>21</java.version>

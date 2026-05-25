@@ -8,6 +8,8 @@ include:
   - path: ./bed-service/docker-compose.yml
   - path: ./medical-records-service/docker-compose.yml
   - path: ./observability/docker-compose.yml
+  - path: ./bed-service/docker-compose.yml
+  - path: ./medical-records-service/docker-compose.yml
 
 networks:
   internal:
