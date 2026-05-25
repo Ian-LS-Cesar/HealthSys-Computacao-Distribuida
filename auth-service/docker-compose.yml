@@ -26,7 +26,7 @@ services:
     restart: unless-stopped
 
   auth-service-db:
-    image: postgres:latest
+    image: postgres:18.4-alpine
     container_name: auth-service-db
     env_file:
       - ../.env

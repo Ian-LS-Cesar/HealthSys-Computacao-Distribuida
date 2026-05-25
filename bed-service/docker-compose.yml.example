@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # O Banco de dados exclusivo do Bed Service
   bed-db:
-    image: postgres:15-alpine
+    image: postgres:18.4-alpine
     container_name: bed-db
     environment:
       POSTGRES_USER: admin
@@ -12,27 +12,30 @@ services:
     ports:
       - "5434:5432" # Porta externa 5434 para não chocar com o Postgres do Auth (5432)
     networks:
-      - healthsys-internal
+      - internal
     volumes:
       - bed_db_data:/var/lib/postgresql/data
 
   # O Microserviço de Leitos
   bed-service:
-    build: ./bed-service
+    build: .
     container_name: bed-service
     ports:
       - "8086:8086"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://bed-db:5432/bed_db
       - SPRING_RABBITMQ_HOST=rabbitmq
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka/
     depends_on:
       - bed-db
       - rabbitmq
+      - service-discovery
     networks:
-      - healthsys-internal
+      - internal
+    restart: unless-stopped
 
 networks:
-  healthsys-internal:
+  internal:
     external: true
 
 volumes:

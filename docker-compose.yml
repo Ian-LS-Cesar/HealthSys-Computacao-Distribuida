@@ -5,6 +5,8 @@ include:
   - path: ./notification-service/docker-compose.yml
   - path: ./service-discovery/docker-compose.yml
   - path: ./api-gateway/docker-compose.yml
+  - path: ./bed-service/docker-compose.yml
+  - path: ./medical-records-service/docker-compose.yml
   - path: ./observability/docker-compose.yml
 
 networks:

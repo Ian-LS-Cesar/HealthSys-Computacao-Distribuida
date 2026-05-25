@@ -1,13 +1,15 @@
 package com.healthsys.medical_records_service;
 
-// import org.junit.jupiter.api.Test;
-// import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
-// @SpringBootTest
-// class MedicalRecordsServiceApplicationTests {
+@SpringBootTest
+@ActiveProfiles("test")
+class MedicalRecordsServiceApplicationTests {
 
-// 	@Test
-// 	void contextLoads() {
-// 	}
+	@Test
+	void contextLoads() {
+	}
 
-// }
+}

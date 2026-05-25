@@ -10,6 +10,8 @@ services:
       - paciente-service
       - triagem-service
       - notification-service
+      - bed-service
+      - medical-records-service
     env_file:
       - ../.env
     command:
