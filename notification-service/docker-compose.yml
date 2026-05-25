@@ -20,7 +20,7 @@ services:
       service-discovery:
         condition: service_healthy
     networks:
-      - internal
+      - internal 
     restart: unless-stopped
 
   notification-service-db:
@@ -37,10 +37,10 @@ services:
     volumes:
       - notification-service-db-data:/var/lib/rabbitmq
     networks:
-      - internal
+      - internal 
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"] 
       interval: 10s
       timeout: 5s
       retries: 10

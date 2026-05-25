@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/prontuarios")
 @CrossOrigin(origins = "*") // Permite a comunicação do app React
@@ -36,5 +38,32 @@ public class ProntuarioController {
     public ResponseEntity<Prontuario> darAlta(@PathVariable String id) {
         Prontuario prontuarioAtualizado = prontuarioService.darAltaPaciente(id);
         return ResponseEntity.ok(prontuarioAtualizado);
+    }
+
+    /**
+     * Endpoint para listar todos os prontuários (histórico geral).
+     * GET http://localhost:8085/api/prontuarios
+     */
+    @GetMapping
+    public ResponseEntity<List<Prontuario>> listarTodos() {
+        return ResponseEntity.ok(prontuarioService.listarTodosProntuarios());
+    }
+
+    /**
+     * Endpoint para buscar um prontuário específico pelo ID.
+     * GET http://localhost:8085/api/prontuarios/{id}
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Prontuario> buscarPorId(@PathVariable String id) {
+        return ResponseEntity.ok(prontuarioService.buscarProntuarioPorId(id));
+    }
+
+    /**
+     * Endpoint para filtrar prontuários por status (ex: INTERNADO, ALTA).
+     * GET http://localhost:8085/api/prontuarios/status?status=INTERNADO
+     */
+    @GetMapping("/status")
+    public ResponseEntity<List<Prontuario>> buscarPorStatus(@RequestParam String status) {
+        return ResponseEntity.ok(prontuarioService.buscarProntuariosPorStatus(status));
     }
 }

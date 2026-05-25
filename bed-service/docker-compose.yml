@@ -1,39 +1,46 @@
-version: '3.8'
-
 services:
   # O Banco de dados exclusivo do Bed Service
   bed-db:
     image: postgres:15-alpine
     container_name: bed-db
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: bed_db
+      POSTGRES_USER: ${BED_DB_USER}
+      POSTGRES_PASSWORD: ${BED_DB_PASSWORD}
+      POSTGRES_DB: ${BED_DB_NAME} 
     ports:
-      - "5434:5432" # Porta externa 5434 para não chocar com o Postgres do Auth (5432)
+      - "${BED_DB_PORT}:5432" 
     networks:
-      - healthsys-internal
+      - internal
     volumes:
       - bed_db_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   # O Microserviço de Leitos
   bed-service:
-    build: ./bed-service
+    build:
+      context: . 
+      dockerfile: Dockerfile
     container_name: bed-service
     ports:
-      - "8086:8086"
+      - "${BED_SERVICE_PORT}:8086"
+    env_file:
+      - ../.env
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://bed-db:5432/bed_db
-      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://bed-db:5432/${BED_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${BED_DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${BED_DB_PASSWORD}
+      - SPRING_RABBITMQ_HOST=notification-service-db
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USER}
+      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
     depends_on:
-      - bed-db
-      - rabbitmq
+      bed-db:
+        condition: service_started
+      notification-service-db: 
+        condition: service_healthy
     networks:
-      - healthsys-internal
-
-networks:
-  healthsys-internal:
-    external: true
+      - internal
+    restart: unless-stopped
 
 volumes:
   bed_db_data:
