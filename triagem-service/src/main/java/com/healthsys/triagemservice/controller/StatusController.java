@@ -6,6 +6,8 @@ import com.healthsys.triagemservice.service.StatusService;
 import jakarta.validation.Valid;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/status")
+@Tag(name = "API Status", description = "Endpoints para Consultar, Criar, Atualizar e Remover Status")
 public class StatusController {
     private final StatusService statusService;
     private final Counter counter;
@@ -28,6 +31,7 @@ public class StatusController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar status")
     public ResponseEntity<List<StatusResponseDTO>> getStatus(){
         counter.increment();
         List<StatusResponseDTO> status = statusService.getStatus();
@@ -35,6 +39,7 @@ public class StatusController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar status")
     public ResponseEntity<StatusResponseDTO> criarStatus(@Valid @RequestBody StatusRequestDTO statusRequestDTO){
         counter.increment();
         StatusResponseDTO status = statusService.criarStatus(statusRequestDTO);
@@ -42,6 +47,7 @@ public class StatusController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar status")
     public ResponseEntity<StatusResponseDTO> atualizarStatus(@PathVariable Integer id, @Valid @RequestBody StatusRequestDTO statusRequestDTO){
         counter.increment();
         StatusResponseDTO status = statusService.atualizarStatus(id, statusRequestDTO);
@@ -49,6 +55,7 @@ public class StatusController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir status")
     public ResponseEntity<Void> deletarStatus(@PathVariable Integer id){
         counter.increment();
         statusService.deletarStatus(id);

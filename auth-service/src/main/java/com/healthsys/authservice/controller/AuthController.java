@@ -4,6 +4,7 @@ import com.healthsys.authservice.dto.LoginRequestDTO;
 import com.healthsys.authservice.dto.LoginResponseDTO;
 import com.healthsys.authservice.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
+@Tag(name = "API Autenticação", description = "Endpoints para Login, Logout e Validação de Token")
 public class AuthController {
     private final AuthService authService;
     private final Counter counter;
@@ -26,7 +28,7 @@ public class AuthController {
                 .register(meterRegistry);
     }
 
-    @Operation(summary="Gerar token no login do usuário")
+    @Operation(summary = "Login do usuário")
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(
             @RequestBody LoginRequestDTO loginRequestDTO){
@@ -42,7 +44,7 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    @Operation(summary = "Realizar logout do usuário, revogando o token")
+    @Operation(summary = "Logout do usuário")
     @PostMapping("/logout")
     public ResponseEntity<LoginResponseDTO> logout(@RequestHeader("Authorization") String authHeader){
         counter.increment();
@@ -57,7 +59,7 @@ public class AuthController {
 
         return ResponseEntity.ok().build();
     }
-    @Operation(summary = "Validar Token")
+    @Operation(summary = "Validar token")
     @GetMapping("/validate")
     public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authHeader){
         counter.increment();

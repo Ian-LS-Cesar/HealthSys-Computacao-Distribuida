@@ -4,6 +4,8 @@ import com.healthsys.pacienteservice.dto.GeneroRequestDTO;
 import com.healthsys.pacienteservice.dto.GeneroResponseDTO;
 import com.healthsys.pacienteservice.service.GeneroService;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/generos")
+@Tag(name = "API Gêneros", description = "Endpoints para Consultar, Criar, Atualizar e Remover Gêneros")
 public class GeneroController {
     private final GeneroService generoService;
     private final Counter counter;
@@ -28,6 +31,7 @@ public class GeneroController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar gêneros")
     public ResponseEntity<List<GeneroResponseDTO>> getGeneros() {
         counter.increment();
         List<GeneroResponseDTO> generos = generoService.getGeneros();
@@ -35,6 +39,7 @@ public class GeneroController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar gênero")
     public ResponseEntity<GeneroResponseDTO> criarGenero(@Valid @RequestBody GeneroRequestDTO generoRequestDTO) {
         counter.increment();
         GeneroResponseDTO generoResponseDTO = generoService.criarGenero(generoRequestDTO);
@@ -42,6 +47,7 @@ public class GeneroController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar gênero")
     public ResponseEntity<GeneroResponseDTO> atualizarGenero(
             @PathVariable Integer id,
             @Valid @RequestBody GeneroRequestDTO generoRequestDTO) {
@@ -51,6 +57,7 @@ public class GeneroController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir gênero")
     public ResponseEntity<Void> deletarGenero(@PathVariable Integer id) {
         counter.increment();
         generoService.deletarGenero(id);

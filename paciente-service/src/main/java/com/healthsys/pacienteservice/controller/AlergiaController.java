@@ -4,6 +4,8 @@ import com.healthsys.pacienteservice.dto.AlergiaRequestDTO;
 import com.healthsys.pacienteservice.dto.AlergiaResponseDTO;
 import com.healthsys.pacienteservice.service.AlergiaService;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/alergias")
+@Tag(name = "API Alergias", description = "Endpoints para Consultar, Criar, Atualizar e Remover Alergias")
 public class AlergiaController {
     private final AlergiaService alergiaService;
     private final Counter counter;
@@ -29,6 +32,7 @@ public class AlergiaController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar alergias")
     public ResponseEntity<List<AlergiaResponseDTO>> getAlergias() {
         counter.increment();
         List<AlergiaResponseDTO> alergias = alergiaService.getAlergias();
@@ -36,6 +40,7 @@ public class AlergiaController {
     }
 
     @GetMapping("/paciente/{pacienteId}")
+    @Operation(summary = "Listar alergias por paciente")
     public ResponseEntity<List<AlergiaResponseDTO>> getAlergiasPorPaciente(@PathVariable UUID pacienteId) {
         counter.increment();
         List<AlergiaResponseDTO> alergias = alergiaService.getAlergiasPorPaciente(pacienteId);
@@ -43,6 +48,7 @@ public class AlergiaController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar alergia")
     public ResponseEntity<AlergiaResponseDTO> criarAlergia(
             @Valid @RequestBody AlergiaRequestDTO alergiaRequestDTO) {
         counter.increment();
@@ -51,6 +57,7 @@ public class AlergiaController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar alergia")
     public ResponseEntity<AlergiaResponseDTO> atualizarAlergia(
             @PathVariable Integer id,
             @Valid @RequestBody AlergiaRequestDTO alergiaRequestDTO) {
@@ -60,6 +67,7 @@ public class AlergiaController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir alergia")
     public ResponseEntity<Void> deletarAlergia(@PathVariable Integer id) {
         counter.increment();
         alergiaService.deletarAlergia(id);

@@ -82,6 +82,13 @@
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>3.0.3</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Lombok para reduzir boilerplate (Getters/Setters) -->
         <dependency>
             <groupId>org.projectlombok</groupId>

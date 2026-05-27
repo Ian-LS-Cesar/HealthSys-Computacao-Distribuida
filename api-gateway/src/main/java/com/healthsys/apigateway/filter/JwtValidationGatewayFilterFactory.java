@@ -22,6 +22,13 @@ public class JwtValidationGatewayFilterFactory extends
     @Override
     public GatewayFilter apply(Object config) {
         return (exchange, chain) -> {
+            String path = exchange.getRequest().getURI().getPath();
+
+            // Rotas públicas de documentação que não requerem JWT
+            if (isDocumentationPath(path)) {
+                return chain.filter(exchange);
+            }
+
             String token =
                     exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
@@ -37,5 +44,11 @@ public class JwtValidationGatewayFilterFactory extends
                     .toBodilessEntity()
                     .then(chain.filter(exchange));
         };
+    }
+
+    private boolean isDocumentationPath(String path) {
+        return path.contains("/v3/api-docs") ||
+               path.contains("/swagger-ui") ||
+               path.contains("/swagger-config");
     }
 }

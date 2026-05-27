@@ -3,6 +3,8 @@ package com.healthsys.authservice.controller;
 import com.healthsys.authservice.dto.PerfilRequestDTO;
 import com.healthsys.authservice.dto.PerfilResponseDTO;
 import com.healthsys.authservice.service.PerfilService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/perfis")
+@Tag(name = "API Perfis", description = "Endpoints para Consultar, Criar e Remover Perfis")
 public class PerfilController {
     private final PerfilService perfilService;
     private final Counter counter;
@@ -26,6 +29,7 @@ public class PerfilController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar perfis")
     public ResponseEntity<List<PerfilResponseDTO>> getPerfis(){
         counter.increment();
         List<PerfilResponseDTO> perfis = perfilService.getPerfis();
@@ -33,6 +37,7 @@ public class PerfilController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar perfil")
     public ResponseEntity<PerfilResponseDTO> createPerfis(@RequestBody PerfilRequestDTO perfilRequestDTO){
         counter.increment();
         PerfilResponseDTO perfilResponseDTO = perfilService.criarPerfis(perfilRequestDTO);
@@ -40,6 +45,7 @@ public class PerfilController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir perfil")
     public ResponseEntity<PerfilResponseDTO> deletePerfil(@PathVariable int id){
         counter.increment();
         perfilService.deletarPerfil(id);

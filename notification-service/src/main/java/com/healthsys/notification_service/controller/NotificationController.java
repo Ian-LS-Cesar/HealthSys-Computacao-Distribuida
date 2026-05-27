@@ -4,6 +4,8 @@ import com.healthsys.notification_service.model.Notification;
 import com.healthsys.notification_service.config.RabbitMQConfig;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RestController
 @RequestMapping("/notifications")
 @CrossOrigin(origins = "*")
+@Tag(name = "API Notificações", description = "Endpoints para Stream de Notificações, Envio de Teste e Status do Serviço")
 public class NotificationController {
 
     private final RabbitTemplate rabbitTemplate;
@@ -41,6 +44,7 @@ public class NotificationController {
      * Exemplo: /api/notifications/stream/cardiologia
      */
     @GetMapping(value = "/stream/{especialidade}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Operation(summary = "Abrir stream de notificações")
     public SseEmitter streamNotifications(@PathVariable String especialidade) {
         counter.increment();
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
@@ -82,6 +86,7 @@ public class NotificationController {
     }
 
     @PostMapping("/send-test/{especialidade}")
+    @Operation(summary = "Enviar notificação de teste")
     public ResponseEntity<String> sendTestNotification(@PathVariable String especialidade, @RequestBody Notification notification) {
         counter.increment();
         try {
@@ -94,6 +99,7 @@ public class NotificationController {
     }
 
     @GetMapping("/status")
+    @Operation(summary = "Consultar status do serviço")
     public ResponseEntity<String> getStatus() {
         counter.increment();
         return ResponseEntity.ok("Notification Service operacional (Topic Routing Mode).");

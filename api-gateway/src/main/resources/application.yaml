@@ -40,7 +40,6 @@ spring:
               filters:
                 - StripPrefix=1
                 - JwtValidation
-
             - id: triagem-service
               uri: lb://triagem-service
               predicates:
@@ -69,6 +68,42 @@ spring:
               filters:
                 - StripPrefix=1
                 - JwtValidation
+            - id: auth-service-api-docs
+              uri: lb://auth-service
+              predicates:
+                - Path=/auth/v3/api-docs/**
+              filters:
+                - StripPrefix=2
+            - id: paciente-service-api-docs
+              uri: lb://paciente-service
+              predicates:
+                - Path=/api/v3/api-docs/**
+              filters:
+                - StripPrefix=2
+            - id: triagem-service-api-docs
+              uri: lb://triagem-service
+              predicates:
+                - Path=/tri/v3/api-docs/**
+              filters:
+                - StripPrefix=2
+            - id: notification-service-api-docs
+              uri: lb://notification-service
+              predicates:
+                - Path=/not/v3/api-docs/**
+              filters:
+                - StripPrefix=2
+            - id: bed-service-api-docs
+              uri: lb://bed-service
+              predicates:
+                - Path=/bed/v3/api-docs/**
+              filters:
+                - StripPrefix=2
+            - id: medical-records-service-api-docs
+              uri: lb://medical-records-service
+              predicates:
+                - Path=/med/v3/api-docs/**
+              filters:
+                - StripPrefix=2
 
 management:
   endpoints:
@@ -82,16 +117,39 @@ management:
   endpoint:
     health:
       show-details: always
-
     prometheus:
       enabled: true
   metrics:
     tags:
       application: ${spring.application.name}
 
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    syntaxHighlight:
+      activate: true
+      theme: monokai
+    urls:
+      - name: Auth Service
+        url: /auth/v3/api-docs
+      - name: Paciente Service
+        url: /api/v3/api-docs
+      - name: Triagem Service
+        url: /tri/v3/api-docs
+      - name: Notification Service
+        url: /not/v3/api-docs
+      - name: Bed Service
+        url: /bed/v3/api-docs
+      - name: Medical Records Service
+        url: /med/v3/api-docs
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
 
 eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
-

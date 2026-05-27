@@ -4,6 +4,8 @@ import com.healthsys.pacienteservice.dto.VacinaRequestDTO;
 import com.healthsys.pacienteservice.dto.VacinaResponseDTO;
 import com.healthsys.pacienteservice.service.VacinaService;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/vacinas")
+@Tag(name = "API Vacinas", description = "Endpoints para Consultar, Criar, Atualizar e Remover Vacinas")
 public class VacinaController {
 
     private final VacinaService vacinaService;
@@ -30,18 +33,21 @@ public class VacinaController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar vacinas")
     public ResponseEntity<List<VacinaResponseDTO>> getVacinas() {
         counter.increment();
         return ResponseEntity.ok(vacinaService.getVacinas());
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar vacina por ID")
     public ResponseEntity<VacinaResponseDTO> getVacinaById(@PathVariable UUID id) {
         counter.increment();
         return ResponseEntity.ok(vacinaService.getVacinaById(id));
     }
 
     @PostMapping
+    @Operation(summary = "Criar vacina")
     public ResponseEntity<VacinaResponseDTO> criarVacina(
             @Valid @RequestBody VacinaRequestDTO vacinaRequestDTO) {
         counter.increment();
@@ -50,6 +56,7 @@ public class VacinaController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar vacina")
     public ResponseEntity<VacinaResponseDTO> atualizarVacina(
             @PathVariable UUID id,
             @Valid @RequestBody VacinaRequestDTO vacinaRequestDTO) {
@@ -58,6 +65,7 @@ public class VacinaController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir vacina")
     public ResponseEntity<Void> deletarVacina(@PathVariable UUID id) {
         counter.increment();
         vacinaService.deletarVacina(id);

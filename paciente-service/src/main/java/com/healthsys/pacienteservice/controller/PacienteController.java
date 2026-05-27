@@ -5,6 +5,8 @@ import com.healthsys.pacienteservice.dto.PacienteResponseDTO;
 import com.healthsys.pacienteservice.dto.validators.CreatePacienteValidationGroup;
 import com.healthsys.pacienteservice.service.PacienteService;
 import jakarta.validation.groups.Default;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/pacientes")
+@Tag(name = "API Pacientes", description = "Endpoints para Consultar, Criar, Atualizar e Remover Pacientes")
 public class PacienteController {
     private final PacienteService pacienteService;
     private final Counter counter;
@@ -30,6 +33,7 @@ public class PacienteController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar pacientes")
     public ResponseEntity<List<PacienteResponseDTO>> getPacientes() {
         counter.increment();
         List<PacienteResponseDTO> pacientes = pacienteService.getPacientes();
@@ -37,18 +41,21 @@ public class PacienteController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar paciente por ID")
     public ResponseEntity<PacienteResponseDTO> getPacienteById(@PathVariable UUID id) {
         counter.increment();
         return ResponseEntity.ok(pacienteService.getPacienteById(id));
     }
 
     @GetMapping("/cpf/{cpf}")
+    @Operation(summary = "Buscar paciente por CPF")
     public ResponseEntity<PacienteResponseDTO> getPacienteByCpf(@PathVariable String cpf) {
         counter.increment();
         return ResponseEntity.ok(pacienteService.getPacienteByCpf(cpf));
     }
 
     @PostMapping
+    @Operation(summary = "Criar paciente")
     public ResponseEntity<PacienteResponseDTO> criarPaciente(@Validated({Default.class, CreatePacienteValidationGroup.class}) @RequestBody PacienteRequestDTO pacienteRequestDTO) {
         counter.increment();
         PacienteResponseDTO pacienteResponseDTO = pacienteService.criarPaciente(pacienteRequestDTO);
@@ -56,6 +63,7 @@ public class PacienteController {
     }
 
     @PutMapping({"/{id}"})
+    @Operation(summary = "Atualizar paciente")
     public ResponseEntity<PacienteResponseDTO> updateUsuario(@PathVariable UUID id,@Validated({Default.class, CreatePacienteValidationGroup.class}) @RequestBody PacienteRequestDTO usuarioRequestDTO){
         counter.increment();
         PacienteResponseDTO pacienteResponseDTO = pacienteService.atualizarPaciente(id, usuarioRequestDTO);
@@ -63,6 +71,7 @@ public class PacienteController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir paciente")
     public ResponseEntity<PacienteResponseDTO> deletarPaciente(@PathVariable UUID id) {
         counter.increment();
         pacienteService.deletarPaciente(id);

@@ -6,6 +6,8 @@ import com.healthsys.triagemservice.dto.TriagemResponseDTO;
 import com.healthsys.triagemservice.service.TriagemService;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/triagens")
+@Tag(name = "API Triagens", description = "Endpoints para Consultar, Criar, Atualizar e Remover Triagens")
 public class TriagemController {
     private final TriagemService triagemService;
     private final Counter counter;
@@ -30,30 +33,35 @@ public class TriagemController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar triagens")
     public ResponseEntity<List<TriagemResponseDTO>> getTriagens() {
         counter.increment();
         return ResponseEntity.ok(triagemService.getTriagens());
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar triagem por ID")
     public ResponseEntity<TriagemResponseDTO> getTriagem(@PathVariable UUID id) {
         counter.increment();
         return ResponseEntity.ok(triagemService.getTriagemById(id));
     }
 
     @GetMapping("/{id}/detalhada")
+    @Operation(summary = "Buscar triagem detalhada por ID")
     public ResponseEntity<TriagemDetalhadaResponseDTO> getTriagemDetalhada(@PathVariable UUID id) {
         counter.increment();
         return ResponseEntity.ok(triagemService.getTriagemDetalhada(id));
     }
 
     @GetMapping("/paciente/{pacienteId}")
+    @Operation(summary = "Listar triagens por paciente")
     public ResponseEntity<List<TriagemResponseDTO>> getTriagemByPaciente(@PathVariable UUID pacienteId) {
         counter.increment();
         return ResponseEntity.ok(triagemService.getTriagemByPaciente(pacienteId));
     }
 
     @PostMapping
+    @Operation(summary = "Criar triagem")
     public ResponseEntity<TriagemResponseDTO> criarTriagem(@Valid @RequestBody TriagemRequestDTO triagemRequestDTO) {
         counter.increment();
         TriagemResponseDTO triagem = triagemService.criarTriagem(triagemRequestDTO);
@@ -61,6 +69,7 @@ public class TriagemController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar triagem")
     public ResponseEntity<TriagemResponseDTO> atualizarTriagem(
             @PathVariable UUID id,
             @Valid @RequestBody TriagemRequestDTO triagemRequestDTO) {
@@ -70,6 +79,7 @@ public class TriagemController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir triagem")
     public ResponseEntity<Void> deletarTriagem(@PathVariable UUID id) {
         counter.increment();
         triagemService.deletarTriagem(id);

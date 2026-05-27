@@ -4,6 +4,8 @@ import com.healthsys.pacienteservice.dto.SexoRequestDTO;
 import com.healthsys.pacienteservice.dto.SexoResponseDTO;
 import com.healthsys.pacienteservice.service.SexoService;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/sexos")
+@Tag(name = "API Sexos", description = "Endpoints para Consultar, Criar, Atualizar e Remover Sexos")
 public class SexoController {
     private final SexoService sexoService;
     private final Counter counter;
@@ -28,6 +31,7 @@ public class SexoController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar sexos")
     public ResponseEntity<List<SexoResponseDTO>> getSexos() {
         counter.increment();
         List<SexoResponseDTO> sexos = sexoService.getSexos();
@@ -35,6 +39,7 @@ public class SexoController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar sexo")
     public ResponseEntity<SexoResponseDTO> criarSexo(@Valid @RequestBody SexoRequestDTO sexoRequestDTO) {
         counter.increment();
         SexoResponseDTO sexoResponseDTO = sexoService.criarSexo(sexoRequestDTO);
@@ -42,6 +47,7 @@ public class SexoController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar sexo")
     public ResponseEntity<SexoResponseDTO> atualizarSexo(
             @PathVariable Integer id,
             @Valid @RequestBody SexoRequestDTO sexoRequestDTO) {
@@ -51,6 +57,7 @@ public class SexoController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir sexo")
     public ResponseEntity<Void> deletarSexo(@PathVariable Integer id) {
         counter.increment();
         sexoService.deletarSexo(id);

@@ -5,6 +5,8 @@ import com.healthsys.authservice.dto.UsuarioResponseDTO;
 import com.healthsys.authservice.dto.validators.CreateUsuarioValidationGroup;
 import com.healthsys.authservice.service.UsuarioService;
 import jakarta.validation.groups.Default;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/usuarios")
+@Tag(name = "API Usuários", description = "Endpoints para Consultar, Criar, Atualizar e Remover Usuários")
 public class UsuarioController {
     private final UsuarioService usuarioService;
     private final Counter counter;
@@ -30,6 +33,7 @@ public class UsuarioController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar usuários")
     public ResponseEntity<List<UsuarioResponseDTO>> getUsuarios() {
         counter.increment();
         List<UsuarioResponseDTO> usuarios = usuarioService.getUsuarios();
@@ -37,6 +41,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/perfil/{perfilId}")
+    @Operation(summary = "Listar usuários por perfil")
     public ResponseEntity<List<UsuarioResponseDTO>> getUsuariosByPerfilId(@PathVariable Integer perfilId) {
         counter.increment();
         List<UsuarioResponseDTO> usuarios = usuarioService.getUsuariosByPerfilId(perfilId);
@@ -44,6 +49,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/especialidade/{especialidadeId}")
+    @Operation(summary = "Listar usuários por especialidade")
     public ResponseEntity<List<UsuarioResponseDTO>> getUsuariosByEspecialidadeId(@PathVariable Integer especialidadeId) {
         counter.increment();
         List<UsuarioResponseDTO> usuarios = usuarioService.getUsuariosByEspecialidadeId(especialidadeId);
@@ -51,6 +57,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/email/{email}")
+    @Operation(summary = "Buscar usuário por e-mail")
     public ResponseEntity<UsuarioResponseDTO> getUsuarioByEmail(@PathVariable String email) {
         counter.increment();
         UsuarioResponseDTO usuario = usuarioService.getUsuarioByEmail(email);
@@ -58,6 +65,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar usuário por ID")
     public ResponseEntity<UsuarioResponseDTO> getUsuarioById(@PathVariable UUID id) {
         counter.increment();
         UsuarioResponseDTO usuario = usuarioService.getUsuarioById(id);
@@ -65,6 +73,7 @@ public class UsuarioController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar usuário")
     public ResponseEntity<UsuarioResponseDTO> createUsuario(
             @Validated({Default.class, CreateUsuarioValidationGroup.class})
             @RequestBody UsuarioRequestDTO usuarioRequestDTO
@@ -75,6 +84,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar usuário")
     public ResponseEntity<UsuarioResponseDTO> updateUsuario(
             @PathVariable UUID id,
             @Validated({Default.class})
@@ -86,6 +96,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir usuário")
     public ResponseEntity<Void> deleteUsuario(@PathVariable UUID id) {
         counter.increment();
         usuarioService.deletarUsuario(id);

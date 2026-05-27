@@ -4,6 +4,8 @@ import com.healthsys.pacienteservice.dto.EnderecoRequestDTO;
 import com.healthsys.pacienteservice.dto.EnderecoResponseDTO;
 import com.healthsys.pacienteservice.service.EnderecoService;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/enderecos")
+@Tag(name = "API Endereços", description = "Endpoints para Consultar, Criar, Atualizar e Remover Endereços")
 public class EnderecoController {
     private final EnderecoService enderecoService;
     private final Counter counter;
@@ -29,6 +32,7 @@ public class EnderecoController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar endereços")
     public ResponseEntity<List<EnderecoResponseDTO>> getEnderecos() {
         counter.increment();
         List<EnderecoResponseDTO> enderecos = enderecoService.getEnderecos();
@@ -36,6 +40,7 @@ public class EnderecoController {
     }
 
     @GetMapping("/paciente/{pacienteId}")
+    @Operation(summary = "Listar endereços por paciente")
     public ResponseEntity<List<EnderecoResponseDTO>> getEnderecosPorPaciente(@PathVariable UUID pacienteId) {
         counter.increment();
         List<EnderecoResponseDTO> enderecos = enderecoService.getEnderecosPorPaciente(pacienteId);
@@ -43,6 +48,7 @@ public class EnderecoController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar endereço")
     public ResponseEntity<EnderecoResponseDTO> criarEndereco(
             @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) {
         counter.increment();
@@ -51,6 +57,7 @@ public class EnderecoController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar endereço")
     public ResponseEntity<EnderecoResponseDTO> atualizarEndereco(
             @PathVariable Integer id,
             @Valid @RequestBody EnderecoRequestDTO enderecoRequestDTO) {
@@ -60,6 +67,7 @@ public class EnderecoController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir endereço")
     public ResponseEntity<Void> deletarEndereco(@PathVariable Integer id) {
         counter.increment();
         enderecoService.deletarEndereco(id);

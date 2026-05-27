@@ -3,6 +3,8 @@ package com.healthsys.authservice.controller;
 import com.healthsys.authservice.dto.EspecialidadeRequestDTO;
 import com.healthsys.authservice.dto.EspecialidadeResponseDTO;
 import com.healthsys.authservice.service.EspecialidadeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/especialidades")
+@Tag(name = "API Especialidades", description = "Endpoints para Consultar, Criar e Remover Especialidades")
 public class EspecialidadeController {
     private final EspecialidadeService especialidadeService;
     private final Counter counter;
@@ -26,6 +29,7 @@ public class EspecialidadeController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar especialidades")
     public ResponseEntity<List<EspecialidadeResponseDTO>> getEspecialidades(){
         counter.increment();
         List<EspecialidadeResponseDTO> especialidades = especialidadeService.getEspecialidades();
@@ -33,6 +37,7 @@ public class EspecialidadeController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar especialidade")
     public ResponseEntity<EspecialidadeResponseDTO> createEspecialidade(@RequestBody EspecialidadeRequestDTO especialidadeRequestDTO){
         counter.increment();
         EspecialidadeResponseDTO especialidadeResponseDTO = especialidadeService.criarEspecialidade(especialidadeRequestDTO);
@@ -40,6 +45,7 @@ public class EspecialidadeController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir especialidade")
     public ResponseEntity<Void> deleteEspecialidade(@PathVariable int id){
         counter.increment();
         especialidadeService.deletarEspecialidade(id);

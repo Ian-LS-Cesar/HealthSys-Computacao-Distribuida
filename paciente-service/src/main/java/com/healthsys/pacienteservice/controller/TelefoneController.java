@@ -4,6 +4,8 @@ import com.healthsys.pacienteservice.dto.TelefoneRequestDTO;
 import com.healthsys.pacienteservice.dto.TelefoneResponseDTO;
 import com.healthsys.pacienteservice.service.TelefoneService;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("/telefones")
+@Tag(name = "API Telefones", description = "Endpoints para Consultar, Criar, Atualizar e Remover Telefones")
 public class TelefoneController {
     private final TelefoneService telefoneService;
     private final Counter counter;
@@ -29,6 +32,7 @@ public class TelefoneController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar telefones")
     public ResponseEntity<List<TelefoneResponseDTO>> getTelefones() {
         counter.increment();
         List<TelefoneResponseDTO> telefones = telefoneService.getTelefones();
@@ -36,6 +40,7 @@ public class TelefoneController {
     }
 
     @GetMapping("/paciente/{pacienteId}")
+    @Operation(summary = "Listar telefones por paciente")
     public ResponseEntity<List<TelefoneResponseDTO>> getTelefonesPorPaciente(@PathVariable UUID pacienteId) {
         counter.increment();
         List<TelefoneResponseDTO> telefones = telefoneService.getTelefonesPorPaciente(pacienteId);
@@ -43,6 +48,7 @@ public class TelefoneController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar telefone")
     public ResponseEntity<TelefoneResponseDTO> criarTelefone(
             @Valid @RequestBody TelefoneRequestDTO telefoneRequestDTO) {
         counter.increment();
@@ -51,6 +57,7 @@ public class TelefoneController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar telefone")
     public ResponseEntity<TelefoneResponseDTO> atualizarTelefone(
             @PathVariable Integer id,
             @Valid @RequestBody TelefoneRequestDTO telefoneRequestDTO) {
@@ -60,6 +67,7 @@ public class TelefoneController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir telefone")
     public ResponseEntity<Void> deletarTelefone(@PathVariable Integer id) {
         counter.increment();
         telefoneService.deletarTelefone(id);

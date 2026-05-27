@@ -26,7 +26,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Allow unauthenticated access to create user (registration).
                         // Allow unauthenticated access to login/logout, validate and actuator endpoints
-                        .requestMatchers("/login", "/validate", "/logout", "/actuator/**", "/perfis", "/usuarios", "/auth/usuarios", "/especialidades").permitAll()
+                        // Allow unauthenticated access to documentation endpoints
+                        .requestMatchers("/login", "/validate", "/logout", "/actuator/**", "/perfis", "/usuarios", "/auth/usuarios", "/especialidades", "/v3/api-docs", "/swagger-ui/**", "/swagger-ui.html", "/swagger-config", "/webjars/**").permitAll()
 
                         // everything else must be authenticated
                         .anyRequest().authenticated()
