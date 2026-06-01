@@ -14,8 +14,11 @@ docker network create healthsys-internal
 DB_NAME=db
 DB_USERNAME=Nome_Usuario_DB
 DB_PASSWORD=Senha_DB
+
 MONGO_USER=Nome_Usuario_Mongo
 MONGO_PASSWORD=Senha_Mongo
+MONGO_INITDB_ROOT_USERNAME=Usuario
+MONGO_INITDB_ROOT_PASSWORD=Senha
 
 # Application ports
 API_GATEWAY_PORT=8080

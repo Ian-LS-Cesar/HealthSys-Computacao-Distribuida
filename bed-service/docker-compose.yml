@@ -1,5 +1,4 @@
 services:
-  # O Banco de dados exclusivo do Bed Service
   bed-db:
     image: postgres:18.4-alpine
     container_name: bed-db
@@ -16,8 +15,12 @@ services:
     volumes:
       - bed_db_data:/var/lib/postgresql
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${BED_DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # O Microserviço de Leitos
   bed-service:
     build:
       context: .
@@ -28,18 +31,23 @@ services:
     ports:
       - "${BED_SERVICE_PORT}:8086"
     environment:
+      SERVER_PORT: 8086
       SPRING_DATASOURCE_URL: jdbc:postgresql://bed-db:5432/${BED_DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      SPRING_RABBITMQ_HOST: notification-service-db
+      SPRING_RABBITMQ_HOST: notification-service-db         
       SPRING_RABBITMQ_PORT: ${RABBITMQ_AMQP_PORT}
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
+      EUREKA_INSTANCE_HOSTNAME: bed-service
+      EUREKA_INSTANCE_NON_SECURE_PORT: 8086
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "false"
     depends_on:
-      - bed-db
-      - notification-service-db
-      - service-discovery
+      bed-db:
+        condition: service_healthy            
+      service-discovery:
+        condition: service_healthy            
     networks:
       - internal
     restart: unless-stopped

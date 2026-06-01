@@ -1,6 +1,5 @@
 server:
   port: 8080
-  
 
 spring:
   application:
@@ -26,7 +25,6 @@ spring:
                 exposedHeaders:
                   - Authorization
                 allowCredentials: true
-
           routes:
             - id: auth-service
               uri: lb://auth-service
@@ -34,27 +32,7 @@ spring:
                 - Path=/auth/**
               filters:
                 - StripPrefix=1
-            - id: paciente-service
-              uri: lb://paciente-service
-              predicates:
-                - Path=/api/**
-              filters:
-                - StripPrefix=1
-                - JwtValidation
-            - id: triagem-service
-              uri: lb://triagem-service
-              predicates:
-                - Path=/tri/**
-              filters:
-                - StripPrefix=1
-                - JwtValidation
-            - id: notification-service
-              uri: lb://notification-service
-              predicates:
-                - Path=/not/**
-              filters:
-                - StripPrefix=1
-                - JwtValidation
+
             - id: bed-service
               uri: lb://bed-service
               predicates:
@@ -62,6 +40,31 @@ spring:
               filters:
                 - StripPrefix=1
                 - JwtValidation
+
+            - id: paciente-service
+              uri: lb://paciente-service
+              predicates:
+                - Path=/api/**
+              filters:
+                - StripPrefix=1
+                - JwtValidation
+
+            - id: triagem-service
+              uri: lb://triagem-service
+              predicates:
+                - Path=/tri/**
+              filters:
+                - StripPrefix=1
+                - JwtValidation
+
+            - id: notification-service
+              uri: lb://notification-service
+              predicates:
+                - Path=/not/**
+              filters:
+                - StripPrefix=1
+                # - JwtValidation
+
             - id: medical-records-service
               uri: lb://medical-records-service
               predicates:
@@ -69,36 +72,42 @@ spring:
               filters:
                 - StripPrefix=1
                 - JwtValidation
+
             - id: auth-service-api-docs
               uri: lb://auth-service
               predicates:
                 - Path=/auth/v3/api-docs/**
               filters:
                 - StripPrefix=2
+
             - id: paciente-service-api-docs
               uri: lb://paciente-service
               predicates:
                 - Path=/api/v3/api-docs/**
               filters:
                 - StripPrefix=2
+
             - id: triagem-service-api-docs
               uri: lb://triagem-service
               predicates:
                 - Path=/tri/v3/api-docs/**
               filters:
                 - StripPrefix=2
+
             - id: notification-service-api-docs
               uri: lb://notification-service
               predicates:
                 - Path=/not/v3/api-docs/**
               filters:
                 - StripPrefix=2
+
             - id: bed-service-api-docs
               uri: lb://bed-service
               predicates:
                 - Path=/bed/v3/api-docs/**
               filters:
                 - StripPrefix=2
+
             - id: medical-records-service-api-docs
               uri: lb://medical-records-service
               predicates:
@@ -154,3 +163,7 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+    register-with-eureka: false   # ← gateway não se registra
+    fetch-registry: true          # ← mas consulta os outros serviços
+  instance:
+    prefer-ip-address: true

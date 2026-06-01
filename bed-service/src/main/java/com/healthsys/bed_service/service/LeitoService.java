@@ -51,4 +51,16 @@ public class LeitoService {
         leito.setPacienteId(null);
         return leitoRepository.save(leito);
     }
+
+    public Leito higienizarLeito(Long leitoId) {
+        Leito leito = leitoRepository.findById(leitoId)
+                .orElseThrow(() -> new RuntimeException("Leito não encontrado"));
+
+        if (leito.getStatus() != StatusLeito.HIGIENIZACAO) {
+            throw new RuntimeException("Leito não está em higienização");
+        }
+
+        leito.setStatus(StatusLeito.LIVRE);
+        return leitoRepository.save(leito);
+    }
 }

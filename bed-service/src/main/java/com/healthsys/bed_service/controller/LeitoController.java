@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/leitos")
-@CrossOrigin(origins = "*")
 @Tag(name = "API Leitos", description = "Endpoints para Consultar, Criar, Internar e Liberar Leitos")
 public class LeitoController {
 
@@ -45,5 +44,11 @@ public class LeitoController {
     @Operation(summary = "Criar leito")
     public Leito criarLeito(@RequestBody Leito leito) {
         return leitoRepository.save(leito);
+    }
+
+    @PostMapping("/{id}/higienizar")
+    @Operation(summary = "Marcar leito como livre após higienização")
+    public ResponseEntity<Leito> higienizar(@PathVariable Long id) {
+        return ResponseEntity.ok(leitoService.higienizarLeito(id));
     }
 }

@@ -20,7 +20,7 @@ services:
       service-discovery:
         condition: service_healthy
     networks:
-      - internal 
+      - internal
     restart: unless-stopped
 
   notification-service-db:
@@ -37,13 +37,20 @@ services:
     volumes:
       - notification-service-db-data:/var/lib/rabbitmq
     networks:
-      - internal 
+      - internal
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"] 
+      # Verifica se o broker está pronto para aceitar conexões AMQP de verdade
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
       interval: 10s
-      timeout: 5s
+      timeout: 10s
       retries: 10
+      start_period: 30s  # ← dá tempo para o RabbitMQ inicializar completamente
 
 volumes:
   notification-service-db-data:
+
+networks:
+  internal:
+    external: true
+    name: ${DOCKER_NETWORK}
