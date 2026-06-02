@@ -6,6 +6,8 @@ import com.healthsys.authservice.mapper.EspecialidadeMapper;
 import com.healthsys.authservice.model.Especialidade;
 import com.healthsys.authservice.repository.EspecialidadeRepository;
 import lombok.Getter;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class EspecialidadeService {
         this.especialidadeRepository = especialidadeRepository;
     }
 
+    @Cacheable(value = "especialidades")
     public List<EspecialidadeResponseDTO> getEspecialidades(){
         List<Especialidade> especialidades = especialidadeRepository.findAll();
         return especialidades.stream()
@@ -26,6 +29,7 @@ public class EspecialidadeService {
                 .toList();
     }
 
+    @CacheEvict(value = "especialidades", allEntries = true)
     public EspecialidadeResponseDTO criarEspecialidade(EspecialidadeRequestDTO especialidadeRequestDTO){
         if (especialidadeRepository.existsByDescricaoIgnoreCase(especialidadeRequestDTO.getDescricao())){
             throw new RuntimeException(
@@ -37,6 +41,7 @@ public class EspecialidadeService {
         return EspecialidadeMapper.toDTO(especialidade);
     }
 
+    @CacheEvict(value = "especialidades", allEntries = true)
     public void deletarEspecialidade(int id){
         especialidadeRepository.deleteById(id);
     }

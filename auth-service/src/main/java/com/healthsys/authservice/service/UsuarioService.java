@@ -12,6 +12,8 @@ import com.healthsys.authservice.repository.EspecialidadeRepository;
 import com.healthsys.authservice.repository.PerfilRepository;
 import com.healthsys.authservice.repository.UsuarioRepository;
 import lombok.Setter;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,7 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Cacheable(value = "usuarios", key="#email")
     @Transactional(readOnly = true)
     public Optional<Usuario> findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
@@ -110,6 +113,7 @@ public class UsuarioService {
         return UsuarioMapper.toDTO(usuarioSalvo);
     }
 
+    @CacheEvict(value= "usuarios", allEntries = true)
     public UsuarioResponseDTO atualizarUsuario(UUID id, UsuarioRequestDTO usuarioRequestDTO) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException("Usuario nao encontrado com ID: " + id));
@@ -153,6 +157,7 @@ public class UsuarioService {
         return UsuarioMapper.toDTO(usuarioAtualizado);
     }
 
+    @CacheEvict(value ="usuarios", allEntries = true)
     public void deletarUsuario(UUID id) {
         usuarioRepository.deleteById(id);
     }

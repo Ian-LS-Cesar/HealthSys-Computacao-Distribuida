@@ -7,6 +7,8 @@ import com.healthsys.authservice.mapper.PerfilMapper;
 import com.healthsys.authservice.model.Perfil;
 import com.healthsys.authservice.repository.PerfilRepository;
 import lombok.Setter;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class PerfilService {
         this.perfilRepository = perfilRepository;
     }
 
+    @Cacheable(value = "perfis")
     public List<PerfilResponseDTO> getPerfis(){
         List<Perfil> perfis = perfilRepository.findAll();
         return perfis.stream()
@@ -27,6 +30,7 @@ public class PerfilService {
                 .toList();
     }
 
+    @CacheEvict(value = "perfis", allEntries = true)
     public PerfilResponseDTO criarPerfis(PerfilRequestDTO perfilRequestDTO){
         if (perfilRepository.existsByDescricaoIgnoreCase(perfilRequestDTO.getDescricao())){
             throw new PerfilAlreadyExistsException(
@@ -39,6 +43,7 @@ public class PerfilService {
         return PerfilMapper.toDTO(perfil);
     }
 
+    @CacheEvict(value = "perfis", allEntries = true)
     public void deletarPerfil(int id){
         perfilRepository.deleteById(id);
     }
