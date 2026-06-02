@@ -1,0 +1,17 @@
+services:
+  redis:
+    image: redis:8.8.0-alpine
+    container_name: redis
+    env_file:
+      - ../../.env
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - ./.redis_data:/data
+    networks:
+      - internal
+
+networks:
+    internal:
+        external: true
+        name: ${DOCKER_NETWORK}
