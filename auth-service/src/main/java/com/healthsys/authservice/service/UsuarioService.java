@@ -44,7 +44,6 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Cacheable(value = "usuarios", key="#email")
     @Transactional(readOnly = true)
     public Optional<Usuario> findByEmail(String email) {
         return usuarioRepository.findByEmail(email);
@@ -79,6 +78,7 @@ public class UsuarioService {
                 .toList();
     }
 
+    @Cacheable(value = "usuarios", key="#email")
     public UsuarioResponseDTO getUsuarioByEmail(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsuarioNotFoundException("Usuario nao encontrado com email: " + email));
