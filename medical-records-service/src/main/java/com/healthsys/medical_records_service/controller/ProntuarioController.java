@@ -2,9 +2,10 @@ package com.healthsys.medical_records_service.controller;
 
 import com.healthsys.medical_records_service.model.Prontuario;
 import com.healthsys.medical_records_service.service.ProntuarioService;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +16,17 @@ import java.util.List;
 @CrossOrigin(origins = "*") // Permite a comunicação do app React
 @Tag(name = "API Prontuários", description = "Endpoints para Internação, Alta, Consulta e Filtro de Prontuários")
 public class ProntuarioController {
+    private final ProntuarioService prontuarioService;
+    private final Counter counter;
 
-    @Autowired
-    private ProntuarioService prontuarioService;
+    public ProntuarioController(ProntuarioService prontuarioService, MeterRegistry meterRegistry) {
+        this.prontuarioService = prontuarioService;
+        this.counter = Counter.builder("medical_records_service_requests_total")
+                .description("Total de chamadas ao controller ProntuarioController")
+                .tag("controller", "ProntuarioController")
+                .tag("endpoint", "/api/prontuarios")
+                .register(meterRegistry);
+    }
 
     /**
      * Endpoint para iniciar a internação de um paciente em um leito específico.
@@ -28,7 +37,8 @@ public class ProntuarioController {
             @RequestParam String pacienteId, 
             @RequestParam Long leitoId, 
             @RequestParam String diagnostico) {
-        
+        counter.increment();
+
         Prontuario novoProntuario = prontuarioService.internarPaciente(pacienteId, leitoId, diagnostico);
         return ResponseEntity.ok(novoProntuario);
     }
@@ -39,6 +49,7 @@ public class ProntuarioController {
     @PostMapping("/{id}/alta")
     @Operation(summary = "Dar alta ao paciente")
     public ResponseEntity<Prontuario> darAlta(@PathVariable String id) {
+        counter.increment();
         Prontuario prontuarioAtualizado = prontuarioService.darAltaPaciente(id);
         return ResponseEntity.ok(prontuarioAtualizado);
     }
@@ -49,6 +60,7 @@ public class ProntuarioController {
     @GetMapping
     @Operation(summary = "Listar prontuários")
     public ResponseEntity<List<Prontuario>> listarTodos() {
+        counter.increment();
         return ResponseEntity.ok(prontuarioService.listarTodosProntuarios());
     }
 
@@ -58,6 +70,7 @@ public class ProntuarioController {
     @GetMapping("/{id}")
     @Operation(summary = "Buscar prontuário por ID")
     public ResponseEntity<Prontuario> buscarPorId(@PathVariable String id) {
+        counter.increment();
         return ResponseEntity.ok(prontuarioService.buscarProntuarioPorId(id));
     }
 
@@ -67,6 +80,7 @@ public class ProntuarioController {
     @GetMapping("/status")
     @Operation(summary = "Buscar prontuários por status")
     public ResponseEntity<List<Prontuario>> buscarPorStatus(@RequestParam String status) {
+        counter.increment();
         return ResponseEntity.ok(prontuarioService.buscarProntuariosPorStatus(status));
     }
 }
