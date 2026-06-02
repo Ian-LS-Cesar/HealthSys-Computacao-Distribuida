@@ -16,6 +16,7 @@ services:
       SPRING_JPA_SHOW_SQL: ${SPRING_JPA_SHOW_SQL}
       JWT_SECRET: ${JWT_SECRET}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
+      REDIS_PORT: ${REDIS_PORT}
     depends_on:
       auth-service-db:
         condition: service_healthy

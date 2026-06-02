@@ -43,6 +43,7 @@ services:
       EUREKA_INSTANCE_HOSTNAME: bed-service
       EUREKA_INSTANCE_NON_SECURE_PORT: 8086
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "false"
+      REDIS_PORT: ${REDIS_PORT}
     depends_on:
       bed-db:
         condition: service_healthy            
