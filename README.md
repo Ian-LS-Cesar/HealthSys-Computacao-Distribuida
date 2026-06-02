@@ -65,6 +65,13 @@ PROMETHEUS_PORT=9090
 GRAFANA_PORT=3000
 GRAFANA_ADMIN_USER=SEU_USUARIO_GRAFANA
 GRAFANA_ADMIN_PASSWORD=SUA_SENHA_GRAFANA
+
+# Redis
+REDIS_USER=Usuario_Redis
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=Senha_Redis
+REDIS_TIME_TO_LIVE=600000
 ```
 
 **OBS: Substitua os valores pelos valores reais do seu ambiente. E lembre-se de verificar se a .env está no gitignore e não commitado**
@@ -87,6 +94,7 @@ docker compose build bed-service
 docker compose build medical-records-service
 docker compose build prometheus
 docker compose build grafana
+docker compose build redis
 ```
 
 ### Construir as imagens de todos os serviços:
@@ -108,6 +116,7 @@ docker compose up -d bed-service
 docker compose up -d medical-records-service
 docker compose up -d prometheus
 docker compose up -d grafana
+docker compose up -d redis
 ```
 
 ### Subir todos os serviços:
@@ -129,6 +138,7 @@ docker compose up -d --build bed-service
 docker compose up -d --build medical-records-service
 docker compose up -d --build prometheus
 docker compose up -d --build grafana
+docker compose up -d --build redis
 ```
 
 ### Subir apenas o Observability (Prometheus + Grafana):
@@ -143,7 +153,7 @@ docker compose up -d --build grafana prometheus
 
 ### Subir o stack completo com observability:
 ```bash
-docker compose up -d --build service-discovery api-gateway auth-service paciente-service triagem-service notification-service bed-service medical-records-service prometheus grafana
+docker compose up -d --build service-discovery api-gateway auth-service paciente-service triagem-service notification-service bed-service medical-records-service prometheus grafana redis
 ```
 
 ### Subir todos os serviços enquanto aplica novas mudanças:
@@ -166,6 +176,7 @@ docker compose logs bed-service
 docker compose logs medical-records-service
 docker compose logs prometheus
 docker compose logs grafana
+docker compose logs redis
 ```
 
 ## Parar os serviços:
@@ -182,6 +193,7 @@ docker compose down bed-service
 docker compose down medical-records-service
 docker compose down prometheus
 docker compose down grafana
+docker compose down redis
 ```
 
 ### Para parar todos os serviços, utilize:
@@ -203,6 +215,7 @@ docker compose down -v bed-service
 docker compose down -v medical-records-service
 docker compose down -v prometheus
 docker compose down -v grafana
+docker compose down -v redis
 ```
 ### Para parar e limpar dados de todos os serviços, utilize:
 ```bash
@@ -228,3 +241,4 @@ docker compose down -v
 - Medical Records DB (MongoDB): `5005`
 - RabbitMQ AMQP: `5672`
 - RabbitMQ Management: `15672`
+- Redis: `6379`

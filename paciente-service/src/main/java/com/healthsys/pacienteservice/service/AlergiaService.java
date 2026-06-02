@@ -8,6 +8,9 @@ import com.healthsys.pacienteservice.model.Alergia;
 import com.healthsys.pacienteservice.repository.AlergiaRepository;
 import com.healthsys.pacienteservice.repository.PacienteRepository;
 import lombok.Setter;
+import org.springframework.cache.annotation.CacheEvict; // <-- Adicionado
+import org.springframework.cache.annotation.Cacheable; // <-- Adicionado
+import org.springframework.cache.annotation.Caching;  // <-- Adicionado
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +27,7 @@ public class AlergiaService {
         this.pacienteRepository = pacienteRepository;
     }
 
+    @Cacheable(value = "alergias_todas", key = "'lista'")
     public List<AlergiaResponseDTO> getAlergias() {
         List<Alergia> alergias = alergiaRepository.findAll();
         return alergias.stream()
@@ -31,6 +35,7 @@ public class AlergiaService {
                 .toList();
     }
 
+    @Cacheable(value = "alergias_paciente", key = "#pacienteId")
     public List<AlergiaResponseDTO> getAlergiasPorPaciente(UUID pacienteId) {
         pacienteRepository.findById(pacienteId)
                 .orElseThrow(() -> new PacienteNotFoundException("Paciente não encontrado com ID: " + pacienteId));
@@ -41,11 +46,19 @@ public class AlergiaService {
                 .toList();
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "alergias_todas", key = "'lista'"),
+            @CacheEvict(value = "alergias_paciente", key = "#alergiaRequestDTO.pacienteId")
+    })
     public AlergiaResponseDTO criarAlergia(AlergiaRequestDTO alergiaRequestDTO) {
         Alergia novaAlergia = AlergiaMapper.toModel(alergiaRequestDTO);
         return AlergiaMapper.toDTO(alergiaRepository.save(novaAlergia));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "alergias_todas", key = "'lista'"),
+            @CacheEvict(value = "alergias_paciente", key = "#alergiaRequestDTO.pacienteId")
+    })
     public AlergiaResponseDTO atualizarAlergia(Integer id, AlergiaRequestDTO alergiaRequestDTO) {
         Alergia alergia = alergiaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Alergia não encontrada com ID: " + id));
@@ -54,6 +67,10 @@ public class AlergiaService {
         return AlergiaMapper.toDTO(alergiaRepository.save(alergia));
     }
 
+    @Caching(evict = {
+            @CacheEvict(value = "alergias_todas", key = "'lista'"),
+            @CacheEvict(value = "alergias_paciente", allEntries = true)
+    })
     public void deletarAlergia(Integer id) {
         alergiaRepository.deleteById(id);
     }
