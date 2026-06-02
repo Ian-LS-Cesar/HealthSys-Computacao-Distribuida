@@ -1,13 +1,13 @@
 # HealthSys-Computacao-Distribuida
 
-### 1) Pré-requisitos (executar uma vez)
+### Pré-requisitos (executar uma vez)
 
-## 1.1) Criar a rede Docker para os serviços se conectar
+## Criar a rede Docker para os serviços se conectar
 ```bash
 docker network create healthsys-internal
 ```
 
-## 1.2) Criar um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente:
+## Criar um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente:
 
 ```bash
 # Database / common
@@ -220,6 +220,20 @@ docker compose down -v redis
 ### Para parar e limpar dados de todos os serviços, utilize:
 ```bash
 docker compose down -v
+```
+
+### Testar Redis
+```bash
+docker compose exec -it redis redis-cli
+auth Usuario_Redis Senha_Redis
+ping
+```
+
+### Checar keys cacheadas no Redis
+```bash
+docker compose exec -it redis redis-cli
+auth Usuario_Redis Senha_Redis
+keys *
 ```
 
 ## Portas padrão
