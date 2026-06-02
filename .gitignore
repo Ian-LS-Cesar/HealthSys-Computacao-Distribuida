@@ -61,3 +61,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Redis ###
+/infraestructure/redis/.redis_data/dump.rdb
