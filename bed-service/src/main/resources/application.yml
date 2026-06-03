@@ -8,16 +8,25 @@ spring:
   # Redis Configuration
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD}
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
       username: ${REDIS_USER}
-
+      password: ${REDIS_PASSWORD}
+      repositories:
+        enabled: false
   cache:
     type: redis
     redis:
       time-to-live: ${REDIS_TIME_TO_LIVE:600000}
       cache-null-values: false
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  sql:
+    init:
+      mode: always
 
   # Configuracao do Banco dentro da Rede do Docker (usa o nome do container do db)
   datasource:
@@ -25,10 +34,7 @@ spring:
     username: ${DB_USERNAME:admin}
     password: ${DB_PASSWORD:password}
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+
 
   # RabbitMQ apontando para o container correto
   rabbitmq:

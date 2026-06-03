@@ -7,6 +7,8 @@ spring:
       port: ${REDIS_PORT:6379}
       username: ${REDIS_USER}
       password: ${REDIS_PASSWORD}
+      repositories:
+        enabled: false
   cache:
     type: redis
     redis:

@@ -7,11 +7,18 @@ spring:
       port: ${REDIS_PORT:6379}
       username: ${REDIS_USER}
       password: ${REDIS_PASSWORD}
+      repositories:
+        enabled: false
   cache:
     type: redis
     redis:
       time-to-live: ${REDIS_TIME_TO_LIVE:600000}
       cache-null-values: false
+  jpa:
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
 
 # O acesso ao paciente-service é feito via Eureka usando @FeignClient(name = "paciente-service")
 
