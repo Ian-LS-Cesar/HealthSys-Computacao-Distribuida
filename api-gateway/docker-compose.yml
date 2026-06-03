@@ -9,7 +9,7 @@ services:
     env_file:
       - ../.env
     environment:
-      AUTH_SERVICE_URL: http://auth-service:8081
+      AUTH_SERVICE_URL: http://auth-service
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-discovery:8761/eureka/
     networks:
       - internal

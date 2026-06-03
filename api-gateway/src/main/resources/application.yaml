@@ -167,3 +167,7 @@ eureka:
     fetch-registry: true          # ← mas consulta os outros serviços
   instance:
     prefer-ip-address: true
+
+auth:
+  service:
+    url: http://auth-service
