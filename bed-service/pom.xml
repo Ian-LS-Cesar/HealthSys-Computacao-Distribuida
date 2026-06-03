@@ -51,13 +51,6 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- Prometheus para métricas -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
         <!-- Core do Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
