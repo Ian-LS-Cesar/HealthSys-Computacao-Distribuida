@@ -7,12 +7,8 @@ services:
     ports:
       - "${MEDICAL_RECORDS_SERVICE_PORT}:8085"
     environment:
-      SPRING_MONGODB_HOST: medical-records-service-db
-      SPRING_MONGODB_PORT: "27017"
-      SPRING_MONGODB_DATABASE: medical_db
-      SPRING_MONGODB_USERNAME: ${MONGO_USER}
-      SPRING_MONGODB_PASSWORD: ${MONGO_PASSWORD}
-      SPRING_MONGODB_AUTHENTICATION_DATABASE: admin
+      # Injects the fully constructed URI using the fixed encoded password
+      SPRING_MONGODB_URI: "mongodb://${MONGO_USER}:${MONGO_PASSWORD}@medical-records-service-db:27017/${MEDICAL_RECORDS_DB_NAME}?authSource=admin"
       SPRING_RABBITMQ_HOST: notification-service-db
       SPRING_RABBITMQ_PORT: ${RABBITMQ_AMQP_PORT}
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER}
@@ -20,9 +16,7 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
     depends_on:
       medical-records-service-db:
-        condition: service_healthy        # ← espera o MongoDB estar pronto
-      service-discovery:
-        condition: service_healthy        # ← espera o Eureka estar pronto
+        condition: service_healthy
     networks:
       - internal
     restart: unless-stopped
@@ -30,11 +24,12 @@ services:
       - ../.env
 
   medical-records-service-db:
-    image: mongo:latest
+    image: mongo:7.0.34
     container_name: medical-records-service-db
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MEDICAL_RECORDS_DB_NAME}
     ports:
       - "${MEDICAL_RECORDS_SERVICE_DB_PORT}:27017"
     volumes:
@@ -49,7 +44,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 30s
+      start_period: 10s
 
 networks:
   internal:

@@ -19,8 +19,6 @@ services:
     depends_on:
       auth-service-db:
         condition: service_healthy
-      service-discovery:
-        condition: service_healthy
     networks:
       - internal
     restart: unless-stopped
