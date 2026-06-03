@@ -142,7 +142,7 @@ springdoc:
     syntaxHighlight:
       activate: true
       theme: monokai
-    urls:
+    URLs:
       - name: Auth Service
         url: /auth/v3/api-docs
       - name: Paciente Service
@@ -163,8 +163,8 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
-    register-with-eureka: false   # ← gateway não se registra
-    fetch-registry: true          # ← mas consulta os outros serviços
+    register-with-eureka: false
+    fetch-registry: true
   instance:
     prefer-ip-address: true
 
