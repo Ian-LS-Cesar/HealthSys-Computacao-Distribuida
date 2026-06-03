@@ -18,6 +18,9 @@ spring:
       ddl-auto: create-drop
     show-sql: false
 
+  sql:
+    init:
+      mode: never
   # RabbitMQ (use defaults for testing)
   rabbitmq:
     host: localhost
