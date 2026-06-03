@@ -43,6 +43,10 @@ services:
       EUREKA_INSTANCE_HOSTNAME: bed-service
       EUREKA_INSTANCE_NON_SECURE_PORT: 8086
       EUREKA_INSTANCE_PREFER_IP_ADDRESS: "false"
+      SPRING_REDIS_HOST: redis-cache
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PASSWORD: ${REDIS_PASSWORD}
+      SPRING_REDIS_USERNAME: ${REDIS_USER}
     depends_on:
       bed-db:
         condition: service_healthy            

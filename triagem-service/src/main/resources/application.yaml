@@ -3,8 +3,9 @@ spring:
     name: triagem-service
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      username: ${REDIS_USER}
       password: ${REDIS_PASSWORD}
   cache:
     type: redis
