@@ -10,17 +10,16 @@ docker network create healthsys-internal
 ## Criar um arquivo `.env` na raiz do projeto com as seguintes variáveis de ambiente:
 
 ```bash
-# Database / common
+# ==========================================
+# 1. DATABASE CREDENTIALS & NAMES
+# ==========================================
 DB_NAME=db
-DB_USERNAME=Nome_Usuario_DB
-DB_PASSWORD=Senha_DB
+DB_USERNAME=nome_usuario
+DB_PASSWORD=senha_usuario
 
-MONGO_USER=Nome_Usuario_Mongo
-MONGO_PASSWORD=Senha_Mongo
-MONGO_INITDB_ROOT_USERNAME=Usuario
-MONGO_INITDB_ROOT_PASSWORD=Senha
-
-# Application ports
+# ==========================================
+# 2. MICROSERVICES PORTS (Internal)
+# ==========================================
 API_GATEWAY_PORT=8080
 AUTH_SERVICE_PORT=8081
 PACIENTE_SERVICE_PORT=8082
@@ -28,50 +27,48 @@ TRIAGEM_SERVICE_PORT=8083
 NOTIFICATION_SERVICE_PORT=8084
 MEDICAL_RECORDS_SERVICE_PORT=8085
 BED_SERVICE_PORT=8086
-SERVICE_DISCOVERY_PORT=8761
 
-# Database host ports for local access
+# ==========================================
+# 3. DATABASE HOST PORTS (Local Dev Mapping)
+# ==========================================
 AUTH_SERVICE_DB_PORT=5001
 PACIENTE_SERVICE_DB_PORT=5002
 TRIAGEM_SERVICE_DB_PORT=5003
 BED_SERVICE_DB_PORT=5004
 MEDICAL_RECORDS_SERVICE_DB_PORT=5005
-NOTIFICATION_SERVICE_DB_PORT=5672
-RABBITMQ_AMQP_PORT=5672
 
-# RabbitMQ management
-RABBITMQ_MANAGEMENT_PORT=15672
-RABBITMQ_USER=Usuario_RABBITMQ
-RABBITMQ_PASSWORD=Senha_RABBITMQ
-SERVICE_DISCOVERY_PORT=8761
-JWT_SECRET=TokenJWT
-
-# JPA
-SPRING_JPA_HIBERNATE_DDL_AUTO=update
-SPRING_JPA_SHOW_SQL=true
-
-# Docker network name
+# ==========================================
+# 4. INFRASTRUCTURE & DISCOVERY
+# ==========================================
 DOCKER_NETWORK=healthsys-internal
 
-# Service-specific database names
-BED_DB_NAME=bed_db
-MEDICAL_RECORDS_DB_NAME=medical_db
-
-# Eureka / service discovery
+SERVICE_DISCOVERY_PORT=8761
 EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/eureka/
+
+# Messaging (RabbitMQ)
+RABBITMQ_AMQP_PORT=5672
+RABBITMQ_MANAGEMENT_PORT=15672
+RABBITMQ_USER=nome_usuario
+RABBITMQ_PASSWORD=senha_usuario
+# Redis
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_USER=nome_usuario
+REDIS_PASSWORD=senha_usuario
+REDIS_TIME_TO_LIVE=600000
 
 # Observability
 PROMETHEUS_PORT=9090
 GRAFANA_PORT=3000
-GRAFANA_ADMIN_USER=SEU_USUARIO_GRAFANA
-GRAFANA_ADMIN_PASSWORD=SUA_SENHA_GRAFANA
+GRAFANA_ADMIN_USER=nome_usuario
+GRAFANA_ADMIN_PASSWORD=senha_usuario
 
-# Redis
-REDIS_USER=Usuario_Redis
-REDIS_HOST=redis
-REDIS_PORT=6379
-REDIS_PASSWORD=Senha_Redis
-REDIS_TIME_TO_LIVE=600000
+# ==========================================
+# 5. APPLICATION CONFIGURATION
+# ==========================================
+JWT_SECRET=token_secreto_para_jwt
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
+SPRING_JPA_SHOW_SQL=true
 ```
 
 **OBS: Substitua os valores pelos valores reais do seu ambiente. E lembre-se de verificar se a .env está no gitignore e não commitado**
