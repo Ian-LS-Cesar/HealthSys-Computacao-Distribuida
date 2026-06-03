@@ -1,0 +1,60 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: bed-service
+
+  # Redis Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      username: ${REDIS_USER}
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: ${REDIS_TIME_TO_LIVE:600000}
+      cache-null-values: false
+
+  # Configuracao do Banco dentro da Rede do Docker (usa o nome do container do db)
+  datasource:
+    url: jdbc:postgresql://bed-db:5432/bed_db
+    username: ${DB_USERNAME:admin}
+    password: ${DB_PASSWORD:password}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # RabbitMQ apontando para o container correto
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: admin
+    password: password
+    template:
+      retry:
+        enabled: true
+
+# Eureka Service Discovery
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+
+# Actuator - Health Checks e Metricas
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
