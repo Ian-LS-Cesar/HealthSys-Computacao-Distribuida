@@ -92,6 +92,7 @@ docker compose build medical-records-service
 docker compose build prometheus
 docker compose build grafana
 docker compose build redis
+docker compose build rabbitmq
 ```
 
 ### Construir as imagens de todos os serviços:
@@ -114,6 +115,7 @@ docker compose up -d medical-records-service
 docker compose up -d prometheus
 docker compose up -d grafana
 docker compose up -d redis
+docker compose up -d rabbitmq
 ```
 
 ### Subir todos os serviços:
@@ -136,6 +138,7 @@ docker compose up -d --build medical-records-service
 docker compose up -d --build prometheus
 docker compose up -d --build grafana
 docker compose up -d --build redis
+docker compose up -d --build rabbitmq
 ```
 
 ### Subir apenas o Observability (Prometheus + Grafana):
@@ -174,6 +177,7 @@ docker compose logs medical-records-service
 docker compose logs prometheus
 docker compose logs grafana
 docker compose logs redis
+docker compose logs rabbitmq
 ```
 
 ## Parar os serviços:
@@ -191,6 +195,7 @@ docker compose down medical-records-service
 docker compose down prometheus
 docker compose down grafana
 docker compose down redis
+docker compose down rabbitmq
 ```
 
 ### Para parar todos os serviços, utilize:
@@ -213,6 +218,7 @@ docker compose down -v medical-records-service
 docker compose down -v prometheus
 docker compose down -v grafana
 docker compose down -v redis
+docker compose down -v rabbitmq
 ```
 ### Para parar e limpar dados de todos os serviços, utilize:
 ```bash
