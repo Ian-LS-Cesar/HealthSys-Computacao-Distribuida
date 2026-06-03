@@ -32,6 +32,13 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- Source: https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.16.5</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- Eureka Client para Service Discovery -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

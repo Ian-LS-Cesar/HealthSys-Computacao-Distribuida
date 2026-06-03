@@ -31,6 +31,13 @@
         <spring-cloud.version>2025.1.1</spring-cloud.version>
     </properties>
     <dependencies>
+        <!-- Source: https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.16.5</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
