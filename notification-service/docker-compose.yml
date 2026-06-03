@@ -9,46 +9,17 @@ services:
     env_file:
       - ../.env
     environment:
-      SPRING_RABBITMQ_HOST: notification-service-db
+      SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: ${RABBITMQ_AMQP_PORT}
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
     depends_on:
-      notification-service-db:
-        condition: service_healthy
       service-discovery:
         condition: service_healthy
     networks:
       - internal
     restart: unless-stopped
-
-  notification-service-db:
-    image: rabbitmq:3-management
-    container_name: notification-service-db
-    env_file:
-      - ../.env
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-    ports:
-      - "${NOTIFICATION_SERVICE_DB_PORT}:5672"
-      - "${RABBITMQ_MANAGEMENT_PORT}:15672"
-    volumes:
-      - notification-service-db-data:/var/lib/rabbitmq
-    networks:
-      - internal
-    restart: unless-stopped
-    healthcheck:
-      # Verifica se o broker está pronto para aceitar conexões AMQP de verdade
-      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
-      interval: 10s
-      timeout: 10s
-      retries: 10
-      start_period: 30s  # ← dá tempo para o RabbitMQ inicializar completamente
-
-volumes:
-  notification-service-db-data:
 
 networks:
   internal:

@@ -1,13 +1,13 @@
 services:
   bed-db:
     image: postgres:18.4-alpine
-    container_name: bed-db
+    container_name: bed-service-db
     env_file:
       - ../.env
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${BED_DB_NAME}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "${BED_SERVICE_DB_PORT}:5432"
     networks:
@@ -16,7 +16,7 @@ services:
       - bed_db_data:/var/lib/postgresql
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${BED_DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -32,10 +32,10 @@ services:
       - "${BED_SERVICE_PORT}:8086"
     environment:
       SERVER_PORT: 8086
-      SPRING_DATASOURCE_URL: jdbc:postgresql://bed-db:5432/${BED_DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://bed-db:5432/${DB_NAME}
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      SPRING_RABBITMQ_HOST: notification-service-db         
+      SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: ${RABBITMQ_AMQP_PORT}
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}

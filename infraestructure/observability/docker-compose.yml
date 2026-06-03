@@ -13,7 +13,7 @@ services:
       - bed-service
       - medical-records-service
     env_file:
-      - ../.env
+      - ../../.env
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
@@ -34,7 +34,7 @@ services:
     ports:
       - "${GRAFANA_PORT}:3000"
     env_file:
-      - ../.env
+      - ../../.env
     environment:
       # Provide safe defaults so docker compose won't warn when these env vars
       # aren't present in the shell. You can still override them via ../.env

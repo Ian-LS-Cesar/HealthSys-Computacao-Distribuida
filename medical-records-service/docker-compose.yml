@@ -8,8 +8,8 @@ services:
       - "${MEDICAL_RECORDS_SERVICE_PORT}:8085"
     environment:
       # Injects the fully constructed URI using the fixed encoded password
-      SPRING_MONGODB_URI: "mongodb://${MONGO_USER}:${MONGO_PASSWORD}@medical-records-service-db:27017/${MEDICAL_RECORDS_DB_NAME}?authSource=admin"
-      SPRING_RABBITMQ_HOST: notification-service-db
+      SPRING_MONGODB_URI: "mongodb://${DB_USERNAME}:${DB_PASSWORD}@medical-records-service-db:27017/${DB_NAME}?authSource=admin"
+      SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_PORT: ${RABBITMQ_AMQP_PORT}
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USER}
       SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
@@ -28,9 +28,9 @@ services:
     image: mongo:7.0.34
     container_name: medical-records-service-db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MEDICAL_RECORDS_DB_NAME}
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
     ports:
       - "${MEDICAL_RECORDS_SERVICE_DB_PORT}:27017"
     volumes:

@@ -1,6 +1,4 @@
-package com.healthsys.notificationservice.config;
-
-// ... imports ...
+package com.healthsys.notification_service.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
